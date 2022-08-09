@@ -1,18 +1,9 @@
 import type { NextPage } from "next";
-import Head from "next/head";
-import Hero from "../components/index/hero";
+import Hero from "../components/index/Hero";
 
 const Home: NextPage = () => {
   return (
     <>
-      <Head>
-        <title>TRAVELER</title>
-        <meta
-          name="description"
-          content="Search and find your favorites places to visit"
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
       <Hero />
     </>
   );

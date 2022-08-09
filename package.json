@@ -9,7 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@react-google-maps/api": "^2.12.1",
     "@react-spring/parallax": "^9.5.2",
+    "google-map-react": "^2.2.0",
     "next": "12.2.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",

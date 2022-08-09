@@ -1,10 +1,18 @@
+import Link from "next/link";
+
 export default function Navbar() {
   return (
-    <nav className="fixed z-10 flex w-screen flex-row items-center border-b-2 border-white/75 bg-indigo-800/50 backdrop-blur-md">
-      <p className="flex-1 px-6 text-3xl text-white">Traveler.</p>
-      <p className="p-6 text-white">Home</p>
-      <p className="p-6 text-white">Search</p>
-      <p className="p-6 pr-12 text-white">Log In</p>
+    <nav className="fixed z-10 flex h-14 w-screen flex-row items-center justify-between border-b-2 border-white/75 bg-indigo-800/50 backdrop-blur-md">
+      <Link href="/">
+        <a className="mx-6 text-3xl text-white">Traveler</a>
+      </Link>
+      <div>
+        <Link href="/">
+          <a className="mx-6 text-white">Home</a>
+        </Link>
+        <a className="mx-6 text-white">Search</a>
+        <a className="mx-6 text-white">Log In</a>
+      </div>
     </nav>
   );
 }

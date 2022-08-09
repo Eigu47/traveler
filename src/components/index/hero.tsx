@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { FiSearch, FiMap } from "react-icons/fi";
+import Link from "next/link";
 
 export default function Hero() {
   return (
@@ -26,10 +27,12 @@ export default function Hero() {
             <FiSearch />
           </button>
         </form>
-        <button className="m-6 flex items-center rounded-full border bg-indigo-700 p-3 text-white duration-75 ease-in-out hover:scale-[102%] hover:shadow-inner">
-          Show Map
-          <FiMap className="ml-3 text-xl" />
-        </button>
+        <Link href="/map">
+          <button className="m-6 flex items-center rounded-full border bg-indigo-700 p-3 text-white duration-75 ease-in-out hover:scale-[102%] hover:shadow-inner">
+            Show Map
+            <FiMap className="ml-3 text-xl" />
+          </button>
+        </Link>
       </div>
     </section>
   );
