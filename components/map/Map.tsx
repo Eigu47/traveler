@@ -1,19 +1,16 @@
 import { GoogleMap, useLoadScript } from "@react-google-maps/api";
-import { isLocalURL } from "next/dist/shared/lib/router/router";
 import { useCallback, useRef } from "react";
 import { MdGpsFixed } from "react-icons/md";
 
 const defaultCenter = { lat: 35.6762, lng: 139.6503 };
 
 export default function Map() {
-  const mapRef = useRef<GoogleMap>();
+  const mapRef = useRef<google.maps.Map>();
 
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_MAP_API_KEY as string,
     libraries: ["places"],
   });
-
-  // const isLoaded = false;
 
   const getCurrentPosition = useCallback(() => {
     navigator?.geolocation?.getCurrentPosition((pos) => {
@@ -23,7 +20,7 @@ export default function Map() {
   }, []);
 
   const onLoad = useCallback(
-    (map: any) => {
+    (map: google.maps.Map) => {
       mapRef.current = map;
       getCurrentPosition();
     },
