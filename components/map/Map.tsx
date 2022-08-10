@@ -2,30 +2,31 @@ import { GoogleMap, useLoadScript } from "@react-google-maps/api";
 import { useCallback, useRef, useState } from "react";
 import { MdGpsFixed } from "react-icons/md";
 
+const defaultCenter = { lat: 35.6762, lng: 139.6503 };
+
 export default function Map() {
-  const [center, setCenter] = useState({ lat: 35.6762, lng: 139.6503 });
-  const mapRef = useRef(null);
+  // const center = useMemo(() => defaultCenter, []);
+
+  const mapRef = useRef<GoogleMap>();
+
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: process.env.NEXT_PUBLIC_MAP_API_KEY as string,
+  });
 
   const getCurrentPosition = useCallback(() => {
     navigator?.geolocation?.getCurrentPosition((pos) => {
-      setCenter({
-        lat: pos.coords.latitude,
-        lng: pos.coords.longitude,
-      });
+      const position = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+      mapRef.current?.panTo(position);
     });
   }, []);
 
   const onLoad = useCallback(
-    (map) => {
+    (map: any) => {
       mapRef.current = map;
       getCurrentPosition();
     },
     [getCurrentPosition]
   );
-
-  const { isLoaded } = useLoadScript({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_MAP_API_KEY as string,
-  });
 
   if (!isLoaded) {
     return <h1>Loading...</h1>;
@@ -35,7 +36,7 @@ export default function Map() {
     <>
       <GoogleMap
         zoom={12}
-        center={center}
+        center={defaultCenter}
         mapContainerClassName="h-full w-full"
         onLoad={onLoad}
         options={{
