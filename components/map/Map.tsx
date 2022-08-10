@@ -33,7 +33,7 @@ export default function Map() {
   }
 
   return (
-    <>
+    <section className="h-full w-full">
       <GoogleMap
         zoom={12}
         center={defaultCenter}
@@ -48,11 +48,11 @@ export default function Map() {
       {navigator.geolocation && (
         <button
           onClick={getCurrentPosition}
-          className="absolute bottom-7 right-3 rounded-lg border border-black/30 bg-white p-1 text-xl text-gray-500 shadow-md duration-75 ease-in-out hover:text-black"
+          className="absolute bottom-6 right-4 rounded-lg border bg-white p-1 text-2xl text-gray-600 shadow duration-75 ease-in-out hover:text-black"
         >
           <MdGpsFixed />
         </button>
       )}
-    </>
+    </section>
   );
 }

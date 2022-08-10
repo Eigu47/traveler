@@ -28,7 +28,10 @@ export default function Hero() {
           </button>
         </form>
         <Link href="/map">
-          <button className="m-6 flex items-center rounded-full border bg-indigo-700 p-3 text-white duration-75 ease-in-out hover:scale-[102%] hover:shadow-inner">
+          <button
+            type="submit"
+            className="m-6 flex items-center rounded-full border bg-indigo-700 p-3 text-white duration-75 ease-in-out hover:scale-[102%] hover:shadow-inner"
+          >
             Show Map
             <FiMap className="ml-3 text-xl" />
           </button>
