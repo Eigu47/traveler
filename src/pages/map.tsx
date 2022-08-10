@@ -1,7 +1,9 @@
+import Map from "../components/map/Map";
+
 export default function map() {
   return (
-    <section className="relative top-20">
-      <p>Hello</p>
-    </section>
+    <main className="relative top-14 h-[calc(100vh-56px)] max-h-full max-w-full">
+      <Map />
+    </main>
   );
 }
