@@ -2,16 +2,14 @@ import Link from "next/link";
 
 export default function Navbar() {
   return (
-    <nav className="fixed z-10 flex h-12 w-screen flex-row items-center justify-between border-b-2 border-white/75 bg-indigo-800/50 text-white backdrop-blur-md">
+    <nav className="fixed z-10 flex h-12 w-screen flex-row items-center justify-between border-b-2 border-white/75 bg-gradient-to-r from-indigo-800 via-blue-800 to-indigo-800 px-6 text-white">
       <Link href="/">
-        <a className="mx-6 text-2xl">Traveler</a>
+        <a className="text-2xl">Traveler</a>
       </Link>
-      <div>
-        <Link href="/">
-          <a className="mx-6">Home</a>
-        </Link>
-        <a className="mx-6">Search</a>
-        <a className="mx-6">Log In</a>
+      <div className="space-x-12">
+        <Link href="/">Home</Link>
+        <Link href="/">Search</Link>
+        <Link href="/">Log In</Link>
       </div>
     </nav>
   );

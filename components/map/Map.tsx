@@ -1,17 +1,19 @@
 import { GoogleMap, useLoadScript } from "@react-google-maps/api";
-import { useCallback, useRef, useState } from "react";
+import { isLocalURL } from "next/dist/shared/lib/router/router";
+import { useCallback, useRef } from "react";
 import { MdGpsFixed } from "react-icons/md";
 
 const defaultCenter = { lat: 35.6762, lng: 139.6503 };
 
 export default function Map() {
-  // const center = useMemo(() => defaultCenter, []);
-
   const mapRef = useRef<GoogleMap>();
 
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_MAP_API_KEY as string,
+    libraries: ["places"],
   });
+
+  // const isLoaded = false;
 
   const getCurrentPosition = useCallback(() => {
     navigator?.geolocation?.getCurrentPosition((pos) => {
@@ -48,7 +50,7 @@ export default function Map() {
       {navigator.geolocation && (
         <button
           onClick={getCurrentPosition}
-          className="absolute bottom-6 right-4 rounded-lg border bg-white p-1 text-2xl text-gray-600 shadow duration-75 ease-in-out hover:text-black"
+          className="absolute bottom-6 right-4 rounded-lg bg-white p-1 text-2xl text-gray-600 shadow-md ring-1 ring-black ring-opacity-5 duration-75 ease-in-out hover:text-black"
         >
           <MdGpsFixed />
         </button>

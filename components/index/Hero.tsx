@@ -17,20 +17,20 @@ export default function Hero() {
         <h1 className="text-center font-serif text-5xl font-semibold text-white">
           The best travel experience
         </h1>
-        <form className="m-16 flex w-6/12 justify-between rounded-full bg-white p-2 shadow-inner">
+        <form className="m-16 flex w-6/12 justify-between rounded-full bg-white p-2 shadow ring-1 ring-black/30">
           <input
             type="text"
-            placeholder="Search..."
+            placeholder="Search by city..."
             className="mx-3 grow outline-0"
           />
-          <button className="rounded-full bg-indigo-600 p-2 text-xl text-white duration-75 ease-in-out hover:scale-[102%] hover:shadow-inner">
+          <button className="rounded-full bg-indigo-600 p-2 text-xl text-white shadow-md ring-1 ring-black/30 duration-75 ease-in-out hover:scale-105">
             <FiSearch />
           </button>
         </form>
         <Link href="/map">
           <button
             type="submit"
-            className="m-6 flex items-center rounded-full border bg-indigo-700 p-3 text-white duration-75 ease-in-out hover:scale-[102%] hover:shadow-inner"
+            className="m-6 flex items-center rounded-full bg-indigo-700 p-3 text-white shadow-lg ring-1 ring-black/30 duration-75 ease-in-out hover:scale-[102%]"
           >
             Show Map
             <FiMap className="ml-3 text-xl" />
