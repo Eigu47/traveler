@@ -53,13 +53,7 @@ export default function SearchBar() {
             }
             placeholder={ready ? "Search city..." : "Loading..."}
           />
-          <button
-            disabled={!ready}
-            onClick={() => console.log(status)}
-            className="text-xl"
-          >
-            <FiSearch />
-          </button>
+          <FiSearch className="text-xl" />
         </div>
         <Transition
           enter="transition ease-in duration-100"

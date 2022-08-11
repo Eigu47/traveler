@@ -47,13 +47,15 @@ export default function MapCanvas({ setBoundary }: Props) {
     const res: any = mapRef.current?.getBounds();
 
     const bounds: Boundary = {
-      tr_longitude: res.Ra.hi,
-      tr_latitude: res.ub.hi,
-      bl_longitude: res.ub.lo,
-      bl_latitude: res.Ra.lo,
+      tr_longitude: res?.Ra.hi,
+      tr_latitude: res?.ub.hi,
+      bl_longitude: res?.Ra.lo,
+      bl_latitude: res?.ub.lo,
     };
 
     setBoundary(bounds);
+
+    console.log(bounds);
   }, [router.query, setBoundary]);
 
   return (
