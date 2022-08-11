@@ -5,12 +5,13 @@ import usePlacesAutocomplete, {
 import { Combobox, Transition } from "@headlessui/react";
 
 import { FiSearch } from "react-icons/fi";
-import { ChangeEvent } from "react";
-import { useRouter } from "next/router";
+import { ChangeEvent, Dispatch, SetStateAction } from "react";
 
-export default function SearchBar() {
-  const router = useRouter();
+interface Props {
+  setCenter: Dispatch<SetStateAction<google.maps.LatLngLiteral>>;
+}
 
+export default function SearchBar({ setCenter }: Props) {
   const {
     ready,
     value,
@@ -26,15 +27,9 @@ export default function SearchBar() {
     clearSuggestions();
 
     const res = await getGeocode({ address: val });
-    const { lat, lng } = await getLatLng(res[0]);
+    const center = await getLatLng(res[0]);
 
-    router.replace({
-      pathname: "/map",
-      query: {
-        lat,
-        lng,
-      },
-    });
+    setCenter(center);
   }
 
   return (

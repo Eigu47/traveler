@@ -1,6 +1,5 @@
 import MapCanvas from "../components/map/MapCanvas";
 import Results from "../components/map/Results";
-import SearchBar from "../components/map/SearchBar";
 import { useLoadScript } from "@react-google-maps/api";
 import Loading from "../components/map/Loading";
 import { useState } from "react";
@@ -34,7 +33,6 @@ export default function Map() {
     <main className="relative top-12 flex h-[calc(100vh-48px)] max-h-full max-w-full">
       <Results />
       {isLoaded ? <MapCanvas setBoundary={setBoundary} /> : <Loading />}
-      <SearchBar />
     </main>
   );
 }

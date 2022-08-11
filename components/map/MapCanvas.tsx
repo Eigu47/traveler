@@ -1,16 +1,17 @@
 import { GoogleMap, Marker } from "@react-google-maps/api/";
-import { useRouter } from "next/router";
 import {
   Dispatch,
   SetStateAction,
   useCallback,
   useEffect,
   useRef,
+  useState,
 } from "react";
 import { MdGpsFixed } from "react-icons/md";
 import { Boundary } from "../../pages/map";
+import SearchBar from "./SearchBar";
 
-const defaultCenter: google.maps.LatLngLiteral = {
+const defaultCenter = {
   lat: 35.6762,
   lng: 139.6503,
 };
@@ -21,42 +22,40 @@ interface Props {
 
 export default function MapCanvas({ setBoundary }: Props) {
   const mapRef = useRef<google.maps.Map>();
-  const router = useRouter();
+  const [center, setCenter] = useState(defaultCenter);
 
   const onLoad = useCallback((map: google.maps.Map) => {
     mapRef.current = map;
   }, []);
 
-  function getCurrentPosition() {
-    navigator?.geolocation?.getCurrentPosition((pos) => {
-      router.replace({
-        pathname: "/map",
-        query: { lat: pos.coords.latitude, lng: pos.coords.longitude },
-      });
-    });
-  }
-
-  useEffect(() => {
-    const { lat, lng } = router.query;
-
-    if (!lat || !lng || (isNaN(+lat) && isNaN(+lng))) return;
-
-    mapRef.current?.panTo({ lat: +lat, lng: +lng });
-    mapRef.current?.setZoom(14);
-
+  function getBoundary() {
     const res: any = mapRef.current?.getBounds();
 
-    const bounds: Boundary = {
+    return {
       tr_longitude: res?.Ra.hi,
       tr_latitude: res?.ub.hi,
       bl_longitude: res?.Ra.lo,
       bl_latitude: res?.ub.lo,
     };
+  }
 
-    setBoundary(bounds);
+  function getCurrentPosition() {
+    navigator?.geolocation?.getCurrentPosition((pos) => {
+      setCenter({
+        lat: pos.coords.latitude,
+        lng: pos.coords.longitude,
+      });
+    });
+  }
 
-    console.log(bounds);
-  }, [router.query, setBoundary]);
+  useEffect(() => {
+    if (center) {
+      mapRef.current?.panTo(center);
+      mapRef.current?.setZoom(14);
+    }
+
+    setBoundary(getBoundary());
+  }, [center, setBoundary]);
 
   return (
     <section className="h-full w-full">
@@ -79,6 +78,7 @@ export default function MapCanvas({ setBoundary }: Props) {
           <MdGpsFixed />
         </button>
       )}
+      <SearchBar setCenter={setCenter} />
     </section>
   );
 }
