@@ -1,10 +1,16 @@
-import usePlacesAutocomplete from "use-places-autocomplete";
+import usePlacesAutocomplete, {
+  getGeocode,
+  getLatLng,
+} from "use-places-autocomplete";
 import { Combobox, Transition } from "@headlessui/react";
 
 import { FiSearch } from "react-icons/fi";
 import { ChangeEvent } from "react";
+import { useRouter } from "next/router";
 
 export default function SearchBar() {
+  const router = useRouter();
+
   const {
     ready,
     value,
@@ -13,13 +19,27 @@ export default function SearchBar() {
     clearSuggestions,
   } = usePlacesAutocomplete();
 
-  // async function handleChange(
+  async function handleChange(val: string) {
+    if (!val) return;
 
-  // )
+    setValue(val, false);
+    clearSuggestions();
+
+    const res = await getGeocode({ address: val });
+    const { lat, lng } = await getLatLng(res[0]);
+
+    router.replace({
+      pathname: "/map",
+      query: {
+        lat,
+        lng,
+      },
+    });
+  }
 
   return (
     <div className="absolute top-4 right-4 z-10 w-72 text-sm">
-      <Combobox value={value} onChange={console.log} nullable disabled={!ready}>
+      <Combobox value={value} onChange={handleChange} disabled={!ready}>
         <div
           className={`relative flex w-full overflow-hidden rounded-lg bg-white px-3 py-2 shadow-lg ring-1 ring-black ring-opacity-5 ${
             !ready && "bg-slate-200"
@@ -35,7 +55,7 @@ export default function SearchBar() {
           />
           <button
             disabled={!ready}
-            onClick={() => console.log(value)}
+            onClick={() => console.log(status)}
             className="text-xl"
           >
             <FiSearch />
@@ -64,8 +84,8 @@ export default function SearchBar() {
                   <span>{place.description}</span>
                 </Combobox.Option>
               ))}
-            {status === "ZERO_RESULTS" && (
-              <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
+            {(status === "ZERO_RESULTS" || !status) && (
+              <div className="relative cursor-default select-none py-1 px-4 text-gray-700">
                 Nothing found.
               </div>
             )}
