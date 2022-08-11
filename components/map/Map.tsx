@@ -1,4 +1,5 @@
 import { GoogleMap, useLoadScript } from "@react-google-maps/api";
+import Image from "next/image";
 import { useCallback, useRef } from "react";
 import { MdGpsFixed } from "react-icons/md";
 
@@ -11,6 +12,8 @@ export default function Map() {
     googleMapsApiKey: process.env.NEXT_PUBLIC_MAP_API_KEY as string,
     libraries: ["places"],
   });
+
+  // const isLoaded = false;
 
   const getCurrentPosition = useCallback(() => {
     navigator?.geolocation?.getCurrentPosition((pos) => {
@@ -28,7 +31,11 @@ export default function Map() {
   );
 
   if (!isLoaded) {
-    return <h1>Loading...</h1>;
+    return (
+      <div className="flex w-full items-center justify-center bg-slate-200">
+        <Image src="/loading.svg" alt="Loading..." height={200} width={200} />
+      </div>
+    );
   }
 
   return (
