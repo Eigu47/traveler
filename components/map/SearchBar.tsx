@@ -13,7 +13,9 @@ export default function SearchBar() {
     clearSuggestions,
   } = usePlacesAutocomplete();
 
-  // function handleChange()
+  // async function handleChange(
+
+  // )
 
   return (
     <div className="absolute top-4 right-4 z-10 w-72 text-sm">
