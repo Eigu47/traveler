@@ -1,23 +1,21 @@
-import { useRouter } from "next/router";
+import { useQuery } from "@tanstack/react-query";
+import { nearbySearchResult } from "../../types/nearbySearchResult";
 
 interface Props {}
 
-// function fetchResults() {
-//   return fetch("dummyData.json").then((res) => res.json());
-// }
+async function fetchResults(): Promise<nearbySearchResult> {
+  return (await await fetch("dummyData.json")).json();
+}
 
 export default function Results({}: Props) {
-  // const { data, isLoading } = useQuery(["results"], fetchReal);
-  // console.log(data);
-
-  const router = useRouter();
+  const { data } = useQuery(["nearby"], fetchResults);
 
   return (
     <aside className="z-10 h-full w-2/6 bg-slate-200 shadow-[0_10px_10px_10px_rgba(0,0,0,0.15)]">
-      {/* {data?.data?.map((_, id) => {
-        <span key={id}>{id}</span>;
-      })} */}
-      <span>{JSON.stringify(router.query)}</span>
+      <h3>Results nearby</h3>
+      {data?.results.map((place) => (
+        <span key={place.place_id}>{place.name}</span>
+      ))}
     </aside>
   );
 }
