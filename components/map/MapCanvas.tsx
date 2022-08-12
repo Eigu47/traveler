@@ -1,6 +1,6 @@
 import { GoogleMap, MarkerF } from "@react-google-maps/api/";
 import { useQuery } from "@tanstack/react-query";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { MdGpsFixed } from "react-icons/md";
 import SearchBar from "./SearchBar";
 import { travelAdvisorApi } from "../../types/travelAdvisorApi";
@@ -32,33 +32,28 @@ export default function MapCanvas() {
     mapRef.current = map;
   }, []);
 
-  useEffect(() => {
+  const queryLatLng = useMemo(() => {
     if (
       router.query.lat &&
       router.query.lng &&
       !isNaN(+router.query.lat) &&
       !isNaN(+router.query.lng)
-    ) {
-      const center = { lat: +router.query.lat, lng: +router.query.lng };
-
-      mapRef.current?.panTo(center);
-      if (mapRef.current?.getZoom() !== 14) mapRef.current?.setZoom(14);
-    }
+    )
+      return { lat: +router.query.lat, lng: +router.query.lng };
   }, [router.query]);
 
-  const queryIsLatLng =
-    router.query.lat &&
-    router.query.lng &&
-    !isNaN(+router.query.lat) &&
-    !isNaN(+router.query.lng)
-      ? { lat: +router.query.lat, lng: +router.query.lng }
-      : undefined;
+  useEffect(() => {
+    if (queryLatLng) {
+      mapRef.current?.panTo(queryLatLng);
+      if (mapRef.current?.getZoom() !== 14) mapRef.current?.setZoom(14);
+    }
+  }, [queryLatLng]);
 
   return (
     <section className="h-full w-full">
       <GoogleMap
         zoom={14}
-        center={queryIsLatLng ?? defaultCenter}
+        center={queryLatLng ?? defaultCenter}
         mapContainerClassName="h-full w-full"
         onLoad={onLoad}
         options={{
@@ -67,7 +62,7 @@ export default function MapCanvas() {
           clickableIcons: false,
         }}
       >
-        {queryIsLatLng && <MarkerF position={queryIsLatLng} />}
+        {queryLatLng && <MarkerF position={queryLatLng} />}
       </GoogleMap>
       {navigator.geolocation && (
         <button
