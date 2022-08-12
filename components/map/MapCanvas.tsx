@@ -1,4 +1,4 @@
-import { GoogleMap } from "@react-google-maps/api/";
+import { GoogleMap, MarkerF } from "@react-google-maps/api/";
 import { useQuery } from "@tanstack/react-query";
 import { useCallback, useEffect, useRef } from "react";
 import { MdGpsFixed } from "react-icons/md";
@@ -34,33 +34,31 @@ export default function MapCanvas() {
 
   useEffect(() => {
     if (
-      !router.query.lat ||
-      !router.query.lng ||
-      isNaN(+router.query.lat) ||
-      isNaN(+router.query.lng)
-    )
-      return;
+      router.query.lat &&
+      router.query.lng &&
+      !isNaN(+router.query.lat) &&
+      !isNaN(+router.query.lng)
+    ) {
+      const center = { lat: +router.query.lat, lng: +router.query.lng };
 
-    const center = { lat: +router.query.lat, lng: +router.query.lng };
-
-    mapRef.current?.panTo(center);
-    if (mapRef.current?.getZoom() !== 14) mapRef.current?.setZoom(14);
-
-    const mark = new google.maps.Marker({
-      position: center,
-      map: mapRef.current,
-    });
-
-    return () => {
-      mark.setMap(null);
-    };
+      mapRef.current?.panTo(center);
+      if (mapRef.current?.getZoom() !== 14) mapRef.current?.setZoom(14);
+    }
   }, [router.query]);
+
+  const queryIsLatLng =
+    router.query.lat &&
+    router.query.lng &&
+    !isNaN(+router.query.lat) &&
+    !isNaN(+router.query.lng)
+      ? { lat: +router.query.lat, lng: +router.query.lng }
+      : undefined;
 
   return (
     <section className="h-full w-full">
       <GoogleMap
         zoom={14}
-        center={defaultCenter}
+        center={queryIsLatLng ?? defaultCenter}
         mapContainerClassName="h-full w-full"
         onLoad={onLoad}
         options={{
@@ -68,7 +66,9 @@ export default function MapCanvas() {
           disableDefaultUI: true,
           clickableIcons: false,
         }}
-      ></GoogleMap>
+      >
+        {queryIsLatLng && <MarkerF position={queryIsLatLng} />}
+      </GoogleMap>
       {navigator.geolocation && (
         <button
           onClick={getCurrentPosition}
