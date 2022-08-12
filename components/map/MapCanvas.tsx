@@ -1,61 +1,60 @@
-import { GoogleMap, Marker } from "@react-google-maps/api/";
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { GoogleMap } from "@react-google-maps/api/";
+import { useQuery } from "@tanstack/react-query";
+import { useCallback, useEffect, useRef } from "react";
 import { MdGpsFixed } from "react-icons/md";
-import { Boundary } from "../../pages/map";
 import SearchBar from "./SearchBar";
+import { travelAdvisorApi } from "../../types/travelAdvisorApi";
+import { useRouter } from "next/router";
 
 const defaultCenter = {
   lat: 35.6762,
   lng: 139.6503,
 };
 
-interface Props {
-  setBoundary: Dispatch<SetStateAction<Boundary | undefined>>;
+function fetchResults(): Promise<travelAdvisorApi> {
+  return fetch("dummyData.json").then((res) => res.json());
 }
 
-export default function MapCanvas({ setBoundary }: Props) {
+export default function MapCanvas() {
+  const router = useRouter();
   const mapRef = useRef<google.maps.Map>();
-  const [center, setCenter] = useState(defaultCenter);
+
+  function getCurrentPosition() {
+    navigator?.geolocation?.getCurrentPosition((pos) => {
+      router.replace({
+        pathname: "/map",
+        query: { lat: pos.coords.latitude, lng: pos.coords.longitude },
+      });
+    });
+  }
 
   const onLoad = useCallback((map: google.maps.Map) => {
     mapRef.current = map;
   }, []);
 
-  function getBoundary() {
-    const res: any = mapRef.current?.getBounds();
-
-    return {
-      tr_longitude: res?.Ra.hi,
-      tr_latitude: res?.ub.hi,
-      bl_longitude: res?.Ra.lo,
-      bl_latitude: res?.ub.lo,
-    };
-  }
-
-  function getCurrentPosition() {
-    navigator?.geolocation?.getCurrentPosition((pos) => {
-      setCenter({
-        lat: pos.coords.latitude,
-        lng: pos.coords.longitude,
-      });
-    });
-  }
-
   useEffect(() => {
-    if (center) {
-      mapRef.current?.panTo(center);
-      mapRef.current?.setZoom(14);
-    }
+    if (
+      !router.query.lat ||
+      !router.query.lng ||
+      isNaN(+router.query.lat) ||
+      isNaN(+router.query.lng)
+    )
+      return;
 
-    setBoundary(getBoundary());
-  }, [center, setBoundary]);
+    const center = { lat: +router.query.lat, lng: +router.query.lng };
+
+    mapRef.current?.panTo(center);
+    if (mapRef.current?.getZoom() !== 14) mapRef.current?.setZoom(14);
+
+    const mark = new google.maps.Marker({
+      position: center,
+      map: mapRef.current,
+    });
+
+    return () => {
+      mark.setMap(null);
+    };
+  }, [router.query]);
 
   return (
     <section className="h-full w-full">
@@ -78,7 +77,7 @@ export default function MapCanvas({ setBoundary }: Props) {
           <MdGpsFixed />
         </button>
       )}
-      <SearchBar setCenter={setCenter} />
+      <SearchBar />
     </section>
   );
 }

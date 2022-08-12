@@ -2,6 +2,10 @@ import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import Navbar from "../components/Navbar";
 import Head from "next/head";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
+const queryClient = new QueryClient();
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -14,8 +18,11 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Navbar />
-      <Component {...pageProps} />
+      <QueryClientProvider client={queryClient}>
+        <Navbar />
+        <Component {...pageProps} />
+        <ReactQueryDevtools />
+      </QueryClientProvider>
     </>
   );
 }
