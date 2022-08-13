@@ -61,8 +61,19 @@ export default function Results({ range, setRange }: Props) {
             <select
               id="search-type"
               className="mb-3 w-full rounded text-sm outline-none focus:ring-1"
+              defaultValue="tourist_attraction"
             >
-              <option value="turist_attraction">Tourist attraction</option>
+              <option>Search all</option>
+              {searchTypes.map((type) => (
+                <option
+                  key={type}
+                  value={type}
+                  label={
+                    type.charAt(0).toUpperCase() +
+                    type.slice(1).replaceAll("_", " ")
+                  }
+                />
+              ))}
             </select>
             <label htmlFor="search-range" className="block text-xs">
               {`Range: ${range} meters`}
@@ -86,11 +97,14 @@ export default function Results({ range, setRange }: Props) {
               name="sort-by"
               id="sort-by"
               className="w-full rounded text-sm outline-none focus:ring-1"
+              defaultValue="relevance"
             >
               {sortOptions.map((sort) => (
-                <option key={sort} value={sort} className="capitalize">
-                  {sort}
-                </option>
+                <option
+                  key={sort}
+                  value={sort}
+                  label={sort.charAt(0).toUpperCase() + sort.slice(1)}
+                />
               ))}
             </select>
           </div>
@@ -114,3 +128,39 @@ async function fetchResults(): Promise<nearbySearchResult> {
 }
 
 const sortOptions = ["relevance", "rating", "distance"];
+
+function normalizeString(string: string) {
+  const first = string.charAt(1).toUpperCase();
+}
+
+const searchTypes = [
+  "airport",
+  "amusement_park",
+  "aquarium",
+  "art_gallery",
+  "bar",
+  "bus_station",
+  "cafe",
+  "campground",
+  "casino",
+  "department_store",
+  "library",
+  "lodging",
+  "meal_delivery",
+  "meal_takeaway",
+  "movie_theater",
+  "museum",
+  "night_club",
+  "park",
+  "restaurant",
+  "shopping_mall",
+  "spa",
+  "stadium",
+  "store",
+  "subway_station",
+  "supermarket",
+  "tourist_attraction",
+  "train_station",
+  "transit_station",
+  "travel_agency",
+];

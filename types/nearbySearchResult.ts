@@ -12,22 +12,23 @@ export interface nearbySearchResult {
 }
 
 export interface Result {
-  business_status: BusinessStatus;
   geometry: Geometry;
   icon: string;
   icon_background_color: IconBackgroundColor;
   icon_mask_base_uri: string;
   name: string;
-  photos: Photo[];
+  photos?: Photo[];
   place_id: string;
-  plus_code: PlusCode;
-  rating: number;
   reference: string;
   scope: Scope;
   types: string[];
-  user_ratings_total: number;
   vicinity: string;
+  business_status?: BusinessStatus;
   opening_hours?: OpeningHours;
+  plus_code?: PlusCode;
+  rating?: number;
+  user_ratings_total?: number;
+  price_level?: number;
 }
 
 export enum BusinessStatus {
@@ -50,10 +51,10 @@ export interface Viewport {
 }
 
 export enum IconBackgroundColor {
-  The13B5C7 = "#13B5C7",
+  Ff9E67 = "#FF9E67",
   The4B96F3 = "#4B96F3",
-  The4Db546 = "#4DB546",
   The7B9Eb0 = "#7B9EB0",
+  The909Ce1 = "#909CE1",
 }
 
 export interface OpeningHours {

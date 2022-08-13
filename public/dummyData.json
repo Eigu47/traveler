@@ -1,811 +1,363 @@
 {
   "html_attributions": [],
-  "next_page_token": "AeJbb3chli2OiPwenNBegYdi64vS8O0-SfFWUzW1MeGiMLOsLfE64SY5a8nNpxZ42aX8BnALPSmuyrrl9lJZgV_NKtg74or3AwGiDAelbyBxh8KTajOhAHa7u2tZzjRyWdRfckfFb2Epca8HTpFpcoXCfpX2JwO6vD9jsITexaoePXreX3tntwlSxny6Dy_hmfHD04b6vht6NfdCWq-drUsCCLe8I_O6AJD6xQDno9Ps7SIzRy_KBxEpKxdbqr-_bIVIRr_d1NeDuJI4R5ZMSfeZB2Ewutu5jAiP0FRoBYG4AFzBEmgMOmh4lvcyUi5UiSyr-WN5EX74C4eip4LnUl0eK8x38lXotPNLAmZxHuZo4TcTaxp699VwULe7gLWLYqL7gFwYZvucWIFPkZ0V4GHSteX7H48yMqlw6sy6UHm6lHv2Oed8SbyJRTB-3lSf50ClAEOfvCw",
+  "next_page_token": "AeJbb3fNm7j3-nQ2gR_oOALsTychRklHbHypum1ADiH2oVH5VaPUh3C__duiF4PWbF4Vfi6S1d4dH87tolezklCuZimRP17gB_1MnIPc9jYNkDZxHRC7QaW45dR_0i7a0Dg8EN6ycs6qCHAz57vW6ixjMwveQHgO5GFcsrlDyQ0gxnpM3uWyavz07KL4ncCw6lBhidiI5RQmAkcUC5xDIIZ5K5A0q6_J9YwJZbN2nt3YP8fjpNds-oGMoTXDOAjT_c96ms9ZZ2hah2AUul8j2lHibSdaAHhk2jGvbafuVgKMFsC_ilk4OSnqSCCdolz1CR9wyfd0pBhoNlrG792rvWBMDeAZ0xmSiKRTz-5iOKaYD2NjfRPX4tStgGWEn2I0fbuhe48i_Gk6SXjO15qB2XFXBSpgnI3VJPbyB6aSeVUHcDho",
   "results": [
     {
-      "business_status": "OPERATIONAL",
       "geometry": {
         "location": {
-          "lat": 35.581857,
-          "lng": 139.5581487
+          "lat": 35.4436739,
+          "lng": 139.6379639
         },
         "viewport": {
           "northeast": {
-            "lat": 35.5835437,
-            "lng": 139.56097195
+            "lat": 35.59283835256976,
+            "lng": 139.7253575326474
           },
           "southwest": {
-            "lat": 35.5800301,
-            "lng": 139.55550815
+            "lat": 35.31261128095807,
+            "lng": 139.4647645591694
           }
         }
       },
-      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/park-71.png",
-      "icon_background_color": "#4DB546",
-      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/tree_pinlet",
-      "name": "Utsukushigaoka Park",
-      "opening_hours": {
-        "open_now": true
-      },
+      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/geocode-71.png",
+      "icon_background_color": "#7B9EB0",
+      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/generic_pinlet",
+      "name": "Yokohama",
       "photos": [
         {
-          "height": 1836,
+          "height": 3024,
           "html_attributions": [
-            "<a href=\"https://maps.google.com/maps/contrib/108067695950663948268\">LESSON STUDIO遊音館</a>"
+            "<a href=\"https://maps.google.com/maps/contrib/100458463861154420797\">BON Bon</a>"
           ],
-          "photo_reference": "AeJbb3cDeaezGlR6UhvhBOWwRL_fPc2pBv21k78rkXFpFPzzwBOh01ArO2HTCaevAQMbhLVNgB1sWe-M3Z5rjEAns_aarShJlHr6i-99gsQyMgizXMOBjKBbnOGbtXowD_rANuXTYy5XGzmezlUFvN8GSraML1sobiaZd4qNN3-ZxEHn6t-r",
-          "width": 3264
+          "photo_reference": "AeJbb3exWpQIDXXKqTGUkUzDn2jhtI6Aho750I6lQvC0KKsbEnLhllPQaPgpgvxzT-P-DeNM4XQbnzdmTbLnxH__IHMY0onkaz5d_U6lvNWh9LrGH4242dtlyPhxHwkPEoIGxIHir0AqAfW2lmR63JJLU-2cDWAz5DRrujkNr9fPY5ut_V5a",
+          "width": 4032
         }
       ],
-      "place_id": "ChIJXxpIghf3GGAR_dntikteQ8k",
-      "plus_code": {
-        "compound_code": "HHJ5+P7 Yokohama, Kanagawa, Japan",
-        "global_code": "8Q7XHHJ5+P7"
-      },
-      "rating": 4,
-      "reference": "ChIJXxpIghf3GGAR_dntikteQ8k",
+      "place_id": "ChIJCWW2u-xbGGARAFQoYPaDlgY",
+      "reference": "ChIJCWW2u-xbGGARAFQoYPaDlgY",
       "scope": "GOOGLE",
-      "types": [
-        "park",
-        "tourist_attraction",
-        "point_of_interest",
-        "establishment"
-      ],
-      "user_ratings_total": 532,
-      "vicinity": "２丁目-２２ 美しが丘, 横浜市青葉区"
+      "types": ["locality", "political"],
+      "vicinity": "Yokohama"
     },
     {
       "business_status": "OPERATIONAL",
       "geometry": {
         "location": {
-          "lat": 35.57228920000001,
-          "lng": 139.5746517
+          "lat": 35.5791103,
+          "lng": 139.5641058
         },
         "viewport": {
           "northeast": {
-            "lat": 35.5737776802915,
-            "lng": 139.57619165
+            "lat": 35.5805131302915,
+            "lng": 139.5654131802915
           },
           "southwest": {
-            "lat": 35.5710797197085,
-            "lng": 139.57331145
+            "lat": 35.5778151697085,
+            "lng": 139.5627152197085
           }
         }
       },
-      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/park-71.png",
-      "icon_background_color": "#4DB546",
-      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/tree_pinlet",
-      "name": "Arima Furusato Park",
+      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+      "icon_background_color": "#FF9E67",
+      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet",
+      "name": "LOTO CAFFE",
       "opening_hours": {
-        "open_now": true
+        "open_now": false
       },
       "photos": [
         {
-          "height": 3120,
+          "height": 1364,
           "html_attributions": [
-            "<a href=\"https://maps.google.com/maps/contrib/113070509662289261494\">Masatoshi Takano</a>"
+            "<a href=\"https://maps.google.com/maps/contrib/115861360093940576704\">S H</a>"
           ],
-          "photo_reference": "AeJbb3ddYa9mYDKr8jsDJKQmVlKK08YbEpbVtuZ_iDTMk1A6hlj03RNrMxTZeLr6KJo-pXFshT6xVajMmgHH3ZU57auiAFVhasg7iOOjwwTiwA7WAz4hKVQ0DvSsrmu-v1eT0cA5KfNPj3JylN5MgnzAg1sHWionoAi2cXiY_H0uFo5rAixp",
-          "width": 4160
+          "photo_reference": "AeJbb3dqcTpaTe9IZxvOW0zZD0EFadlp8gV5OEch7C3urDQK1bqOWecenHTsToBe2aRp-NsYJqm-xYGBKsgJfszFvEcIneN4ZzQjc58iGAlg7hL9kwLJcbOHK5aBQjv_LuCUqvPuEDcGT3I39QLVd5SrnbEHqCm8bWBmeikDX71fcOrPuNAN",
+          "width": 2048
         }
       ],
-      "place_id": "ChIJczZ_HVb2GGARl8GaAwLWR3I",
+      "place_id": "ChIJB_KKhBz3GGARYOG2vn5Sepg",
       "plus_code": {
-        "compound_code": "HHCF+WV Kawasaki, Kanagawa, Japan",
-        "global_code": "8Q7XHHCF+WV"
+        "compound_code": "HHH7+JJ Kawasaki, Kanagawa, Japan",
+        "global_code": "8Q7XHHH7+JJ"
       },
-      "rating": 3.7,
-      "reference": "ChIJczZ_HVb2GGARl8GaAwLWR3I",
+      "rating": 4.2,
+      "reference": "ChIJB_KKhBz3GGARYOG2vn5Sepg",
       "scope": "GOOGLE",
-      "types": [
-        "park",
-        "tourist_attraction",
-        "point_of_interest",
-        "establishment"
-      ],
-      "user_ratings_total": 54,
-      "vicinity": "8-chōme-20-26-1 Arima, Miyamae Ward, Kawasaki"
+      "types": ["restaurant", "food", "point_of_interest", "establishment"],
+      "user_ratings_total": 53,
+      "vicinity": "サンウィングタマプラーザ, １F, 2-chōme-6−２０ Inukura, KawasakiMiyamae Ward"
     },
     {
       "business_status": "OPERATIONAL",
       "geometry": {
         "location": {
-          "lat": 35.5770543,
-          "lng": 139.5671143
+          "lat": 35.58677669999999,
+          "lng": 139.5697566
         },
         "viewport": {
           "northeast": {
-            "lat": 35.57842198029149,
-            "lng": 139.5680440302915
+            "lat": 35.5881514302915,
+            "lng": 139.5711479802915
           },
           "southwest": {
-            "lat": 35.5757240197085,
-            "lng": 139.5653460697085
+            "lat": 35.5854534697085,
+            "lng": 139.5684500197085
           }
         }
       },
-      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/park-71.png",
-      "icon_background_color": "#4DB546",
-      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/tree_pinlet",
-      "name": "Saginuma Park",
+      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
+      "icon_background_color": "#7B9EB0",
+      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/generic_pinlet",
+      "name": "NICO HAIRDESIGN",
       "opening_hours": {
-        "open_now": true
+        "open_now": false
       },
       "photos": [
         {
-          "height": 5120,
+          "height": 1371,
           "html_attributions": [
-            "<a href=\"https://maps.google.com/maps/contrib/108959432471500694460\">XD11 inaryo</a>"
+            "<a href=\"https://maps.google.com/maps/contrib/105646675408878636907\">NICO HAIRDESIGN</a>"
           ],
-          "photo_reference": "AeJbb3d4_Q8wl210ihymOt269m836RN76ZoVPt8hCuErI1BZjciLId5wDyK6iIhhKiEPngJSZSBoO_1kFPfa0dyUjjOcpppDvZ0DRB2V-VElUve7HYgiEyrbCfoew_oGT4-dq1s12OZd_cwPO15_Ro1KKaXoJ5g5y-K9J81n4au62y3IpE7b",
-          "width": 3840
+          "photo_reference": "AeJbb3fagkttV7Lc-9uqio2WpBtyZgXAzd2a5fyCw0MIjVNlpEA3di6VnE7-x29zA294Jv7Ta5kruBHlIbax8mjm-t4VPWU0Y6oM_D-WpfgnBPgUfjqD6cpS8r0-FT0Rj6KaYSQI2DRtfW6fGEYCHdRBpFtK3o3LO-qTznFLgv1RLnv1PYJz",
+          "width": 2048
         }
       ],
-      "place_id": "ChIJW_Zu6QL3GGAR3IN223B19r0",
+      "place_id": "ChIJCfUfNOD2GGARQ-96cEDhY_4",
       "plus_code": {
-        "compound_code": "HHG8+RR Kawasaki, Kanagawa, Japan",
-        "global_code": "8Q7XHHG8+RR"
+        "compound_code": "HHP9+PW Kawasaki, Kanagawa, Japan",
+        "global_code": "8Q7XHHP9+PW"
       },
-      "rating": 3.7,
-      "reference": "ChIJW_Zu6QL3GGAR3IN223B19r0",
+      "rating": 4.2,
+      "reference": "ChIJCfUfNOD2GGARQ-96cEDhY_4",
       "scope": "GOOGLE",
       "types": [
-        "park",
-        "tourist_attraction",
+        "beauty_salon",
+        "hair_care",
         "point_of_interest",
         "establishment"
       ],
-      "user_ratings_total": 266,
-      "vicinity": "2-chōme-10-1 Saginuma, Miyamae Ward, Kawasaki"
+      "user_ratings_total": 5,
+      "vicinity": "4-chōme-10-2 Tsuchihashi, Miyamae Ward, Kawasaki"
     },
     {
       "business_status": "OPERATIONAL",
       "geometry": {
         "location": {
-          "lat": 35.5768549,
-          "lng": 139.5718444
+          "lat": 35.5788511,
+          "lng": 139.5602785
         },
         "viewport": {
           "northeast": {
-            "lat": 35.5782144302915,
-            "lng": 139.5731876302915
+            "lat": 35.5802165802915,
+            "lng": 139.5615284802915
           },
           "southwest": {
-            "lat": 35.5755164697085,
-            "lng": 139.5704896697085
+            "lat": 35.5775186197085,
+            "lng": 139.5588305197085
           }
         }
       },
-      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/park-71.png",
-      "icon_background_color": "#4DB546",
-      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/tree_pinlet",
-      "name": "Saginuma Dai 1 Park",
+      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+      "icon_background_color": "#FF9E67",
+      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet",
+      "name": "Ramen Kagetsu Arashi",
       "opening_hours": {
-        "open_now": true
-      },
-      "photos": [
-        {
-          "height": 1920,
-          "html_attributions": [
-            "<a href=\"https://maps.google.com/maps/contrib/111260047770210652992\">匹田実</a>"
-          ],
-          "photo_reference": "AeJbb3dz_Gj1OsTz9szkbXainSrSNYCfL8JEWBOLboLMmF5xKgiAjc-8exe_75a8DSatdlUdtod1u3BNGVPoDsGapCdlPWc1iPF3M_v-peKSS85-b1SAMLyC3Z1BC3NjY2bc50RqPr9WIB6vMJe8dTxPSJU4spnBsycenSFpK76me5cWRH3N",
-          "width": 1080
-        }
-      ],
-      "place_id": "ChIJMyzAN_z2GGARXZk-NlK4mO4",
-      "plus_code": {
-        "compound_code": "HHGC+PP Kawasaki, Kanagawa, Japan",
-        "global_code": "8Q7XHHGC+PP"
-      },
-      "rating": 3.6,
-      "reference": "ChIJMyzAN_z2GGARXZk-NlK4mO4",
-      "scope": "GOOGLE",
-      "types": [
-        "park",
-        "tourist_attraction",
-        "point_of_interest",
-        "establishment"
-      ],
-      "user_ratings_total": 45,
-      "vicinity": "1-chōme-19-4 Saginuma, Miyamae Ward, Kawasaki"
-    },
-    {
-      "business_status": "OPERATIONAL",
-      "geometry": {
-        "location": {
-          "lat": 35.5823623,
-          "lng": 139.571718
-        },
-        "viewport": {
-          "northeast": {
-            "lat": 35.5836559302915,
-            "lng": 139.5731841802915
-          },
-          "southwest": {
-            "lat": 35.5809579697085,
-            "lng": 139.5704862197085
-          }
-        }
-      },
-      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/park-71.png",
-      "icon_background_color": "#4DB546",
-      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/tree_pinlet",
-      "name": "Tsuchihashi-minami Park",
-      "opening_hours": {
-        "open_now": true
-      },
-      "photos": [
-        {
-          "height": 3456,
-          "html_attributions": [
-            "<a href=\"https://maps.google.com/maps/contrib/106154587638133232505\">高橋良男</a>"
-          ],
-          "photo_reference": "AeJbb3dedognnksUyp2T_1V1yb_pYOj5PTRsRdJbX2Y8Puw1tMMiNjHyPpno76FFRoXsnEkrKk2xPBHaD4DFyQrIrU5njx4O6uL-YKdZ_K6CB7vYcMbLTJmyL5gm9cBJWLpi97nqCpMKi9cvixOM5gK7Ha8k9cPQ3an61TnFWB1q1OPNoXsQ",
-          "width": 4608
-        }
-      ],
-      "place_id": "ChIJV6mRBuP2GGARv1sZc3H1ijE",
-      "plus_code": {
-        "compound_code": "HHJC+WM Kawasaki, Kanagawa, Japan",
-        "global_code": "8Q7XHHJC+WM"
-      },
-      "rating": 3.5,
-      "reference": "ChIJV6mRBuP2GGARv1sZc3H1ijE",
-      "scope": "GOOGLE",
-      "types": [
-        "park",
-        "tourist_attraction",
-        "point_of_interest",
-        "establishment"
-      ],
-      "user_ratings_total": 28,
-      "vicinity": "3-chōme-5-6 Tsuchihashi, Miyamae Ward, Kawasaki"
-    },
-    {
-      "business_status": "OPERATIONAL",
-      "geometry": {
-        "location": {
-          "lat": 35.5837543,
-          "lng": 139.5687156
-        },
-        "viewport": {
-          "northeast": {
-            "lat": 35.58515268029149,
-            "lng": 139.5702266302915
-          },
-          "southwest": {
-            "lat": 35.5824547197085,
-            "lng": 139.5675286697085
-          }
-        }
-      },
-      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/park-71.png",
-      "icon_background_color": "#4DB546",
-      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/tree_pinlet",
-      "name": "Saginumakita Park",
-      "opening_hours": {
-        "open_now": true
-      },
-      "photos": [
-        {
-          "height": 4140,
-          "html_attributions": [
-            "<a href=\"https://maps.google.com/maps/contrib/113074526728214833237\">cypherjam狸</a>"
-          ],
-          "photo_reference": "AeJbb3djhpyK-bvjKt7j2V3GBqVw6FHLZ9ARWUoEwSKekKbijys2a-faXd6hsIEmOPyc-bSFVK5HRK7nZdQbGLfGQrVhiwqMNiZIrY76ywFd7n4PBdygstgYpsSGyVeazzpdCWjF02YkUjXk7fiot9DKGWcbpC2uON4k7IT9TEK-SmGnbEm_",
-          "width": 5520
-        }
-      ],
-      "place_id": "ChIJ9UYB_h33GGARO3xpyRkf2wU",
-      "plus_code": {
-        "compound_code": "HHM9+GF Kawasaki, Kanagawa, Japan",
-        "global_code": "8Q7XHHM9+GF"
-      },
-      "rating": 3.6,
-      "reference": "ChIJ9UYB_h33GGARO3xpyRkf2wU",
-      "scope": "GOOGLE",
-      "types": [
-        "park",
-        "tourist_attraction",
-        "point_of_interest",
-        "establishment"
-      ],
-      "user_ratings_total": 49,
-      "vicinity": "4-chōme-11 Saginuma, Miyamae Ward, Kawasaki"
-    },
-    {
-      "business_status": "OPERATIONAL",
-      "geometry": {
-        "location": {
-          "lat": 35.5780951,
-          "lng": 139.5631842
-        },
-        "viewport": {
-          "northeast": {
-            "lat": 35.5794349802915,
-            "lng": 139.5644515302915
-          },
-          "southwest": {
-            "lat": 35.5767370197085,
-            "lng": 139.5617535697085
-          }
-        }
-      },
-      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/park-71.png",
-      "icon_background_color": "#4DB546",
-      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/tree_pinlet",
-      "name": "Utsukushigaoka Otsubo Park",
-      "opening_hours": {
-        "open_now": true
+        "open_now": false
       },
       "photos": [
         {
           "height": 3024,
           "html_attributions": [
-            "<a href=\"https://maps.google.com/maps/contrib/116181607823189860708\">Takumi Kondo</a>"
+            "<a href=\"https://maps.google.com/maps/contrib/106146042062563354867\">Ryu Sato</a>"
           ],
-          "photo_reference": "AeJbb3fetw9x7qGoAggF5SyC6zVszykNbJCS7k1Tk8YKRVXyzs1xrycBuk__erIVuJfQ6Az71GgJOJsemWl1VmPSgEhChvHzm0YYkpZtW6rQx5IL11OXcSzRwJuaVp8bAjLnFIuROjzDbNgMGAS7tx0x9wZfBKb6HPkQaIJzQKF1zlN9kQv1",
+          "photo_reference": "AeJbb3cYjTtD8-rXzqca_Z25oAEy7Zu2wlQxzjhUMkvZBx5Jjw2Jkryy00icmzs2l5Og7mbTm-o-xx4Rb1-c4jy171SWhKB5JtBClJShdkeTiczMDi-AoM7vJoehWUmwp6CwL4gBb-oDjmnganGSf6Hhn1Yt8qkI4tT3nss8gvS3He_ZiC9z",
           "width": 4032
         }
       ],
-      "place_id": "ChIJDwsLZxv3GGAR49vpWRMnRug",
+      "place_id": "ChIJ9_WCRhr3GGAR64vB72qKT_0",
       "plus_code": {
-        "compound_code": "HHH7+67 Yokohama, Kanagawa, Japan",
-        "global_code": "8Q7XHHH7+67"
+        "compound_code": "HHH6+G4 Yokohama, Kanagawa, Japan",
+        "global_code": "8Q7XHHH6+G4"
       },
-      "rating": 3.1,
-      "reference": "ChIJDwsLZxv3GGAR49vpWRMnRug",
+      "price_level": 2,
+      "rating": 3.3,
+      "reference": "ChIJ9_WCRhr3GGAR64vB72qKT_0",
       "scope": "GOOGLE",
-      "types": [
-        "park",
-        "tourist_attraction",
-        "point_of_interest",
-        "establishment"
-      ],
-      "user_ratings_total": 9,
-      "vicinity": "2-chōme-４−７９ Utsukushigaoka, YokohamaAoba Ward"
+      "types": ["restaurant", "food", "point_of_interest", "establishment"],
+      "user_ratings_total": 147,
+      "vicinity": "2-chōme-１−１１ Utsukushigaoka, YokohamaAoba Ward"
     },
     {
       "business_status": "OPERATIONAL",
       "geometry": {
         "location": {
-          "lat": 35.582081,
-          "lng": 139.5744263
+          "lat": 35.57805080000001,
+          "lng": 139.5702868
         },
         "viewport": {
           "northeast": {
-            "lat": 35.5836488302915,
-            "lng": 139.5755461802915
+            "lat": 35.5793447802915,
+            "lng": 139.5716456302915
           },
           "southwest": {
-            "lat": 35.5809508697085,
-            "lng": 139.5728482197085
+            "lat": 35.5766468197085,
+            "lng": 139.5689476697085
           }
         }
       },
-      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/park-71.png",
-      "icon_background_color": "#4DB546",
-      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/tree_pinlet",
-      "name": "Kappaku Saginuma",
+      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
+      "icon_background_color": "#7B9EB0",
+      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/generic_pinlet",
+      "name": "Bianco caro鷺沼店【ビアンコ カーロ】",
       "opening_hours": {
-        "open_now": true
+        "open_now": false
       },
       "photos": [
         {
-          "height": 2448,
+          "height": 960,
           "html_attributions": [
-            "<a href=\"https://maps.google.com/maps/contrib/116632205322061479119\">Yola Pratiwi</a>"
+            "<a href=\"https://maps.google.com/maps/contrib/118268164307300120643\">Bianco caro鷺沼店【ビアンコ カーロ】</a>"
           ],
-          "photo_reference": "AeJbb3ckuEurziO31VbnEjazu65aKAA3LziqXNakEpid7w2XLJJKpvz7uLSZH_7adm0rrE6j9XMU7VeepGv0mETdc7b6TXVmSvucMgY5DmCmnxKtbIt_KRrmxiJOCxB2-wRpz4uyLh8e-hj9yrtqZzjHnNVpK_E7ffArwJzPpqmu0CKS77_Y",
-          "width": 2448
+          "photo_reference": "AeJbb3eNksaeOo7M8GWJK27whSQkSdNsjfWaYUX9ZNDTOWCjlXpKZybYuKziRDW49sZ03qMf8-2sZbO97DXkIdsbxspRzbByokiWFzhxFfh1rXTz20e2eGxXXD0TdveePm0rTHjt1TpIyCldjwSPi3p-dwxVIyp02BKhJ-AKsUlgAosFzYL6",
+          "width": 1280
         }
       ],
-      "place_id": "ChIJLWrcuuT2GGAR2X4QP9FFhKk",
+      "place_id": "ChIJiwMc-_z2GGARLvKrQB6dqZw",
       "plus_code": {
-        "compound_code": "HHJF+RQ Kawasaki, Kanagawa, Japan",
-        "global_code": "8Q7XHHJF+RQ"
+        "compound_code": "HHHC+64 Kawasaki, Kanagawa, Japan",
+        "global_code": "8Q7XHHHC+64"
       },
-      "rating": 3.7,
-      "reference": "ChIJLWrcuuT2GGAR2X4QP9FFhKk",
+      "rating": 4.1,
+      "reference": "ChIJiwMc-_z2GGARLvKrQB6dqZw",
       "scope": "GOOGLE",
-      "types": [
-        "park",
-        "tourist_attraction",
-        "point_of_interest",
-        "establishment"
-      ],
-      "user_ratings_total": 103,
-      "vicinity": "3-chōme-１−１ Tsuchihashi, KawasakiMiyamae Ward"
-    },
-    {
-      "business_status": "OPERATIONAL",
-      "geometry": {
-        "location": {
-          "lat": 35.576535,
-          "lng": 139.5631255
-        },
-        "viewport": {
-          "northeast": {
-            "lat": 35.5779560802915,
-            "lng": 139.5643340802915
-          },
-          "southwest": {
-            "lat": 35.5752581197085,
-            "lng": 139.5616361197085
-          }
-        }
-      },
-      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/park-71.png",
-      "icon_background_color": "#4DB546",
-      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/tree_pinlet",
-      "name": "Saruda Park",
-      "opening_hours": {
-        "open_now": true
-      },
-      "photos": [
-        {
-          "height": 3024,
-          "html_attributions": [
-            "<a href=\"https://maps.google.com/maps/contrib/116181607823189860708\">Takumi Kondo</a>"
-          ],
-          "photo_reference": "AeJbb3cqbO9gCSlOHZzCC-kumc2_tvhTzhTwkGj98DfB6TirmlDmmUA-YXZEf9Lw0x5BVmIAe4MIKAh0VI2MKG3UHgOiyVBUQML2gRVAyy9A1VTjaqeK5p99CcxLC4AU6GXobfZKJPGa8nfFL558HgMtY0HJN6IzLaC39n4hIuK2s0Qn9GZ0",
-          "width": 4032
-        }
-      ],
-      "place_id": "ChIJI7pvrgT3GGARF29GOseHNZY",
-      "plus_code": {
-        "compound_code": "HHG7+J7 Yokohama, Kanagawa, Japan",
-        "global_code": "8Q7XHHG7+J7"
-      },
-      "rating": 2.8,
-      "reference": "ChIJI7pvrgT3GGARF29GOseHNZY",
-      "scope": "GOOGLE",
-      "types": [
-        "park",
-        "tourist_attraction",
-        "point_of_interest",
-        "establishment"
-      ],
-      "user_ratings_total": 6,
-      "vicinity": "3-chōme-１１−１ Shinishikawa, YokohamaAoba Ward"
-    },
-    {
-      "business_status": "OPERATIONAL",
-      "geometry": {
-        "location": {
-          "lat": 35.5779777,
-          "lng": 139.5617763
-        },
-        "viewport": {
-          "northeast": {
-            "lat": 35.5793575302915,
-            "lng": 139.5630799302915
-          },
-          "southwest": {
-            "lat": 35.5766595697085,
-            "lng": 139.5603819697085
-          }
-        }
-      },
-      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/park-71.png",
-      "icon_background_color": "#4DB546",
-      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/tree_pinlet",
-      "name": "Utsukushigaoka Nichome Park",
-      "opening_hours": {
-        "open_now": true
-      },
-      "photos": [
-        {
-          "height": 2448,
-          "html_attributions": [
-            "<a href=\"https://maps.google.com/maps/contrib/116791803326099720708\">T M</a>"
-          ],
-          "photo_reference": "AeJbb3eczoPbMFYKC3x-kPOyTAekc5_DTtBg9rtLdOS38d4_B5-u34HGqU-Be6w5NwGmAp_bvoaGrxRY1BJ3Q9Ksge8OdhJxoi_QyUovr4Y1GGmwfgORr9Mr5a7dDictYmdVpmmxZyTSoh3Vc3spkyJWqfkkfiQ5cEfPd-Xe3WgmGhQQgApo",
-          "width": 3264
-        }
-      ],
-      "place_id": "ChIJk6-zGhv3GGARRzF-2tGEN60",
-      "plus_code": {
-        "compound_code": "HHH6+5P Yokohama, Kanagawa, Japan",
-        "global_code": "8Q7XHHH6+5P"
-      },
-      "rating": 3.2,
-      "reference": "ChIJk6-zGhv3GGARRzF-2tGEN60",
-      "scope": "GOOGLE",
-      "types": [
-        "park",
-        "tourist_attraction",
-        "point_of_interest",
-        "establishment"
-      ],
-      "user_ratings_total": 9,
-      "vicinity": "2-chōme-３−５１ Utsukushigaoka, YokohamaAoba Ward"
-    },
-    {
-      "business_status": "OPERATIONAL",
-      "geometry": {
-        "location": {
-          "lat": 35.5783994,
-          "lng": 139.5616154
-        },
-        "viewport": {
-          "northeast": {
-            "lat": 35.5798032802915,
-            "lng": 139.5630712802915
-          },
-          "southwest": {
-            "lat": 35.5771053197085,
-            "lng": 139.5603733197085
-          }
-        }
-      },
-      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/park-71.png",
-      "icon_background_color": "#4DB546",
-      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/tree_pinlet",
-      "name": "Utsukushigaoka Daigo Park",
-      "opening_hours": {
-        "open_now": true
-      },
-      "photos": [
-        {
-          "height": 3024,
-          "html_attributions": [
-            "<a href=\"https://maps.google.com/maps/contrib/116181607823189860708\">Takumi Kondo</a>"
-          ],
-          "photo_reference": "AeJbb3etYinQQUDh5_4sCsvrbcjzEBS0ohS5BJjmj0RYsqTV6aZ0xrVltb8KiStCt7UCHkzivbhwmAc8PLc8doILybGJ3odCh8l8cr5VfBQH42dT7-3jOEu2Xx2bxOrxlZ4fQ8zPP6O8unq1eGOsoS0_XzsF8gN6iSncAlpX0bLcBVyNSxA-",
-          "width": 4032
-        }
-      ],
-      "place_id": "ChIJQY2tBxv3GGARV8X8mrIz85Q",
-      "plus_code": {
-        "compound_code": "HHH6+9J Yokohama, Kanagawa, Japan",
-        "global_code": "8Q7XHHH6+9J"
-      },
-      "rating": 3.9,
-      "reference": "ChIJQY2tBxv3GGARV8X8mrIz85Q",
-      "scope": "GOOGLE",
-      "types": [
-        "park",
-        "tourist_attraction",
-        "point_of_interest",
-        "establishment"
-      ],
+      "types": ["hair_care", "point_of_interest", "establishment"],
       "user_ratings_total": 37,
-      "vicinity": "2-chōme-２−４ Utsukushigaoka, YokohamaAoba Ward"
+      "vicinity": "3-chōme-５−３１ Saginuma, KawasakiMiyamae Ward"
     },
     {
       "business_status": "OPERATIONAL",
       "geometry": {
         "location": {
-          "lat": 35.5734384,
-          "lng": 139.5664715
+          "lat": 35.5789641,
+          "lng": 139.5595153
         },
         "viewport": {
           "northeast": {
-            "lat": 35.5747250302915,
-            "lng": 139.5679210802915
+            "lat": 35.58030658029151,
+            "lng": 139.5608477302915
           },
           "southwest": {
-            "lat": 35.5720270697085,
-            "lng": 139.5652231197085
+            "lat": 35.57760861970851,
+            "lng": 139.5581497697085
           }
         }
       },
-      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/park-71.png",
-      "icon_background_color": "#4DB546",
-      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/tree_pinlet",
-      "name": "Takatsu Park",
+      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+      "icon_background_color": "#FF9E67",
+      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet",
+      "name": "Prologue Passage",
       "opening_hours": {
-        "open_now": true
+        "open_now": false
       },
       "photos": [
         {
-          "height": 3468,
+          "height": 4032,
           "html_attributions": [
-            "<a href=\"https://maps.google.com/maps/contrib/115601038684414585329\">M K</a>"
+            "<a href=\"https://maps.google.com/maps/contrib/100025670310891929808\">right side</a>"
           ],
-          "photo_reference": "AeJbb3caQ_U_8uND4Qkx6EeyAgmOj60kMvaGs1hKOLlJEe5St_xofSSVm3Oqbh3EAZKndt8BypGP10BPUQM7z12zZ9K40dgysR0Ms3CRgywtiNYOeRUq0AYnhVoNEt99lF_XR83ZK24BjIoGqUO9cUBd_fNBw9Nb5s_VfEVwHFITmNKYk2Ez",
-          "width": 4624
+          "photo_reference": "AeJbb3fGz3AdgfuUtoYe6Gk20vx76mpqlTgV63sAF1oFKKB6UOjVoLmsGb8_k36R0u7z2Z5tyOWbLYAq4eXZqob-x33QKq0gp1zX2lj-z6NZPQeR69TKUsr-hvMiSM6as9_-whiT2Q_zzRqkFIB0mU4XvEIjN7bkyHyDu--3M0ETObbCXXED",
+          "width": 3024
         }
       ],
-      "place_id": "ChIJea8xgQH3GGARKwn_c5hcpCw",
+      "place_id": "ChIJdc6bFBr3GGARHEugSgrwXOs",
       "plus_code": {
-        "compound_code": "HHF8+9H Yokohama, Kanagawa, Japan",
-        "global_code": "8Q7XHHF8+9H"
+        "compound_code": "HHH5+HR Yokohama, Kanagawa, Japan",
+        "global_code": "8Q7XHHH5+HR"
       },
+      "price_level": 2,
       "rating": 4,
-      "reference": "ChIJea8xgQH3GGARKwn_c5hcpCw",
+      "reference": "ChIJdc6bFBr3GGARHEugSgrwXOs",
       "scope": "GOOGLE",
       "types": [
-        "park",
-        "tourist_attraction",
+        "bakery",
+        "food",
+        "store",
         "point_of_interest",
         "establishment"
       ],
-      "user_ratings_total": 57,
-      "vicinity": "4-chōme-１７−１ Shinishikawa, YokohamaAoba Ward"
+      "user_ratings_total": 58,
+      "vicinity": "セントルプラザ, 2-chōme-１４−１２ Utsukushigaoka, YokohamaAoba Ward"
     },
     {
       "business_status": "OPERATIONAL",
       "geometry": {
         "location": {
-          "lat": 35.57284619999999,
-          "lng": 139.5699484
+          "lat": 35.578607,
+          "lng": 139.5734897
         },
         "viewport": {
           "northeast": {
-            "lat": 35.57422238029149,
-            "lng": 139.5713752802915
+            "lat": 35.5800633802915,
+            "lng": 139.5748693802915
           },
           "southwest": {
-            "lat": 35.5715244197085,
-            "lng": 139.5686773197085
+            "lat": 35.57736541970851,
+            "lng": 139.5721714197085
           }
         }
       },
-      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/park-71.png",
-      "icon_background_color": "#4DB546",
-      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/tree_pinlet",
-      "name": "Arimasakura Park",
+      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/shopping-71.png",
+      "icon_background_color": "#4B96F3",
+      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/shopping_pinlet",
+      "name": "ＫＥＹＵＣＡＳＷＥＥＴＳフレルさぎ沼店",
       "opening_hours": {
-        "open_now": true
+        "open_now": false
       },
       "photos": [
         {
           "height": 2160,
           "html_attributions": [
-            "<a href=\"https://maps.google.com/maps/contrib/103863009982762779563\">Dale McCord</a>"
+            "<a href=\"https://maps.google.com/maps/contrib/107215816041238188961\">ぽてこ</a>"
           ],
-          "photo_reference": "AeJbb3dq-5NxvIVSTdOxOHyxBRhsThk5iU61rBF06qmuBT9ssH3P90Do9Culz8v4XQamkOTSKbE9EF02Ux7a9kDRcl4XCYdLPlF5MkpbIlWuufPHFDWHYqlbjoOtw6DwrinHa3Tl758Y9wGmpIxIK_yI-65XOVpsK-zS5Jl0oapC0qi1OhDy",
+          "photo_reference": "AeJbb3cdQ8ZZ_SxPHbYQaThHCj4WfOsitaVuP8qN9xfPa93XQbyFD9Enka7n969cM_MP5SZ-ahBvjmp9u8w-Zt3zjg3n67FhEmR5VZLvbWuBoOFhsrNjCLkRJc5kHYk_h0x1aOGnAgHy0Z53NWb-205dw-TlU9Mycqz1JEj3x3NgbCZscJJG",
           "width": 2880
         }
       ],
-      "place_id": "ChIJ5010Nf72GGARAPbidIi0omo",
+      "place_id": "ChIJeTZNfvz2GGAR8JvHCtYhDqE",
       "plus_code": {
-        "compound_code": "HHF9+4X Kawasaki, Kanagawa, Japan",
-        "global_code": "8Q7XHHF9+4X"
+        "compound_code": "HHHF+C9 Kawasaki, Kanagawa, Japan",
+        "global_code": "8Q7XHHHF+C9"
       },
-      "rating": 3.6,
-      "reference": "ChIJ5010Nf72GGARAPbidIi0omo",
+      "rating": 4,
+      "reference": "ChIJeTZNfvz2GGAR8JvHCtYhDqE",
       "scope": "GOOGLE",
-      "types": [
-        "park",
-        "tourist_attraction",
-        "point_of_interest",
-        "establishment"
-      ],
-      "user_ratings_total": 34,
-      "vicinity": "9 Chome-6 Arima, Miyamae Ward, Kawasaki"
+      "types": ["food", "store", "point_of_interest", "establishment"],
+      "user_ratings_total": 4,
+      "vicinity": "１丁目-１ 鷺沼, 川崎市宮前区"
     },
     {
       "business_status": "OPERATIONAL",
       "geometry": {
         "location": {
-          "lat": 35.5806389,
-          "lng": 139.5770859
+          "lat": 35.5793579,
+          "lng": 139.5729469
         },
         "viewport": {
           "northeast": {
-            "lat": 35.5819956802915,
-            "lng": 139.5783222302915
+            "lat": 35.5806344302915,
+            "lng": 139.5744418802915
           },
           "southwest": {
-            "lat": 35.5792977197085,
-            "lng": 139.5756242697085
+            "lat": 35.5779364697085,
+            "lng": 139.5717439197085
           }
         }
       },
-      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/park-71.png",
-      "icon_background_color": "#4DB546",
-      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/tree_pinlet",
-      "name": "Kodai West Park",
+      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+      "icon_background_color": "#FF9E67",
+      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet",
+      "name": "おむすび権米衛 鷺沼店",
       "opening_hours": {
-        "open_now": true
-      },
-      "photos": [
-        {
-          "height": 2160,
-          "html_attributions": [
-            "<a href=\"https://maps.google.com/maps/contrib/114551158499169500098\">齊藤良彦</a>"
-          ],
-          "photo_reference": "AeJbb3cUflrCF_OiugJiJ6_zRXD_0b8-4p2w-U2xd-WK0ChexaedaaW1Zvexgcz7iLIki6fjE0K1yxU5PsYkK96lciNaqZho-exURM_WZ8e5QL7OPXf3S6QqyV7D4fFqIj0KsxelqPwQ8_vxFGqPtemJnSCt13AkvhyWeIn5wiHYXeqKBbdS",
-          "width": 3840
-        }
-      ],
-      "place_id": "ChIJ9_4R8Pr2GGARKZzM3WChWcw",
-      "plus_code": {
-        "compound_code": "HHJG+7R Kawasaki, Kanagawa, Japan",
-        "global_code": "8Q7XHHJG+7R"
-      },
-      "rating": 3.9,
-      "reference": "ChIJ9_4R8Pr2GGARKZzM3WChWcw",
-      "scope": "GOOGLE",
-      "types": [
-        "park",
-        "tourist_attraction",
-        "point_of_interest",
-        "establishment"
-      ],
-      "user_ratings_total": 36,
-      "vicinity": "１丁目-１３ 小台, 川崎市宮前区"
-    },
-    {
-      "business_status": "OPERATIONAL",
-      "geometry": {
-        "location": {
-          "lat": 35.5840226,
-          "lng": 139.5621331
-        },
-        "viewport": {
-          "northeast": {
-            "lat": 35.5855821802915,
-            "lng": 139.56381995
-          },
-          "southwest": {
-            "lat": 35.5828842197085,
-            "lng": 139.56094695
-          }
-        }
-      },
-      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/park-71.png",
-      "icon_background_color": "#4DB546",
-      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/tree_pinlet",
-      "name": "Miyamaeutsukushinomori Park",
-      "opening_hours": {
-        "open_now": true
-      },
-      "photos": [
-        {
-          "height": 3456,
-          "html_attributions": [
-            "<a href=\"https://maps.google.com/maps/contrib/110193514269809607883\">Hirotaka Yokokawa</a>"
-          ],
-          "photo_reference": "AeJbb3dU58rGM4uCMb1NwEEaInbwK9MU8LMlVS-8M5bdM2JbgOCYqvb1-XWcbpAmsbWgy9eMna7DLWTx4dIr_6Zx3_XseY2fwjsEcWjJusCUOEL8WUrxeyUiHyy1GoR5WJTXfpIB05g1yyUbDyjSYznq8jPizUZ9C056vHyf1GcqL3pcLfQp",
-          "width": 4608
-        }
-      ],
-      "place_id": "ChIJdTX_2hj3GGAR68uXBHyqu44",
-      "plus_code": {
-        "compound_code": "HHM6+JV Kawasaki, Kanagawa, Japan",
-        "global_code": "8Q7XHHM6+JV"
-      },
-      "rating": 3.6,
-      "reference": "ChIJdTX_2hj3GGAR68uXBHyqu44",
-      "scope": "GOOGLE",
-      "types": [
-        "park",
-        "tourist_attraction",
-        "point_of_interest",
-        "establishment"
-      ],
-      "user_ratings_total": 84,
-      "vicinity": "2-chōme-25-3 Inukura, Miyamae Ward, Kawasaki"
-    },
-    {
-      "business_status": "OPERATIONAL",
-      "geometry": {
-        "location": {
-          "lat": 35.5753897,
-          "lng": 139.575809
-        },
-        "viewport": {
-          "northeast": {
-            "lat": 35.5767791802915,
-            "lng": 139.5771786302915
-          },
-          "southwest": {
-            "lat": 35.5740812197085,
-            "lng": 139.5744806697085
-          }
-        }
-      },
-      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/park-71.png",
-      "icon_background_color": "#4DB546",
-      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/tree_pinlet",
-      "name": "Arimakaede Park",
-      "opening_hours": {
-        "open_now": true
+        "open_now": false
       },
       "photos": [
         {
@@ -813,234 +365,598 @@
           "html_attributions": [
             "<a href=\"https://maps.google.com/maps/contrib/105113064044179083677\">P. Marlowe</a>"
           ],
-          "photo_reference": "AeJbb3fJQTHeLzTywF9WlO_ViZHV-9tgEVt09jo11PR0Dzv46vWi8974WL7rrmMUe46dp3DfULC9Ezxw2hiyQo_x0ksV3ZWp--r-fb9Rn0CZh8wCOzwpQPhtRucp-ueJZIkdQrh2j0_AWVLGIPyFxsEirPxq64d752tbE83AvUZ7BqldtGS3",
+          "photo_reference": "AeJbb3d91XKkKsL3Q7YIPJWFHTzirXP4OJBZfNJF7HWK_7T_qSOu0nknV7AueOTJggC_XQ_jgYJytIKOJUZVcni0GvNa-YXlo87h0QzzdOsh1VeY9rsoEjSz3riaHxZpGM7idjJtAAN962jxsFwRZpbyvvzzO_Bb5HZzW0yJsP8EoS88tr7L",
           "width": 4160
         }
       ],
-      "place_id": "ChIJw3mjBPn2GGARdU2HNjH7iNY",
+      "place_id": "ChIJ2Znblfz2GGARhZUcia604a0",
       "plus_code": {
-        "compound_code": "HHGG+58 Kawasaki, Kanagawa, Japan",
-        "global_code": "8Q7XHHGG+58"
+        "compound_code": "HHHF+P5 Kawasaki, Kanagawa, Japan",
+        "global_code": "8Q7XHHHF+P5"
       },
-      "rating": 3,
-      "reference": "ChIJw3mjBPn2GGARdU2HNjH7iNY",
+      "price_level": 1,
+      "rating": 4,
+      "reference": "ChIJ2Znblfz2GGARhZUcia604a0",
       "scope": "GOOGLE",
-      "types": [
-        "park",
-        "tourist_attraction",
-        "point_of_interest",
-        "establishment"
-      ],
-      "user_ratings_total": 4,
-      "vicinity": "8-chōme-6-5 Arima, Miyamae Ward, Kawasaki"
+      "types": ["restaurant", "food", "point_of_interest", "establishment"],
+      "user_ratings_total": 61,
+      "vicinity": "3-chōme-１−１ Saginuma, KawasakiMiyamae Ward"
     },
     {
       "business_status": "OPERATIONAL",
       "geometry": {
         "location": {
-          "lat": 35.57330049999999,
-          "lng": 139.5739321
+          "lat": 35.57978799999999,
+          "lng": 139.5717516
         },
         "viewport": {
           "northeast": {
-            "lat": 35.5746602802915,
-            "lng": 139.5753403302915
+            "lat": 35.58110268029149,
+            "lng": 139.5731486302915
           },
           "southwest": {
-            "lat": 35.5719623197085,
-            "lng": 139.5726423697085
+            "lat": 35.57840471970849,
+            "lng": 139.5704506697085
           }
         }
       },
-      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/park-71.png",
-      "icon_background_color": "#4DB546",
-      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/tree_pinlet",
-      "name": "Arima Yamaboshi Park",
+      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
+      "icon_background_color": "#7B9EB0",
+      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/generic_pinlet",
+      "name": "ヘアサロンミー",
+      "opening_hours": {
+        "open_now": false
+      },
+      "place_id": "ChIJTRmE0Pz2GGARotEenjRm4Ec",
+      "plus_code": {
+        "compound_code": "HHHC+WP Kawasaki, Kanagawa, Japan",
+        "global_code": "8Q7XHHHC+WP"
+      },
+      "rating": 4.2,
+      "reference": "ChIJTRmE0Pz2GGARotEenjRm4Ec",
+      "scope": "GOOGLE",
+      "types": ["hair_care", "point_of_interest", "establishment"],
+      "user_ratings_total": 5,
+      "vicinity": "3-chōme-３−４ Saginuma, KawasakiMiyamae Ward"
+    },
+    {
+      "business_status": "OPERATIONAL",
+      "geometry": {
+        "location": {
+          "lat": 35.5786093,
+          "lng": 139.5578432
+        },
+        "viewport": {
+          "northeast": {
+            "lat": 35.58019883029149,
+            "lng": 139.5589312302915
+          },
+          "southwest": {
+            "lat": 35.57750086970849,
+            "lng": 139.5562332697085
+          }
+        }
+      },
+      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/shopping-71.png",
+      "icon_background_color": "#4B96F3",
+      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/shoppingcart_pinlet",
+      "name": "林フルーツ たまプラーザ店",
+      "opening_hours": {
+        "open_now": false
+      },
+      "photos": [
+        {
+          "height": 3043,
+          "html_attributions": [
+            "<a href=\"https://maps.google.com/maps/contrib/117680507665710395546\">whitecat ameba</a>"
+          ],
+          "photo_reference": "AeJbb3f8tHWXZHn-TsF9HXlSdxKbVH4fdcVOHTNarL7jht2B2jFMtEenPMtYl53a3fo3WU6uwtoUQTt1kY-er6xwYJG_byisCDe27IxLjxhk2qDH_5vxcuNeSZvq6xo6Xk03y5M31_Zh89X6HD5VeL8zSJyvx1Sr3m6onR_5Y7TsixKdDSRx",
+          "width": 2400
+        }
+      ],
+      "place_id": "ChIJ01CNthD3GGAR6D0m4DDy7-0",
+      "plus_code": {
+        "compound_code": "HHH5+C4 Yokohama, Kanagawa, Japan",
+        "global_code": "8Q7XHHH5+C4"
+      },
+      "rating": 3.6,
+      "reference": "ChIJ01CNthD3GGAR6D0m4DDy7-0",
+      "scope": "GOOGLE",
+      "types": [
+        "grocery_or_supermarket",
+        "food",
+        "store",
+        "point_of_interest",
+        "establishment"
+      ],
+      "user_ratings_total": 10,
+      "vicinity": "１丁目-７ 美しが丘, 横浜市青葉区"
+    },
+    {
+      "business_status": "OPERATIONAL",
+      "geometry": {
+        "location": {
+          "lat": 35.5838014,
+          "lng": 139.5638155
+        },
+        "viewport": {
+          "northeast": {
+            "lat": 35.5850592802915,
+            "lng": 139.5652157302915
+          },
+          "southwest": {
+            "lat": 35.5823613197085,
+            "lng": 139.5625177697085
+          }
+        }
+      },
+      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+      "icon_background_color": "#FF9E67",
+      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet",
+      "name": "Bekotei restaurant",
+      "opening_hours": {
+        "open_now": false
+      },
+      "photos": [
+        {
+          "height": 720,
+          "html_attributions": [
+            "<a href=\"https://maps.google.com/maps/contrib/103602561952052442010\">焼肉べこ亭 たまプラーザ本店</a>"
+          ],
+          "photo_reference": "AeJbb3ebDYmwXDeDzE1sys1aXUltp02DhyRtEvHa32EFlC4w3vOci2gP1hJtNXOPE88FxjQl7qFs2Pi1FiR8IQQuCk139eCs-JVJ33ZXWDhdxpfxblhK8ygmbGEwBXCk7-_FbU4Ncef_luqRObutOym3BEsMjA07SZEISqxw_Wn0PMOTjC9G",
+          "width": 1081
+        }
+      ],
+      "place_id": "ChIJD3Ff1B73GGARS5bMGkuyxV4",
+      "plus_code": {
+        "compound_code": "HHM7+GG Kawasaki, Kanagawa, Japan",
+        "global_code": "8Q7XHHM7+GG"
+      },
+      "price_level": 3,
+      "rating": 4.1,
+      "reference": "ChIJD3Ff1B73GGARS5bMGkuyxV4",
+      "scope": "GOOGLE",
+      "types": ["restaurant", "food", "point_of_interest", "establishment"],
+      "user_ratings_total": 452,
+      "vicinity": "2-chōme-10-1 Inukura, Miyamae Ward, Kawasaki"
+    },
+    {
+      "business_status": "OPERATIONAL",
+      "geometry": {
+        "location": {
+          "lat": 35.5876781,
+          "lng": 139.5688594
+        },
+        "viewport": {
+          "northeast": {
+            "lat": 35.5892703802915,
+            "lng": 139.5702470802915
+          },
+          "southwest": {
+            "lat": 35.5865724197085,
+            "lng": 139.5675491197085
+          }
+        }
+      },
+      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/lodging-71.png",
+      "icon_background_color": "#909CE1",
+      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/hotel_pinlet",
+      "name": "BaliAn Resort Kawasaki",
       "opening_hours": {
         "open_now": true
       },
       "photos": [
         {
-          "height": 4032,
+          "height": 2000,
           "html_attributions": [
-            "<a href=\"https://maps.google.com/maps/contrib/108344636384235428257\">吉田良太</a>"
+            "<a href=\"https://maps.google.com/maps/contrib/111381463851514801006\">ホテルバリアンリゾート東名川崎I.C店</a>"
           ],
-          "photo_reference": "AeJbb3divmM-XNGrJUFa-dCcNB7KzQ-B8u6Prvg3m-Nqm_5KG1Ia1A3B0sYlWcPU7PQH9VX7VVKE7siktF2j7dsR-qnTVNHbp_v0jcglLWFE-kVC6X90Br16H7fIToyYT7446LYwzoXpmNOboJzUe9vOj0kiU3pNDDaoH8PRsMws3tM7ztCk",
-          "width": 3024
+          "photo_reference": "AeJbb3ePRkz6fR7CZVh7xyd8stooaQPQw4bMKHgXYteQ3WpZbODdeB1jEcOxfg3KzKH9feA26DYV0xKe8gRUwWF96UPY_MjyMr_PxE1Gf5BAWQTfSeVvTZ4LZJXvuWBX2HPrmck5vpnwjPmuYUdOR7hiP80NGRHplEermGfiXtsaBTsBdeEN",
+          "width": 3008
         }
       ],
-      "place_id": "ChIJX0Hhyvj2GGARSZzZY4uxFvg",
+      "place_id": "ChIJudOKHOD2GGARm3PsojdRrBQ",
       "plus_code": {
-        "compound_code": "HHFF+8H Kawasaki, Kanagawa, Japan",
-        "global_code": "8Q7XHHFF+8H"
+        "compound_code": "HHQ9+3G Kawasaki, Kanagawa, Japan",
+        "global_code": "8Q7XHHQ9+3G"
       },
-      "rating": 2.9,
-      "reference": "ChIJX0Hhyvj2GGARSZzZY4uxFvg",
+      "rating": 4.2,
+      "reference": "ChIJudOKHOD2GGARm3PsojdRrBQ",
       "scope": "GOOGLE",
-      "types": [
-        "park",
-        "tourist_attraction",
-        "point_of_interest",
-        "establishment"
-      ],
-      "user_ratings_total": 12,
-      "vicinity": "8 Chome-19 Arima, Miyamae Ward, Kawasaki"
+      "types": ["lodging", "point_of_interest", "establishment"],
+      "user_ratings_total": 80,
+      "vicinity": "4-chōme-１４−３ Tsuchihashi, KawasakiMiyamae Ward"
     },
     {
       "business_status": "OPERATIONAL",
       "geometry": {
         "location": {
-          "lat": 35.5868511,
-          "lng": 139.5705889
+          "lat": 35.57931790000001,
+          "lng": 139.559126
         },
         "viewport": {
           "northeast": {
-            "lat": 35.58813963029149,
-            "lng": 139.5718166802915
+            "lat": 35.5805687302915,
+            "lng": 139.5604856802915
           },
           "southwest": {
-            "lat": 35.58544166970849,
-            "lng": 139.5691187197085
+            "lat": 35.57787076970851,
+            "lng": 139.5577877197085
           }
         }
       },
-      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/park-71.png",
-      "icon_background_color": "#4DB546",
-      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/tree_pinlet",
-      "name": "Dobashi 4-chome Park",
+      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+      "icon_background_color": "#FF9E67",
+      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet",
+      "name": "中国料理 黒龍 麺百花",
       "opening_hours": {
-        "open_now": true
+        "open_now": false
+      },
+      "photos": [
+        {
+          "height": 1536,
+          "html_attributions": [
+            "<a href=\"https://maps.google.com/maps/contrib/112189643529211565143\">makkuro rider</a>"
+          ],
+          "photo_reference": "AeJbb3fV-i2rC9EVsd1K69ePera54z3wacJGAzTsUkB8YjMq1DqhWljuMdHL4Frw-YLtXXLgk9OfbELsaZndgBBlTxZKGLUEHoe4LLyy9PRggww9tNZgjhHbx5NiIo97SD6ouPdWujMg-0QBKCSO5Mws4OQWq9Wetbdh2SamgzFfDe3e3qDc",
+          "width": 2048
+        }
+      ],
+      "place_id": "ChIJPxThBBr3GGARh5OjdTqXtoU",
+      "plus_code": {
+        "compound_code": "HHH5+PM Yokohama, Kanagawa, Japan",
+        "global_code": "8Q7XHHH5+PM"
+      },
+      "price_level": 2,
+      "rating": 4,
+      "reference": "ChIJPxThBBr3GGARh5OjdTqXtoU",
+      "scope": "GOOGLE",
+      "types": ["restaurant", "food", "point_of_interest", "establishment"],
+      "user_ratings_total": 203,
+      "vicinity": "2-chōme-１６−１ Utsukushigaoka, YokohamaAoba Ward"
+    },
+    {
+      "business_status": "OPERATIONAL",
+      "geometry": {
+        "location": {
+          "lat": 35.5800928,
+          "lng": 139.5586927
+        },
+        "viewport": {
+          "northeast": {
+            "lat": 35.5814622802915,
+            "lng": 139.5601165802915
+          },
+          "southwest": {
+            "lat": 35.5787643197085,
+            "lng": 139.5574186197085
+          }
+        }
+      },
+      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+      "icon_background_color": "#FF9E67",
+      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet",
+      "name": "蕎麦切り はん平",
+      "opening_hours": {
+        "open_now": false
       },
       "photos": [
         {
           "height": 3024,
           "html_attributions": [
-            "<a href=\"https://maps.google.com/maps/contrib/116181607823189860708\">Takumi Kondo</a>"
+            "<a href=\"https://maps.google.com/maps/contrib/110832632350741340550\">村長智</a>"
           ],
-          "photo_reference": "AeJbb3fVXqQGaPB-MIetmsPxwG1u-I54AFJ6RnJMTg8e2CM18RR6C1C9UUgGTr8QM9CJgNeXmBnl1-gynMpwoNOq_SM47qe0E-jB8AVYnvEN1WVkCP9QLgerbrlOwvMjwBtrhlgV2pE_UFcEjF-FJ7U9fLu_1dkDcwRvERzQmghLUqcHHV0N",
+          "photo_reference": "AeJbb3d1TtQQr0uewG6rWqlL2q-6j8bc0pcS-sK5vknI5t8JLKXstqaLV4TeVeIJXDgqx3q2fh6BRa-_AVimdTVJV_EHvFd4zNPlAcOALnmgmEBTB7AeNq6yqhqaD-6rV-oGqqhO1d8QP8CxV5pvc01kd1TboomlDlTAMz5oyhtsYF3GAA1X",
           "width": 4032
         }
       ],
-      "place_id": "ChIJQzFyTeD2GGAR-ohNI_26LMU",
+      "place_id": "ChIJqT8Z_Rn3GGARw45mffEBOS0",
       "plus_code": {
-        "compound_code": "HHPC+P6 Kawasaki, Kanagawa, Japan",
-        "global_code": "8Q7XHHPC+P6"
+        "compound_code": "HHJ5+2F Yokohama, Kanagawa, Japan",
+        "global_code": "8Q7XHHJ5+2F"
       },
-      "rating": 3,
-      "reference": "ChIJQzFyTeD2GGAR-ohNI_26LMU",
+      "price_level": 2,
+      "rating": 3.7,
+      "reference": "ChIJqT8Z_Rn3GGARw45mffEBOS0",
       "scope": "GOOGLE",
-      "types": [
-        "park",
-        "tourist_attraction",
-        "point_of_interest",
-        "establishment"
-      ],
-      "user_ratings_total": 9,
-      "vicinity": "4-chōme-11-4 Tsuchihashi, Miyamae Ward, Kawasaki"
+      "types": ["restaurant", "food", "point_of_interest", "establishment"],
+      "user_ratings_total": 22,
+      "vicinity": "ホワイトハウス 102, 2-chōme-２０−２０ Utsukushigaoka, YokohamaAoba Ward"
     },
     {
       "business_status": "OPERATIONAL",
       "geometry": {
         "location": {
-          "lat": 35.5859009,
-          "lng": 139.5746235
+          "lat": 35.5781788,
+          "lng": 139.5593642
         },
         "viewport": {
           "northeast": {
-            "lat": 35.5872939802915,
-            "lng": 139.5760078802915
+            "lat": 35.57946803029149,
+            "lng": 139.5600509302915
           },
           "southwest": {
-            "lat": 35.58459601970851,
-            "lng": 139.5733099197085
+            "lat": 35.5767700697085,
+            "lng": 139.5573529697085
           }
         }
       },
-      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/park-71.png",
-      "icon_background_color": "#4DB546",
-      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/tree_pinlet",
-      "name": "Dobashi 2-chome Park",
+      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+      "icon_background_color": "#FF9E67",
+      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet",
+      "name": "McDonald's Tama Plaza Terrace",
       "opening_hours": {
-        "open_now": true
+        "open_now": false
       },
       "photos": [
         {
-          "height": 2448,
+          "height": 3024,
           "html_attributions": [
-            "<a href=\"https://maps.google.com/maps/contrib/104822948706597486611\">ぬのやみつひろ</a>"
+            "<a href=\"https://maps.google.com/maps/contrib/110832632350741340550\">村長智</a>"
           ],
-          "photo_reference": "AeJbb3cawGzdFmly19td9sk4gNiI5zb_9Vm1v8ObnzO5FytYMjr-CmleCJR5xL6PN7KrmIpMl3gSQjALyZeyrk6fsL3dChklEeIJOXLFp8CzViP7I8LCegZMtHVyitqSojG2SMJfX8KVTVweEGZfkFrDaFLewjphLd-sCt0zU2nDk-gIcIbP",
-          "width": 3264
+          "photo_reference": "AeJbb3e_GqUq8R8imDVnIm-UELOPZNK12YcqRQ9tGQyU-9pgW935_1wSlWXz_X-pp2xD3wnT0mRleH4NAmHzJ1_I312e6E2aKdN53KuXXdtpXuKPBSp_94kqh5f9t_Rwo6xT5rH2_olRPqR0f35usk20jdvgTP07SqlvnrI4tcQ9tFwOUxHS",
+          "width": 4032
         }
       ],
-      "place_id": "ChIJc-P4HOT2GGARcVNWMJUT4Xc",
+      "place_id": "ChIJbdhShRD3GGAR77OG6ukN-Gw",
       "plus_code": {
-        "compound_code": "HHPF+9R Kawasaki, Kanagawa, Japan",
-        "global_code": "8Q7XHHPF+9R"
+        "compound_code": "HHH5+7P Yokohama, Kanagawa, Japan",
+        "global_code": "8Q7XHHH5+7P"
       },
+      "price_level": 1,
       "rating": 3.5,
-      "reference": "ChIJc-P4HOT2GGARcVNWMJUT4Xc",
+      "reference": "ChIJbdhShRD3GGAR77OG6ukN-Gw",
       "scope": "GOOGLE",
       "types": [
-        "park",
-        "tourist_attraction",
+        "cafe",
+        "restaurant",
+        "food",
+        "store",
         "point_of_interest",
         "establishment"
       ],
-      "user_ratings_total": 43,
-      "vicinity": "2-chōme-13-1 Tsuchihashi, Miyamae Ward, Kawasaki"
+      "user_ratings_total": 451,
+      "vicinity": "1-chōme-1-2 Utsukushigaoka, Aoba Ward, Yokohama"
     },
     {
       "business_status": "OPERATIONAL",
       "geometry": {
         "location": {
-          "lat": 35.58546250000001,
-          "lng": 139.5622347
+          "lat": 35.57977100000001,
+          "lng": 139.571745
         },
         "viewport": {
           "northeast": {
-            "lat": 35.5866920802915,
-            "lng": 139.5635076802915
+            "lat": 35.58108803029151,
+            "lng": 139.5731387302915
           },
           "southwest": {
-            "lat": 35.5839941197085,
-            "lng": 139.5608097197085
+            "lat": 35.57839006970851,
+            "lng": 139.5704407697085
           }
         }
       },
-      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/park-71.png",
-      "icon_background_color": "#4DB546",
-      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/tree_pinlet",
-      "name": "Inukurasakuranooka Park",
+      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+      "icon_background_color": "#FF9E67",
+      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet",
+      "name": "うらら",
       "opening_hours": {
-        "open_now": true
+        "open_now": false
+      },
+      "photos": [
+        {
+          "height": 1883,
+          "html_attributions": [
+            "<a href=\"https://maps.google.com/maps/contrib/101816377207000337172\">うらら</a>"
+          ],
+          "photo_reference": "AeJbb3fiGl2qALLDHfUokEd9nr2GpCu4ciep2aK_pe_T6si3YkqQRzmrzbhaYTkfPSrn88Dc4lI2g4zc2EqnHQReoozhGz-_5Q74arlQVV7PN-4_Gra5U8ZZAyV3b9XrggCyQhDZgB6UkdW-tIyHSydFHMVoYoa2MCBZQ6IDx4DZXkvYk5mo",
+          "width": 3765
+        }
+      ],
+      "place_id": "ChIJTRmE0Pz2GGARNOYFVtlrnMk",
+      "plus_code": {
+        "compound_code": "HHHC+WM Kawasaki, Kanagawa, Japan",
+        "global_code": "8Q7XHHHC+WM"
+      },
+      "rating": 4.2,
+      "reference": "ChIJTRmE0Pz2GGARNOYFVtlrnMk",
+      "scope": "GOOGLE",
+      "types": ["restaurant", "food", "point_of_interest", "establishment"],
+      "user_ratings_total": 19,
+      "vicinity": "3-chōme-４−１２ Saginuma, KawasakiMiyamae Ward"
+    },
+    {
+      "business_status": "OPERATIONAL",
+      "geometry": {
+        "location": {
+          "lat": 35.5777799,
+          "lng": 139.571432
+        },
+        "viewport": {
+          "northeast": {
+            "lat": 35.5792784802915,
+            "lng": 139.5728042802915
+          },
+          "southwest": {
+            "lat": 35.5765805197085,
+            "lng": 139.5701063197085
+          }
+        }
+      },
+      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+      "icon_background_color": "#FF9E67",
+      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet",
+      "name": "Tōfu-ya Ukai SAGINUMA",
+      "opening_hours": {
+        "open_now": false
+      },
+      "photos": [
+        {
+          "height": 2912,
+          "html_attributions": [
+            "<a href=\"https://maps.google.com/maps/contrib/109186139105777369363\">とうふ屋うかい 鷺沼店</a>"
+          ],
+          "photo_reference": "AeJbb3eOH2o8nbY3qOMJsaF8QRicVN6kmgh-GI9vG2IasT-6NdLHl40WxpsbG-paIHG9Ptyp-VQgfkOaGfBo5Fbs4_35Gh2tpDgNS71AE0TaXMAO9PoRdB0smT5_ftLx2mc4InTAy1z8VE09glZzFK_S2RJHxAbQY0WYoxQG4V40_uzfmjsE",
+          "width": 4368
+        }
+      ],
+      "place_id": "ChIJ4aqWq_32GGARQ0fHzYmrR4Y",
+      "plus_code": {
+        "compound_code": "HHHC+4H Kawasaki, Kanagawa, Japan",
+        "global_code": "8Q7XHHHC+4H"
+      },
+      "price_level": 3,
+      "rating": 4.4,
+      "reference": "ChIJ4aqWq_32GGARQ0fHzYmrR4Y",
+      "scope": "GOOGLE",
+      "types": [
+        "meal_takeaway",
+        "restaurant",
+        "food",
+        "point_of_interest",
+        "establishment"
+      ],
+      "user_ratings_total": 1003,
+      "vicinity": "1-chōme-１８−４ Saginuma, KawasakiMiyamae Ward"
+    },
+    {
+      "business_status": "OPERATIONAL",
+      "geometry": {
+        "location": {
+          "lat": 35.5785736,
+          "lng": 139.5737192
+        },
+        "viewport": {
+          "northeast": {
+            "lat": 35.5798417802915,
+            "lng": 139.5750914302915
+          },
+          "southwest": {
+            "lat": 35.57714381970851,
+            "lng": 139.5723934697085
+          }
+        }
+      },
+      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+      "icon_background_color": "#FF9E67",
+      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet",
+      "name": "ファクトリーShin フレル鷺沼店",
+      "opening_hours": {
+        "open_now": false
       },
       "photos": [
         {
           "height": 2160,
           "html_attributions": [
-            "<a href=\"https://maps.google.com/maps/contrib/107880030527330106540\">亀歩</a>"
+            "<a href=\"https://maps.google.com/maps/contrib/112745816406776990894\">ShunjiEagle</a>"
           ],
-          "photo_reference": "AeJbb3fP5S7_e5OIlVbECZFE9mwLakA3NMYyXR0M3riS7reCRLdwVWG7pOo1bUKBZSHtYTXk2flkW12TN1GwTQkc75S5hnMeLGUTwGrLKxHr5bftRCx8mskv8aHnDVcBCq8hRh-SexMhwh3jowYD2AmLAUyN_C6ATqnv5MWGiMA2vUwSRxoG",
+          "photo_reference": "AeJbb3dQXwHDAg4pYZ8jZGNehi0m2WaQnV_Tbscy90m5SzfvYpuianwDW7YJtYDgz6Dx5PhpxsKRKE9W280IhfBViv_7LomdGbUzduKDxET6V1BnZhvZ5ycGmm4gJJ2Cfyw979UslOeeywKBmJM-do5oYGFYOi9-rvehWxTyCHrSy02_t6xI",
           "width": 3840
         }
       ],
-      "place_id": "ChIJOVMZnxj3GGARXmpcw7QhlVw",
+      "place_id": "ChIJzSnHffz2GGARKe3vsVOIWS0",
       "plus_code": {
-        "compound_code": "HHP6+5V Kawasaki, Kanagawa, Japan",
-        "global_code": "8Q7XHHP6+5V"
+        "compound_code": "HHHF+CF Kawasaki, Kanagawa, Japan",
+        "global_code": "8Q7XHHHF+CF"
       },
-      "rating": 3.8,
-      "reference": "ChIJOVMZnxj3GGARXmpcw7QhlVw",
+      "price_level": 2,
+      "rating": 3.6,
+      "reference": "ChIJzSnHffz2GGARKe3vsVOIWS0",
       "scope": "GOOGLE",
       "types": [
-        "park",
-        "tourist_attraction",
+        "bakery",
+        "food",
+        "store",
         "point_of_interest",
         "establishment"
       ],
-      "user_ratings_total": 16,
-      "vicinity": "2-chōme-13-4 Inukura, Miyamae Ward, Kawasaki"
+      "user_ratings_total": 17,
+      "vicinity": "フレルさぎ沼1F, 1-chōme-１ Saginuma, KawasakiMiyamae Ward"
+    },
+    {
+      "business_status": "OPERATIONAL",
+      "geometry": {
+        "location": {
+          "lat": 35.5789594,
+          "lng": 139.5745748
+        },
+        "viewport": {
+          "northeast": {
+            "lat": 35.5802392802915,
+            "lng": 139.5758470802915
+          },
+          "southwest": {
+            "lat": 35.5775413197085,
+            "lng": 139.5731491197085
+          }
+        }
+      },
+      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png",
+      "icon_background_color": "#FF9E67",
+      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/restaurant_pinlet",
+      "name": "手打そば よしみや",
+      "opening_hours": {
+        "open_now": false
+      },
+      "photos": [
+        {
+          "height": 3024,
+          "html_attributions": [
+            "<a href=\"https://maps.google.com/maps/contrib/117069513961561497181\">a i</a>"
+          ],
+          "photo_reference": "AeJbb3dLhLdf7QlHZOEL7vPBmUpo_Ov2q7sXPGsHr9SuXoossXvH6iPXQW-i-l0OaWRxIcw9xSBTLp9ji13bSVShGU4PNVc4DarxnfJkpXzSh508QUECPCEiJ2ZXmMkznscjK7PKVAAS7noqO0iuG3N2D4OvRmBcVlrNkgXCNaR3XXRyp8AJ",
+          "width": 4032
+        }
+      ],
+      "place_id": "ChIJ8924m_v2GGAR2LX3eb4xvNQ",
+      "plus_code": {
+        "compound_code": "HHHF+HR Kawasaki, Kanagawa, Japan",
+        "global_code": "8Q7XHHHF+HR"
+      },
+      "price_level": 2,
+      "rating": 4.2,
+      "reference": "ChIJ8924m_v2GGAR2LX3eb4xvNQ",
+      "scope": "GOOGLE",
+      "types": ["restaurant", "food", "point_of_interest", "establishment"],
+      "user_ratings_total": 192,
+      "vicinity": "東急鷺沼ドエル, 地下１階, 1-chōme-１９−５ Kodai, KawasakiMiyamae Ward"
+    },
+    {
+      "geometry": {
+        "location": {
+          "lat": 35.5308325,
+          "lng": 139.7029125
+        },
+        "viewport": {
+          "northeast": {
+            "lat": 35.6428029750826,
+            "lng": 139.8357926988851
+          },
+          "southwest": {
+            "lat": 35.46979131762433,
+            "lng": 139.4489102754371
+          }
+        }
+      },
+      "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/geocode-71.png",
+      "icon_background_color": "#7B9EB0",
+      "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/generic_pinlet",
+      "name": "Kawasaki",
+      "photos": [
+        {
+          "height": 2448,
+          "html_attributions": [
+            "<a href=\"https://maps.google.com/maps/contrib/115678829700931828177\">2000 uenopo</a>"
+          ],
+          "photo_reference": "AeJbb3foam7iPTjvh5-Cp-ASJ_mBBUuuKre8ghNhK2lLHJ7Au_8bir5ghh0UGrBPC-BnLYgYjYpvtH0xYj2Dlmgk0oDcwpA2oJi-Mk4of4hU5o0LwStZXz-Aj0ppeKKdoKIrUyCuJwmrCeQBj9cTF1HHcGEs-IcDofG5YQxAKk7yv3hayj8",
+          "width": 3264
+        }
+      ],
+      "place_id": "ChIJV1C9AXtfGGARy9PPyhfzyYg",
+      "reference": "ChIJV1C9AXtfGGARy9PPyhfzyYg",
+      "scope": "GOOGLE",
+      "types": ["locality", "political"],
+      "vicinity": "Kawasaki"
     }
   ],
   "status": "OK"
