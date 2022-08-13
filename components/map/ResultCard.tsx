@@ -10,15 +10,16 @@ interface Props {
 
 export default function ResultCard({ place, queryLatLng }: Props) {
   return (
-    <article className="min-h-56 m-2 my-5 flex flex-col rounded-xl bg-slate-100 text-center text-sm shadow">
-      <div className="flex h-40 rounded-xl bg-slate-200">
-        <div className="w-40 flex-none p-2">
+    <article className="duration-50 m-2 flex cursor-pointer flex-col rounded-xl bg-slate-100 text-center text-sm shadow ring-1 ring-black/20 ease-out hover:shadow-[0_0_5px_0_#3b82f6] hover:ring-0 active:scale-[99%]">
+      <div className="flex h-40 rounded-xl border-b border-black/10 bg-slate-200">
+        <div className="w-40 flex-none">
           <Image
-            className="rounded-md bg-slate-300"
+            className="rounded-l-md bg-slate-300"
             src={`https://maps.googleapis.com/maps/api/place/photo?photo_reference=${place.photos[0].photo_reference}&maxheight=200&maxwidth=200&key=${process.env.NEXT_PUBLIC_MAP_API_KEY}`}
             alt={place.name}
             width={200}
             height={200}
+            objectFit="cover"
           />
         </div>
         <div className="h-full w-full">

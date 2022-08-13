@@ -14,22 +14,9 @@ import { nearbySearchResult } from "../../types/nearbySearchResult";
 import { useState } from "react";
 import Image from "next/image";
 
-const defaultCenter = {
-  lat: 35.6762,
-  lng: 139.6503,
-};
-
 interface Props {
   range: number;
 }
-
-const libraries: (
-  | "drawing"
-  | "geometry"
-  | "localContext"
-  | "places"
-  | "visualization"
-)[] = ["places"];
 
 export default function MapCanvas({ range }: Props) {
   const router = useRouter();
@@ -158,8 +145,21 @@ export default function MapCanvas({ range }: Props) {
         onClick={getCurrentPosition}
         className="absolute bottom-6 right-4 rounded-lg bg-white p-1 text-2xl text-gray-600 shadow-md ring-1 ring-black/20 duration-75 ease-in-out hover:text-black"
       >
-        {navigator?.geolocation && <MdGpsFixed />}
+        <MdGpsFixed />
       </button>
     </section>
   );
 }
+
+const defaultCenter = {
+  lat: 35.6762,
+  lng: 139.6503,
+};
+
+const libraries: (
+  | "drawing"
+  | "geometry"
+  | "localContext"
+  | "places"
+  | "visualization"
+)[] = ["places"];

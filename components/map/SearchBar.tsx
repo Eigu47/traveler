@@ -3,7 +3,6 @@ import usePlacesAutocomplete, {
   getLatLng,
 } from "use-places-autocomplete";
 import { Combobox, Transition } from "@headlessui/react";
-
 import { FiSearch } from "react-icons/fi";
 import { ChangeEvent } from "react";
 import { useRouter } from "next/router";

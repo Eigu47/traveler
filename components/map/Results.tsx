@@ -1,13 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
-import { SetStateAction } from "react";
+import { SetStateAction, useState } from "react";
 import { Dispatch, useMemo } from "react";
 import { nearbySearchResult } from "../../types/nearbySearchResult";
 import ResultCard from "./ResultCard";
-
-async function fetchResults(): Promise<nearbySearchResult> {
-  return (await await fetch("dummyData.json")).json();
-}
 
 interface Props {
   range: number;
@@ -15,6 +11,7 @@ interface Props {
 }
 
 export default function Results({ range, setRange }: Props) {
+  const [showOptions, setShowOptions] = useState(false);
   const router = useRouter();
   const { data } = useQuery(["nearby"], fetchResults);
 
@@ -32,31 +29,46 @@ export default function Results({ range, setRange }: Props) {
     <aside className="z-10 h-full w-2/6 bg-slate-300 shadow-[0_10px_10px_5px_rgba(0,0,0,0.15)] ring-1 ring-black/10">
       <form
         onSubmit={(e) => e.preventDefault()}
-        className="flex h-32 items-center space-x-3 bg-slate-200 p-3 shadow-md"
+        className="bg-slate-200 px-4 shadow-md"
       >
-        <div className="w-full">
-          <input
-            type="text"
-            className="rounded px-2 outline-none focus:ring-2 focus:ring-blue-500/50"
-            placeholder="Search by keyword"
-          />
-          <div>
+        <div className="flex w-full items-center space-x-3 py-6">
+          <div className="relative grow">
+            <label
+              htmlFor="search-keyword"
+              className="absolute -top-4 left-1 text-xs"
+            >
+              Search by keyword:
+            </label>
+            <input
+              type="text"
+              id="search-keyboard"
+              className="w-full rounded px-2 outline-none ring-1 ring-black/20 focus:ring-2 focus:ring-blue-500/50"
+              placeholder="Optional"
+            />
+          </div>
+          <button
+            type="submit"
+            className="h-fit whitespace-nowrap rounded-md bg-blue-700 px-4 py-3 text-sm text-white shadow-md ring-1 ring-black/20 hover:bg-blue-800 active:scale-95"
+          >
+            Search here
+          </button>
+        </div>
+        <div className="flex w-full space-x-3 overflow-y-hidden border-t border-t-black/20 pt-4 pb-1">
+          <div className="basis-4/6">
             <label htmlFor="search-type" className="block text-xs">
               Filter by
             </label>
             <select
               id="search-type"
-              className="block rounded text-sm outline-none focus:ring-1"
+              className="mb-3 w-full rounded text-sm outline-none focus:ring-1"
             >
               <option value="turist_attraction">Tourist attraction</option>
             </select>
-          </div>
-          <div>
-            <label className="block text-xs" htmlFor="search-range">
+            <label htmlFor="search-range" className="block text-xs">
               {`Range: ${range} meters`}
             </label>
             <input
-              className="range-sm block w-full cursor-pointer"
+              className="range-sm w-full cursor-pointer"
               id="search-range"
               type="range"
               value={range}
@@ -66,15 +78,25 @@ export default function Results({ range, setRange }: Props) {
               step={100}
             />
           </div>
+          <div className="grow">
+            <label htmlFor="sort-by" className="block text-xs">
+              Sort by
+            </label>
+            <select
+              name="sort-by"
+              id="sort-by"
+              className="w-full rounded text-sm outline-none focus:ring-1"
+            >
+              {sortOptions.map((sort) => (
+                <option key={sort} value={sort} className="capitalize">
+                  {sort}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
-        <button
-          type="submit"
-          className="whitespace-nowrap rounded-md bg-blue-700 px-2 py-3 text-sm text-white shadow-md ring-1 ring-black/20 hover:bg-blue-800 active:scale-95"
-        >
-          Search here
-        </button>
       </form>
-      <div className="m-1.5 max-h-[calc(100vh-188px)] overflow-y-auto">
+      <div className="m-[8px_6px_8px_0px] max-h-[calc(100vh-188px)] space-y-5 overflow-y-auto">
         {data?.results.map((place) => (
           <ResultCard
             key={place.place_id}
@@ -86,3 +108,9 @@ export default function Results({ range, setRange }: Props) {
     </aside>
   );
 }
+
+async function fetchResults(): Promise<nearbySearchResult> {
+  return (await await fetch("dummyData.json")).json();
+}
+
+const sortOptions = ["relevance", "rating", "distance"];
