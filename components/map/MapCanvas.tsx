@@ -126,7 +126,7 @@ export default function MapCanvas() {
       {navigator.geolocation && (
         <button
           onClick={getCurrentPosition}
-          className="absolute bottom-6 right-4 rounded-lg bg-white p-1 text-2xl text-gray-600 shadow-md ring-1 ring-black ring-opacity-5 duration-75 ease-in-out hover:text-black"
+          className="absolute bottom-6 right-4 rounded-lg bg-white p-1 text-2xl text-gray-600 shadow-md ring-1 ring-black/20 duration-75 ease-in-out hover:text-black"
         >
           <MdGpsFixed />
         </button>
