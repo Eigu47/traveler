@@ -1,35 +1,11 @@
 import Image from "next/image";
 import { Result } from "../../types/nearbySearchResult";
-import { BsStarFill, BsStarHalf, BsStar } from "react-icons/bs";
 import getDistance from "../../utils/getDistance";
+import Rating from "./Rating";
 
 interface Props {
   place: Result;
   queryLatLng: { lat: number; lng: number } | undefined;
-}
-
-function Rating({
-  rating,
-  className = "",
-}: {
-  rating: number;
-  className?: string;
-}) {
-  return (
-    <div className={`flex text-amber-400 ${className}`}>
-      {rating < 1 ? <BsStarHalf /> : <BsStarFill />}
-      {rating < 2 ? <BsStar /> : rating < 1.5 ? <BsStarHalf /> : <BsStarFill />}
-      {rating < 3 ? <BsStar /> : rating < 3.5 ? <BsStarHalf /> : <BsStarFill />}
-      {rating < 4 ? <BsStar /> : rating < 4.5 ? <BsStarHalf /> : <BsStarFill />}
-      {rating < 5 ? (
-        <BsStar />
-      ) : rating < 4.75 ? (
-        <BsStarHalf />
-      ) : (
-        <BsStarFill />
-      )}
-    </div>
-  );
 }
 
 export default function ResultCard({ place, queryLatLng }: Props) {

@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
-import { useMemo } from "react";
+import { SetStateAction } from "react";
+import { Dispatch, useMemo } from "react";
 import { nearbySearchResult } from "../../types/nearbySearchResult";
 import ResultCard from "./ResultCard";
 
@@ -8,7 +9,12 @@ async function fetchResults(): Promise<nearbySearchResult> {
   return (await await fetch("dummyData.json")).json();
 }
 
-export default function Results() {
+interface Props {
+  range: number;
+  setRange: Dispatch<SetStateAction<number>>;
+}
+
+export default function Results({ range, setRange }: Props) {
   const router = useRouter();
   const { data } = useQuery(["nearby"], fetchResults);
 
@@ -38,20 +44,23 @@ export default function Results() {
             <label htmlFor="search-type" className="block text-xs">
               Filter by
             </label>
-            <select id="search-type" className="block rounded text-sm">
+            <select
+              id="search-type"
+              className="block rounded text-sm outline-none focus:ring-1"
+            >
               <option value="turist_attraction">Tourist attraction</option>
             </select>
           </div>
           <div>
             <label className="block text-xs" htmlFor="search-range">
-              Range in meters:
+              {`Range: ${range} meters`}
             </label>
             <input
               className="range-sm block w-full cursor-pointer"
               id="search-range"
               type="range"
-              placeholder="meters"
-              defaultValue={1500}
+              value={range}
+              onChange={(e) => setRange(+e.target.value)}
               max={50000}
               min={1000}
               step={100}

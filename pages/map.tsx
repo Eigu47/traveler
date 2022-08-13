@@ -1,28 +1,14 @@
 import MapCanvas from "../components/map/MapCanvas";
 import Results from "../components/map/Results";
-import { useLoadScript } from "@react-google-maps/api";
-import Loading from "../components/map/Loading";
-
-const libraries: (
-  | "drawing"
-  | "geometry"
-  | "localContext"
-  | "places"
-  | "visualization"
-)[] = ["places"];
+import { useState } from "react";
 
 export default function Map() {
-  const { isLoaded } = useLoadScript({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_MAP_API_KEY as string,
-    libraries,
-  });
-
-  // const isLoaded = false;
+  const [range, setRange] = useState<number>(1500);
 
   return (
     <main className="relative top-12 flex h-[calc(100vh-48px)] max-h-full max-w-full">
-      <Results />
-      {isLoaded ? <MapCanvas /> : <Loading />}
+      <Results range={range} setRange={setRange} />
+      <MapCanvas range={range} />
     </main>
   );
 }
