@@ -16,10 +16,10 @@ import Image from "next/image";
 import { filterResults } from "./Results";
 
 interface Props {
-  range: number;
+  radius: number;
 }
 
-export default function MapCanvas({ range }: Props) {
+export default function MapCanvas({ radius }: Props) {
   const router = useRouter();
   const mapRef = useRef<google.maps.Map>();
   const [showMenu, setShowMenu] = useState<google.maps.LatLngLiteral>();
@@ -120,7 +120,7 @@ export default function MapCanvas({ range }: Props) {
               <CircleF
                 options={{
                   center: queryLatLng,
-                  radius: range,
+                  radius: radius,
                   clickable: false,
                   strokeWeight: 0.1,
                   fillColor: "DodgerBlue",

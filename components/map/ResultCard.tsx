@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { Result } from "../../types/NearbySearchResult";
 import Rating from "./Rating";
-import { SiGooglestreetview } from "react-icons/si";
 
 interface Props {
   place: Result;
@@ -59,7 +58,7 @@ export default function ResultCard({ place, queryLatLng }: Props) {
             )
             .map((type) => (
               <p
-                className="mx-1.5 rounded-lg bg-gray-400/40 px-1 py-0.5 text-xs"
+                className="mx-1.5 rounded-lg bg-gray-300/30 px-1 py-0.5 text-xs shadow-sm ring-1 ring-black/5"
                 key={type}
               >
                 {type.charAt(0).toUpperCase() +
