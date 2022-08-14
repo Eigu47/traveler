@@ -10,9 +10,10 @@ import { useEffect, useMemo, useRef } from "react";
 import { MdGpsFixed, MdLocationPin } from "react-icons/md";
 import SearchBar from "./SearchBar";
 import { useRouter } from "next/router";
-import { nearbySearchResult } from "../../types/nearbySearchResult";
+import { NearbySearchResult } from "../../types/NearbySearchResult";
 import { useState } from "react";
 import Image from "next/image";
+import { filterResults } from "./Results";
 
 interface Props {
   range: number;
@@ -22,12 +23,18 @@ export default function MapCanvas({ range }: Props) {
   const router = useRouter();
   const mapRef = useRef<google.maps.Map>();
   const [showMenu, setShowMenu] = useState<google.maps.LatLngLiteral>();
-  const { data: placesPoint } = useQuery<nearbySearchResult>(["nearby"]);
+  const [loadFinish, setLoadFinish] = useState(false);
+
+  const { data, isSuccess } = useQuery<NearbySearchResult>(["nearby"], {
+    select: filterResults,
+  });
 
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_MAP_API_KEY as string,
     libraries,
   });
+
+  // const isLoaded = false;
 
   function getCurrentPosition() {
     navigator?.geolocation?.getCurrentPosition((pos) => {
@@ -73,26 +80,34 @@ export default function MapCanvas({ range }: Props) {
         },
       });
     }
-
     setShowMenu(undefined);
   }
 
   useEffect(() => {
-    const clickOutside = () => setShowMenu(undefined);
-    window.addEventListener("click", () => clickOutside);
-    return () => window.removeEventListener("click", () => clickOutside);
+    function handleClick() {
+      setShowMenu(undefined);
+    }
+    window.addEventListener("click", handleClick);
+
+    return () => window.removeEventListener("click", handleClick);
   }, []);
 
   return (
     <section className="h-full w-full bg-[#e5e3df]">
-      {isLoaded ? (
+      {!loadFinish && (
+        <div className="flex h-full w-full items-center justify-center">
+          <Image src="/loading.svg" alt="Loading..." height={200} width={200} />
+        </div>
+      )}
+      {isLoaded && (
         <>
           <GoogleMap
-            zoom={13}
+            zoom={10}
             center={queryLatLng ?? defaultCenter}
             mapContainerClassName="h-full w-full"
             onLoad={(map) => {
               mapRef.current = map;
+              setLoadFinish(true);
             }}
             onRightClick={handleRightClick}
             options={{
@@ -113,15 +128,16 @@ export default function MapCanvas({ range }: Props) {
                 }}
               />
             )}
-            {placesPoint?.results.map((places) => (
-              <MarkerF
-                key={places.place_id}
-                position={{
-                  lat: places.geometry.location.lat,
-                  lng: places.geometry.location.lng,
-                }}
-              />
-            ))}
+            {isSuccess &&
+              data.results.map((places) => (
+                <MarkerF
+                  key={places.place_id}
+                  position={{
+                    lat: places.geometry.location.lat,
+                    lng: places.geometry.location.lng,
+                  }}
+                />
+              ))}
             {showMenu && (
               <OverlayView position={showMenu} mapPaneName="overlayMouseTarget">
                 <button
@@ -136,10 +152,6 @@ export default function MapCanvas({ range }: Props) {
           </GoogleMap>
           <SearchBar />
         </>
-      ) : (
-        <div className="flex h-full w-full items-center justify-center">
-          <Image src="/loading.svg" alt="Loading..." height={200} width={200} />
-        </div>
       )}
       <button
         onClick={getCurrentPosition}

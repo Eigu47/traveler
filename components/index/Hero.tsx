@@ -17,7 +17,10 @@ export default function Hero() {
         <h1 className="text-center font-serif text-5xl font-semibold text-white">
           The best travel experience
         </h1>
-        <form className="m-16 flex w-6/12 justify-between rounded-full bg-white p-2 shadow ring-1 ring-black/30">
+        <form
+          onSubmit={(e) => e.preventDefault()}
+          className="m-16 flex w-6/12 justify-between rounded-full bg-white p-2 shadow ring-1 ring-black/30"
+        >
           <input
             type="text"
             placeholder="Search by city..."

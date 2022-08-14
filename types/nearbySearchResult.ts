@@ -4,7 +4,7 @@
 //
 //   "Set quicktype target language"
 
-export interface nearbySearchResult {
+export interface NearbySearchResult {
   html_attributions: any[];
   next_page_token: string;
   results: Result[];
@@ -17,7 +17,7 @@ export interface Result {
   icon_background_color: IconBackgroundColor;
   icon_mask_base_uri: string;
   name: string;
-  photos?: Photo[];
+  photos: Photo[];
   place_id: string;
   reference: string;
   scope: Scope;
