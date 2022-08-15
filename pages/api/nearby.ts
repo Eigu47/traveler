@@ -22,12 +22,12 @@ export default async function handler(
     });
 
     const filterRes = fetchRes.data.results.filter(
-      (res) => !res.types.includes("locality") || !res.photos
+      (res) => !res.types.includes("locality") && res.photos
     );
 
     const response = {
       ...fetchRes.data,
-      filterRes,
+      results: filterRes,
     };
 
     res.status(200).json(response);

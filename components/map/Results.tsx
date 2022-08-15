@@ -1,11 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
-import { SetStateAction, useState } from "react";
+import { SetStateAction, useCallback, useState } from "react";
 import { Dispatch, useMemo } from "react";
-import { NearbySearchResult } from "../../types/NearbySearchResult";
+import { NearbySearchResult, Result } from "../../types/NearbySearchResult";
 import ResultCard from "./ResultCard";
 import { FiChevronsDown } from "react-icons/fi";
 import axios from "axios";
+import { getDistance } from "./ResultCard";
 
 interface Props {
   radius: number;
@@ -16,6 +17,8 @@ export default function Results({ radius, setRadius }: Props) {
   const [showOptions, setShowOptions] = useState(false);
   const [keyword, setKeyword] = useState<string>();
   const [type, setType] = useState<string>("tourist_attraction");
+  const [sortBy, setSortBy] = useState<typeof sortOptions[number]>();
+  const [sortedResult, setSortedResult] = useState<Result[]>();
   const router = useRouter();
 
   const { data, isSuccess, refetch } = useQuery<NearbySearchResult>(
@@ -35,6 +38,37 @@ export default function Results({ radius, setRadius }: Props) {
     )
       return { lat: +router.query.lat, lng: +router.query.lng };
   }, [router.query]);
+
+  // function sorting(
+  //   results: Result[],
+  //   sortBy: typeof sortOptions[number] | undefined
+  // ) {
+  //   if (sortBy === "rating") {
+  //     return results
+  //       .sort((a, b) => (a.rating ?? 0) - (b.rating ?? 0))
+  //       .reverse();
+  //   }
+
+  //   if (sortBy === "distance") {
+  //     return results;
+  //   }
+
+  //   return results;
+  // }
+
+  const sortedResults: Result[] = useCallback(() => {
+    if (sortBy === "rating") {
+      return data?.results
+        .sort((a, b) => (a.rating ?? 0) - (b.rating ?? 0))
+        .reverse();
+    }
+
+    if (sortBy === "distance") {
+      return data?.results;
+    }
+
+    return data?.results;
+  }, [data, sortBy]);
 
   return (
     <aside
@@ -101,7 +135,7 @@ export default function Results({ radius, setRadius }: Props) {
                 ))}
               </select>
               <label htmlFor="search-radius" className="block text-xs">
-                {`Radius: ${radius} meters`}
+                {`Max radius: ${radius} meters`}
               </label>
               <input
                 className="radius-sm w-full cursor-pointer"
@@ -122,7 +156,8 @@ export default function Results({ radius, setRadius }: Props) {
                 name="sort-by"
                 id="sort-by"
                 className="w-full rounded text-sm outline-none focus:ring-1"
-                defaultValue="relevance"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
               >
                 {sortOptions.map((sort) => (
                   <option
@@ -149,7 +184,7 @@ export default function Results({ radius, setRadius }: Props) {
       </form>
       <div className="m-[8px_6px_8px_0px] space-y-5 overflow-y-auto">
         {isSuccess &&
-          data?.results.map((place) => (
+          sortedResults().map((place) => (
             <ResultCard
               key={place.place_id}
               place={place}

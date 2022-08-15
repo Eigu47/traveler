@@ -29,6 +29,7 @@ export interface Result {
   rating?: number;
   user_ratings_total?: number;
   price_level?: number;
+  distance?: number;
 }
 
 export enum BusinessStatus {

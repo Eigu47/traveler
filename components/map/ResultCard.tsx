@@ -31,7 +31,7 @@ export default function ResultCard({ place, queryLatLng }: Props) {
                 queryLatLng
               )} km from the center`}</p>
             )}
-          </div>{" "}
+          </div>
           {place.opening_hours && (
             <p>
               Currently
@@ -71,7 +71,7 @@ export default function ResultCard({ place, queryLatLng }: Props) {
   );
 }
 
-function getDistance(
+export function getDistance(
   pointA: google.maps.LatLngLiteral,
   pointB: google.maps.LatLngLiteral
 ) {
