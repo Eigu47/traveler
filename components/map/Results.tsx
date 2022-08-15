@@ -18,12 +18,11 @@ export default function Results({ radius, setRadius }: Props) {
   const [type, setType] = useState<string>("tourist_attraction");
   const router = useRouter();
 
-  const { data, isSuccess, refetch } = useQuery(
+  const { data, isSuccess, refetch } = useQuery<NearbySearchResult>(
     ["nearby"],
     () => fetchResults(queryLatLng, radius, keyword, type),
     {
       enabled: false,
-      select: filterResults,
     }
   );
 
@@ -46,7 +45,6 @@ export default function Results({ radius, setRadius }: Props) {
         onSubmit={(e) => {
           e.preventDefault();
           setShowOptions(false);
-          console.log(queryLatLng, radius, keyword, type);
           refetch();
         }}
         className="bg-slate-200 px-4 shadow-md"
@@ -163,58 +161,28 @@ export default function Results({ radius, setRadius }: Props) {
   );
 }
 
-// async function fetchResults(
-//   queryLatLng?: google.maps.LatLngLiteral,
-//   range?: number,
-//   keyword?: string,
-//   type?: string
-// ): Promise<NearbySearchResult> {
-//   if (!queryLatLng || !range) throw new Error("LatLng or range needed");
-
-//   const res = await fetch(
-//     `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${queryLatLng.lat}%2C${queryLatLng.lng}&radius=${range}&keyword=${keyword}&type=${type}&key=${process.env.NEXT_PUBLIC_MAP_API_KEY}`
-//   );
-
-//   if (!res.ok) throw new Error("Network response was not ok");
-
-//   return res.json();
-// }
-
 async function fetchResults(
   queryLatLng?: google.maps.LatLngLiteral,
   radius?: number,
   keyword?: string,
   type?: string
-): Promise<NearbySearchResult> {
-  if (!queryLatLng || !radius) throw new Error("LatLng or radius not found");
+) {
+  if (!queryLatLng) return;
 
   const res = await axios.request({
     method: "GET",
-    url: "https://google-maps28.p.rapidapi.com/maps/api/place/nearbysearch/json",
+    url: "/api/nearby",
     params: {
-      location: `${queryLatLng.lat},${queryLatLng.lng}`,
+      lat: queryLatLng.lat,
+      lng: queryLatLng.lng,
       radius,
       type,
       keyword,
-    },
-    headers: {
-      "X-RapidAPI-Key": "62004c9b7fmshaca47649d8652f7p1ad323jsnc99272cba1b2",
-      "X-RapidAPI-Host": "google-maps28.p.rapidapi.com",
+      key: process.env.NEXT_PUBLIC_MAP_API_KEY,
     },
   });
 
   return res.data;
-}
-
-export function filterResults(data: NearbySearchResult) {
-  const filterRes = data.results.filter(
-    (res) => !res.types.includes("locality") && res.photos
-  );
-
-  return {
-    ...data,
-    results: filterRes,
-  };
 }
 
 const sortOptions = ["relevance", "rating", "distance"];
@@ -250,10 +218,3 @@ const searchTypes = [
   "transit_station",
   "travel_agency",
 ];
-
-// async function fetchResults(): Promise<NearbySearchResult> {
-//   const res = await fetch("dummyData.json");
-//   if (!res.ok) throw new Error("Network response was not ok");
-
-//   return res.json();
-// }

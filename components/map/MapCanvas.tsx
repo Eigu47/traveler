@@ -13,25 +13,20 @@ import { useRouter } from "next/router";
 import { NearbySearchResult } from "../../types/NearbySearchResult";
 import { useState } from "react";
 import Image from "next/image";
-import { filterResults } from "./Results";
 
 interface Props {
   radius: number;
+  isLoaded: boolean;
 }
 
-export default function MapCanvas({ radius }: Props) {
+export default function MapCanvas({ radius, isLoaded }: Props) {
   const router = useRouter();
   const mapRef = useRef<google.maps.Map>();
   const [showMenu, setShowMenu] = useState<google.maps.LatLngLiteral>();
   const [loadFinish, setLoadFinish] = useState(false);
 
   const { data, isSuccess } = useQuery<NearbySearchResult>(["nearby"], {
-    select: filterResults,
-  });
-
-  const { isLoaded } = useLoadScript({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_MAP_API_KEY as string,
-    libraries,
+    enabled: false,
   });
 
   // const isLoaded = false;
@@ -102,7 +97,7 @@ export default function MapCanvas({ radius }: Props) {
       {isLoaded && (
         <>
           <GoogleMap
-            zoom={10}
+            zoom={queryLatLng ? 13 : 10}
             center={queryLatLng ?? defaultCenter}
             mapContainerClassName="h-full w-full"
             onLoad={(map) => {
@@ -167,11 +162,3 @@ const defaultCenter = {
   lat: 35.6762,
   lng: 139.6503,
 };
-
-const libraries: (
-  | "drawing"
-  | "geometry"
-  | "localContext"
-  | "places"
-  | "visualization"
-)[] = ["places"];
