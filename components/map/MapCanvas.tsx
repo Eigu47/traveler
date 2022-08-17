@@ -3,27 +3,39 @@ import {
   GoogleMap,
   MarkerF,
   OverlayView,
+  useLoadScript,
 } from "@react-google-maps/api/";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useMemo, useRef } from "react";
+import { Dispatch, useEffect, useMemo, useRef } from "react";
 import { MdGpsFixed, MdLocationPin } from "react-icons/md";
 import SearchBar from "./SearchBar";
 import { useRouter } from "next/router";
-import { NearbySearchResult } from "../../types/NearbySearchResult";
+import { NearbySearchResult, Result } from "../../types/NearbySearchResult";
 import { useState } from "react";
 import Image from "next/image";
 import { filterResults } from "./ResultsUtil";
+import { SetStateAction } from "react";
 
 interface Props {
   radius: number;
-  isLoaded: boolean;
+  selectedPlace: Result | undefined;
+  setSelectedPlace: Dispatch<SetStateAction<Result | undefined>>;
 }
 
-export default function MapCanvas({ radius, isLoaded }: Props) {
+export default function MapCanvas({
+  radius,
+  selectedPlace,
+  setSelectedPlace,
+}: Props) {
   const router = useRouter();
   const mapRef = useRef<google.maps.Map>();
   const [showMenu, setShowMenu] = useState<google.maps.LatLngLiteral>();
   const [loadFinish, setLoadFinish] = useState(false);
+
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: process.env.NEXT_PUBLIC_MAP_API_KEY as string,
+    libraries,
+  });
 
   const { data, isSuccess } = useQuery<NearbySearchResult>(["nearby"], {
     enabled: false,
@@ -111,16 +123,19 @@ export default function MapCanvas({ radius, isLoaded }: Props) {
             }}
           >
             {queryLatLng && (
-              <CircleF
-                options={{
-                  center: queryLatLng,
-                  radius: radius,
-                  clickable: false,
-                  strokeWeight: 0.1,
-                  fillColor: "DodgerBlue",
-                  fillOpacity: 0.1,
-                }}
-              />
+              <>
+                <CircleF
+                  options={{
+                    center: queryLatLng,
+                    radius: radius,
+                    clickable: false,
+                    strokeWeight: 0.1,
+                    fillColor: "DodgerBlue",
+                    fillOpacity: 0.1,
+                  }}
+                />
+                <MarkerF position={queryLatLng} clickable={false} />
+              </>
             )}
             {isSuccess &&
               data.results.map((places) => (
@@ -130,9 +145,45 @@ export default function MapCanvas({ radius, isLoaded }: Props) {
                     lat: places.geometry.location.lat,
                     lng: places.geometry.location.lng,
                   }}
-                  icon={places.icon}
+                  icon={{
+                    url: places.icon,
+                    scaledSize: new google.maps.Size(35, 35),
+                  }}
+                  onMouseOver={() => setSelectedPlace(places)}
+                  onMouseOut={() => setSelectedPlace(undefined)}
                 />
               ))}
+            {selectedPlace && (
+              <OverlayView
+                position={selectedPlace.geometry.location}
+                mapPaneName="overlayMouseTarget"
+              >
+                <div className="w-48 rounded-lg bg-slate-100 shadow ring-1 ring-black/20">
+                  <p className="p-2 text-center text-lg">
+                    {selectedPlace.name}
+                  </p>
+                  <Image
+                    className="bg-slate-400"
+                    src={`https://maps.googleapis.com/maps/api/place/photo?photo_reference=${selectedPlace.photos[0].photo_reference}&maxheight=200&maxwidth=200&key=${process.env.NEXT_PUBLIC_MAP_API_KEY}`}
+                    alt={selectedPlace.name}
+                    width={250}
+                    height={250}
+                    objectFit="cover"
+                  />
+                  {selectedPlace.types
+                    .filter(
+                      (type) =>
+                        type !== "point_of_interest" && type !== "establishment"
+                    )
+                    .map((type) => (
+                      <p className="text-center text-base" key={type}>
+                        {type.charAt(0).toUpperCase() +
+                          type.slice(1).replaceAll("_", " ")}
+                      </p>
+                    ))}
+                </div>
+              </OverlayView>
+            )}
             {showMenu && (
               <OverlayView position={showMenu} mapPaneName="overlayMouseTarget">
                 <button
@@ -150,13 +201,21 @@ export default function MapCanvas({ radius, isLoaded }: Props) {
       )}
       <button
         onClick={getCurrentPosition}
-        className="absolute bottom-6 right-4 rounded-lg bg-white p-1 text-2xl text-gray-600 shadow-md ring-1 ring-black/20 duration-75 ease-in-out hover:text-black"
+        className="absolute bottom-6 right-4 rounded-lg bg-white p-1 text-4xl text-gray-600 shadow-md ring-1 ring-black/20 duration-75 ease-in-out hover:text-black"
       >
         <MdGpsFixed />
       </button>
     </section>
   );
 }
+
+const libraries: (
+  | "drawing"
+  | "geometry"
+  | "localContext"
+  | "places"
+  | "visualization"
+)[] = ["places"];
 
 const DEFAULT_CENTER = {
   lat: 35.6762,
