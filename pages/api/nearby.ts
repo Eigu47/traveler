@@ -21,16 +21,7 @@ export default async function handler(
       },
     });
 
-    const filterRes = fetchRes.data.results.filter(
-      (res) => !res.types.includes("locality") && res.photos
-    );
-
-    const response = {
-      ...fetchRes.data,
-      results: filterRes,
-    };
-
-    res.status(200).json(response);
+    res.status(200).json(fetchRes.data);
   } catch (error) {
     res.status(500).json(error);
   }

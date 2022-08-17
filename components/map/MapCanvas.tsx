@@ -3,7 +3,6 @@ import {
   GoogleMap,
   MarkerF,
   OverlayView,
-  useLoadScript,
 } from "@react-google-maps/api/";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo, useRef } from "react";
@@ -13,6 +12,7 @@ import { useRouter } from "next/router";
 import { NearbySearchResult } from "../../types/NearbySearchResult";
 import { useState } from "react";
 import Image from "next/image";
+import { filterResults } from "./ResultsUtil";
 
 interface Props {
   radius: number;
@@ -27,9 +27,8 @@ export default function MapCanvas({ radius, isLoaded }: Props) {
 
   const { data, isSuccess } = useQuery<NearbySearchResult>(["nearby"], {
     enabled: false,
+    select: filterResults,
   });
-
-  // const isLoaded = false;
 
   function getCurrentPosition() {
     navigator?.geolocation?.getCurrentPosition((pos) => {
@@ -98,7 +97,7 @@ export default function MapCanvas({ radius, isLoaded }: Props) {
         <>
           <GoogleMap
             zoom={queryLatLng ? 13 : 10}
-            center={queryLatLng ?? defaultCenter}
+            center={queryLatLng ?? DEFAULT_CENTER}
             mapContainerClassName="h-full w-full"
             onLoad={(map) => {
               mapRef.current = map;
@@ -131,6 +130,7 @@ export default function MapCanvas({ radius, isLoaded }: Props) {
                     lat: places.geometry.location.lat,
                     lng: places.geometry.location.lng,
                   }}
+                  icon={places.icon}
                 />
               ))}
             {showMenu && (
@@ -158,7 +158,7 @@ export default function MapCanvas({ radius, isLoaded }: Props) {
   );
 }
 
-const defaultCenter = {
+const DEFAULT_CENTER = {
   lat: 35.6762,
   lng: 139.6503,
 };

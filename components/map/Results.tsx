@@ -1,12 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
-import { SetStateAction, useCallback, useState } from "react";
+import { SetStateAction, useState } from "react";
 import { Dispatch, useMemo } from "react";
-import { NearbySearchResult, Result } from "../../types/NearbySearchResult";
+import { NearbySearchResult } from "../../types/NearbySearchResult";
 import ResultCard from "./ResultCard";
 import { FiChevronsDown } from "react-icons/fi";
-import axios from "axios";
-import { getDistance } from "./ResultCard";
+import {
+  SearchTypes,
+  SEARCH_TYPES,
+  SortOptions,
+  SORT_OPTIONS,
+  fetchResults,
+  filterResults,
+  sortResults,
+} from "./ResultsUtil";
+import Image from "next/image";
 
 interface Props {
   radius: number;
@@ -14,20 +22,11 @@ interface Props {
 }
 
 export default function Results({ radius, setRadius }: Props) {
-  const [showOptions, setShowOptions] = useState(false);
+  const [showOptions, setShowOptions] = useState(true);
   const [keyword, setKeyword] = useState<string>();
-  const [type, setType] = useState<string>("tourist_attraction");
-  const [sortBy, setSortBy] = useState<typeof sortOptions[number]>();
-  const [sortedResult, setSortedResult] = useState<Result[]>();
+  const [type, setType] = useState<SearchTypes>("tourist_attraction");
+  const [sortBy, setSortBy] = useState<SortOptions>("relevance");
   const router = useRouter();
-
-  const { data, isSuccess, refetch } = useQuery<NearbySearchResult>(
-    ["nearby"],
-    () => fetchResults(queryLatLng, radius, keyword, type),
-    {
-      enabled: false,
-    }
-  );
 
   const queryLatLng = useMemo(() => {
     if (
@@ -39,36 +38,14 @@ export default function Results({ radius, setRadius }: Props) {
       return { lat: +router.query.lat, lng: +router.query.lng };
   }, [router.query]);
 
-  // function sorting(
-  //   results: Result[],
-  //   sortBy: typeof sortOptions[number] | undefined
-  // ) {
-  //   if (sortBy === "rating") {
-  //     return results
-  //       .sort((a, b) => (a.rating ?? 0) - (b.rating ?? 0))
-  //       .reverse();
-  //   }
-
-  //   if (sortBy === "distance") {
-  //     return results;
-  //   }
-
-  //   return results;
-  // }
-
-  const sortedResults: Result[] = useCallback(() => {
-    if (sortBy === "rating") {
-      return data?.results
-        .sort((a, b) => (a.rating ?? 0) - (b.rating ?? 0))
-        .reverse();
+  const { data, isSuccess, refetch, isFetching } = useQuery<NearbySearchResult>(
+    ["nearby"],
+    () => fetchResults(queryLatLng, radius, keyword, type),
+    {
+      enabled: false,
+      select: (res) => filterResults(res, queryLatLng),
     }
-
-    if (sortBy === "distance") {
-      return data?.results;
-    }
-
-    return data?.results;
-  }, [data, sortBy]);
+  );
 
   return (
     <aside
@@ -102,7 +79,14 @@ export default function Results({ radius, setRadius }: Props) {
               onFocus={() => setShowOptions(true)}
             />
           </div>
-          <button className="h-fit whitespace-nowrap rounded-md bg-blue-700 px-4 py-3 text-sm text-white shadow-md ring-1 ring-black/20 hover:bg-blue-800 active:scale-95">
+          <button
+            className={`h-fit whitespace-nowrap rounded-md bg-blue-700 px-4 py-3 text-sm text-white shadow-md ring-1 ring-black/20 ${
+              queryLatLng
+                ? "hover:bg-blue-800 active:scale-95"
+                : "bg-gray-600/20 text-black"
+            }`}
+            disabled={!queryLatLng}
+          >
             Search here
           </button>
         </div>
@@ -120,10 +104,10 @@ export default function Results({ radius, setRadius }: Props) {
                 id="search-type"
                 className="mb-3 w-full rounded text-sm outline-none focus:ring-1"
                 defaultValue="tourist_attraction"
-                onChange={(e) => setType(e.target.value)}
+                onChange={(e) => setType(e.target.value as SearchTypes)}
               >
                 <option>Search all</option>
-                {searchTypes.map((type) => (
+                {SEARCH_TYPES.map((type) => (
                   <option
                     key={type}
                     value={type}
@@ -157,9 +141,9 @@ export default function Results({ radius, setRadius }: Props) {
                 id="sort-by"
                 className="w-full rounded text-sm outline-none focus:ring-1"
                 value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
+                onChange={(e) => setSortBy(e.target.value as SortOptions)}
               >
-                {sortOptions.map((sort) => (
+                {SORT_OPTIONS.map((sort) => (
                   <option
                     key={sort}
                     value={sort}
@@ -184,72 +168,15 @@ export default function Results({ radius, setRadius }: Props) {
       </form>
       <div className="m-[8px_6px_8px_0px] space-y-5 overflow-y-auto">
         {isSuccess &&
-          sortedResults().map((place) => (
-            <ResultCard
-              key={place.place_id}
-              place={place}
-              queryLatLng={queryLatLng}
-            />
+          sortResults(data, sortBy).map((place) => (
+            <ResultCard key={place.place_id} place={place} />
           ))}
       </div>
+      {isFetching && !data && (
+        <div className="flex h-full w-full justify-center">
+          <Image src="/loading.svg" alt="Loading..." height={150} width={150} />
+        </div>
+      )}
     </aside>
   );
 }
-
-async function fetchResults(
-  queryLatLng?: google.maps.LatLngLiteral,
-  radius?: number,
-  keyword?: string,
-  type?: string
-) {
-  if (!queryLatLng) return;
-
-  const res = await axios.request({
-    method: "GET",
-    url: "/api/nearby",
-    params: {
-      lat: queryLatLng.lat,
-      lng: queryLatLng.lng,
-      radius,
-      type,
-      keyword,
-      key: process.env.NEXT_PUBLIC_MAP_API_KEY,
-    },
-  });
-
-  return res.data;
-}
-
-const sortOptions = ["relevance", "rating", "distance"];
-
-const searchTypes = [
-  "airport",
-  "amusement_park",
-  "aquarium",
-  "art_gallery",
-  "bar",
-  "bus_station",
-  "cafe",
-  "campground",
-  "casino",
-  "department_store",
-  "library",
-  "lodging",
-  "meal_delivery",
-  "meal_takeaway",
-  "movie_theater",
-  "museum",
-  "night_club",
-  "park",
-  "restaurant",
-  "shopping_mall",
-  "spa",
-  "stadium",
-  "store",
-  "subway_station",
-  "supermarket",
-  "tourist_attraction",
-  "train_station",
-  "transit_station",
-  "travel_agency",
-];

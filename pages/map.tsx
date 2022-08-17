@@ -1,6 +1,6 @@
 import MapCanvas from "../components/map/MapCanvas";
 import Results from "../components/map/Results";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useLoadScript } from "@react-google-maps/api";
 
 const libraries: (

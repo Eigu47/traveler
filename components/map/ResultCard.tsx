@@ -4,10 +4,9 @@ import Rating from "./Rating";
 
 interface Props {
   place: Result;
-  queryLatLng: google.maps.LatLngLiteral | undefined;
 }
 
-export default function ResultCard({ place, queryLatLng }: Props) {
+export default function ResultCard({ place }: Props) {
   return (
     <article className="m-2 flex cursor-pointer flex-col rounded-xl bg-slate-100 text-center text-sm shadow ring-1 ring-black/20 duration-75 ease-out hover:shadow-[0_0_5px_0_#3b82f6] hover:ring-0 active:scale-[99%]">
       <div className="flex h-40 rounded-xl border-b border-black/10 bg-slate-200">
@@ -24,13 +23,7 @@ export default function ResultCard({ place, queryLatLng }: Props) {
         <div className="flex w-full flex-col p-3 pb-0">
           <div className="w-full grow space-y-3">
             <p className="text-xs">{place.vicinity}</p>
-
-            {queryLatLng && (
-              <p className="">{`${getDistance(
-                place.geometry.location,
-                queryLatLng
-              )} km from the center`}</p>
-            )}
+            <p className="">{`${place.distance} km from the center`}</p>
           </div>
           {place.opening_hours && (
             <p>
