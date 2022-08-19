@@ -188,9 +188,9 @@ export default function MapCanvas({
               <OverlayView position={showMenu} mapPaneName="overlayMouseTarget">
                 <button
                   onClick={handleClickBtn}
-                  className="m-1 flex items-center space-x-2 rounded-md bg-slate-50 px-3 py-2 text-sm shadow ring-1 ring-black/20 hover:bg-blue-200"
+                  className="m-1 flex items-center space-x-2 rounded-md bg-slate-50 px-3 py-2 text-lg shadow ring-1 ring-black/20 hover:bg-blue-200"
                 >
-                  <MdLocationPin className="-mx-1 text-xl" />
+                  <MdLocationPin className="-mx-1 text-2xl" />
                   <span>Set center here</span>
                 </button>
               </OverlayView>
