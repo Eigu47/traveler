@@ -4,24 +4,32 @@ import { Dispatch } from "react";
 import { Result } from "../../types/NearbySearchResult";
 import Rating from "./Rating";
 import { SiGooglemaps } from "react-icons/si";
+import { useEffect } from "react";
 
 interface Props {
   place: Result;
   selectedPlace: Result | undefined;
   setSelectedPlace: Dispatch<SetStateAction<Result | undefined>>;
+  isClicked: boolean;
 }
 
 export default function ResultCard({
   place,
   selectedPlace,
   setSelectedPlace,
+  isClicked,
 }: Props) {
   const resultRef = useRef<HTMLElement>(null);
 
   const isSelected = selectedPlace?.place_id === place.place_id;
 
-  if (isSelected)
-    resultRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  useEffect(() => {
+    if (isClicked)
+      resultRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+  }, [isClicked]);
 
   return (
     <article
@@ -76,7 +84,7 @@ export default function ResultCard({
             rel="noreferrer"
             className="flex items-center text-2xl hover:text-blue-700"
           >
-            <SiGooglemaps className="mr-2 text-2xl" />
+            <SiGooglemaps className="mr-2" size={24} />
             {place.name}
           </a>
         </div>

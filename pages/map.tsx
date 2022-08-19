@@ -3,15 +3,10 @@ import Results from "../components/map/Results";
 import { useState } from "react";
 import { Result } from "../types/NearbySearchResult";
 
-// interface SelectedPlace {
-//   hover: Result | null;
-//   clicked: Result | null;
-// }
-
 export default function Map() {
   const [radius, setRadius] = useState<number>(5000);
   const [selectedPlace, setSelectedPlace] = useState<Result>();
-  // const [placeClicked, setPlaceClicked] = useState<Result>()
+  const [clickedPlace, setClickedPlace] = useState<string>();
 
   return (
     <main className="relative top-14 flex h-[calc(100vh-56px)] max-h-full max-w-full">
@@ -20,11 +15,13 @@ export default function Map() {
         setRadius={setRadius}
         selectedPlace={selectedPlace}
         setSelectedPlace={setSelectedPlace}
+        clickedPlace={clickedPlace}
       />
       <MapCanvas
         radius={radius}
         selectedPlace={selectedPlace}
         setSelectedPlace={setSelectedPlace}
+        setClickedPlace={setClickedPlace}
       />
     </main>
   );

@@ -5,7 +5,7 @@ import {
   OverlayView,
   useLoadScript,
 } from "@react-google-maps/api/";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { Dispatch, useEffect, useMemo, useRef } from "react";
 import { MdGpsFixed, MdLocationPin } from "react-icons/md";
 import SearchBar from "./SearchBar";
@@ -13,43 +13,25 @@ import { useRouter } from "next/router";
 import { NearbySearchResult, Result } from "../../types/NearbySearchResult";
 import { useState } from "react";
 import Image from "next/image";
-import { filterResults } from "./ResultsUtil";
 import { SetStateAction } from "react";
 
 interface Props {
   radius: number;
   selectedPlace: Result | undefined;
   setSelectedPlace: Dispatch<SetStateAction<Result | undefined>>;
+  setClickedPlace: Dispatch<SetStateAction<string | undefined>>;
 }
 
 export default function MapCanvas({
   radius,
   selectedPlace,
   setSelectedPlace,
+  setClickedPlace,
 }: Props) {
   const router = useRouter();
   const mapRef = useRef<google.maps.Map>();
   const [showMenu, setShowMenu] = useState<google.maps.LatLngLiteral>();
   const [loadFinish, setLoadFinish] = useState(false);
-
-  const { isLoaded } = useLoadScript({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_MAP_API_KEY as string,
-    libraries,
-  });
-
-  const { data, isSuccess } = useQuery<NearbySearchResult>(["nearby"], {
-    enabled: false,
-    select: filterResults,
-  });
-
-  function getCurrentPosition() {
-    navigator?.geolocation?.getCurrentPosition((pos) => {
-      router.replace({
-        pathname: "/map",
-        query: { lat: pos.coords.latitude, lng: pos.coords.longitude },
-      });
-    });
-  }
 
   const queryLatLng = useMemo(() => {
     if (
@@ -60,6 +42,27 @@ export default function MapCanvas({
     )
       return { lat: +router.query.lat, lng: +router.query.lng };
   }, [router.query]);
+
+  const { data, isSuccess } = useInfiniteQuery<NearbySearchResult>(
+    ["nearby", queryLatLng],
+    {
+      enabled: false,
+    }
+  );
+
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: process.env.NEXT_PUBLIC_MAP_API_KEY as string,
+    libraries,
+  });
+
+  function getCurrentPosition() {
+    navigator?.geolocation?.getCurrentPosition((pos) => {
+      router.replace({
+        pathname: "/map",
+        query: { lat: pos.coords.latitude, lng: pos.coords.longitude },
+      });
+    });
+  }
 
   useEffect(() => {
     if (queryLatLng) {
@@ -138,21 +141,24 @@ export default function MapCanvas({
               </>
             )}
             {isSuccess &&
-              data.results.map((places) => (
-                <MarkerF
-                  key={places.place_id}
-                  position={{
-                    lat: places.geometry.location.lat,
-                    lng: places.geometry.location.lng,
-                  }}
-                  icon={{
-                    url: places.icon,
-                    scaledSize: new google.maps.Size(35, 35),
-                  }}
-                  onMouseOver={() => setSelectedPlace(places)}
-                  onMouseOut={() => setSelectedPlace(undefined)}
-                />
-              ))}
+              data.pages.map((page) =>
+                page.results.map((places) => (
+                  <MarkerF
+                    key={places.place_id}
+                    position={{
+                      lat: places.geometry.location.lat,
+                      lng: places.geometry.location.lng,
+                    }}
+                    icon={{
+                      url: places.icon,
+                      scaledSize: new google.maps.Size(35, 35),
+                    }}
+                    onClick={() => setClickedPlace(places.place_id)}
+                    onMouseOver={() => setSelectedPlace(places)}
+                    onMouseOut={() => setSelectedPlace(undefined)}
+                  />
+                ))
+              )}
             {selectedPlace && (
               <OverlayView
                 position={selectedPlace.geometry.location}

@@ -6,13 +6,14 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { lat, lng, radius, type, keyword } = req.query;
+  const { pagetoken, lat, lng, radius, type, keyword } = req.query;
 
   try {
     const fetchRes = await axios.request<NearbySearchResult>({
       method: "GET",
       url: "https://maps.googleapis.com/maps/api/place/nearbysearch/json",
       params: {
+        pagetoken,
         location: `${lat},${lng}`,
         radius,
         type,
@@ -21,7 +22,11 @@ export default async function handler(
       },
     });
 
-    res.status(200).json(fetchRes.data);
+    const filteredRes = fetchRes.data.results.filter(
+      (res) => !res.types.includes("locality") && res.photos
+    );
+
+    res.status(200).json({ ...fetchRes.data, results: filteredRes });
   } catch (error) {
     res.status(500).json(error);
   }

@@ -1,7 +1,8 @@
 import axios from "axios";
-import { NearbySearchResult } from "../../types/NearbySearchResult";
+import { Result } from "../../types/NearbySearchResult";
 
 export async function fetchResults(
+  pageParam?: string,
   queryLatLng?: google.maps.LatLngLiteral,
   radius?: number,
   keyword?: string,
@@ -12,6 +13,7 @@ export async function fetchResults(
     method: "GET",
     url: "/api/nearby",
     params: {
+      pagetoken: pageParam,
       lat: queryLatLng.lat,
       lng: queryLatLng.lng,
       radius,
@@ -42,22 +44,13 @@ export function getDistance(
   return d;
 }
 
-export function filterResults(
-  data: NearbySearchResult,
+export function addDistance(
+  results: Result[],
   queryLatLng?: google.maps.LatLngLiteral
 ) {
-  const filteredResults = data.results.filter(
-    (res) => !res.types.includes("locality") && res.photos
-  );
+  if (!queryLatLng) return results;
 
-  if (!queryLatLng) {
-    return {
-      ...data,
-      results: filteredResults,
-    };
-  }
-
-  const distanceAdded = filteredResults.map((res) => {
+  const distanceAdded = results.map((res) => {
     const distance = getDistance(res.geometry.location, queryLatLng);
 
     return {
@@ -66,26 +59,21 @@ export function filterResults(
     };
   });
 
-  return {
-    ...data,
-    results: distanceAdded,
-  };
+  return distanceAdded;
 }
 
-export function sortResults(data: NearbySearchResult, sortBy: SortOptions) {
+export function sortResults(results: Result[], sortBy: SortOptions) {
   if (sortBy === "rating") {
-    return [...data.results]
+    return [...results]
       .sort((a, b) => (a.rating ?? 0) - (b.rating ?? 0))
       .reverse();
   }
 
   if (sortBy === "distance") {
-    return [...data.results].sort(
-      (a, b) => (a.distance ?? 0) - (b.distance ?? 0)
-    );
+    return [...results].sort((a, b) => (a.distance ?? 0) - (b.distance ?? 0));
   }
 
-  return data.results;
+  return results;
 }
 
 export type SearchTypes = typeof SEARCH_TYPES[number];
