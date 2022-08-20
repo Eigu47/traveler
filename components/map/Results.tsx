@@ -69,7 +69,7 @@ export default function Results({
   );
 
   return (
-    <aside className="z-10 flex h-64 w-full flex-row bg-slate-300 shadow-[0_10px_10px_5px_rgba(0,0,0,0.15)] ring-1 ring-black/10 sm:h-full sm:max-w-[25vw] sm:flex-col">
+    <aside className="z-10 flex h-64 w-full flex-row bg-slate-300 shadow-[0_10px_10px_5px_rgba(0,0,0,0.15)] ring-1 ring-black/10 sm:h-full sm:min-w-[450px] sm:max-w-[25vw] sm:flex-col">
       <ResultsForm
         refetch={refetch}
         keyword={keyword}
@@ -80,9 +80,10 @@ export default function Results({
         setRadius={setRadius}
         sortBy={sortBy}
         setSortBy={setSortBy}
+        clickedPlace={clickedPlace}
       />
       {data && (
-        <div className="mx-1.5 flex flex-row overflow-x-auto sm:m-[12px_8px_8px_4px] sm:flex-col sm:space-y-5 sm:overflow-y-auto sm:overflow-x-hidden">
+        <div className="mx-1.5 flex flex-row overflow-x-auto overflow-y-hidden sm:m-[12px_8px_8px_4px] sm:flex-col sm:space-y-5 sm:overflow-y-auto sm:overflow-x-hidden">
           {(isFetchingNextPage || !isFetching) &&
             sortResults(allResults, sortBy).map((place) => (
               <ResultCard

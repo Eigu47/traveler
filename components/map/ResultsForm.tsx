@@ -4,7 +4,7 @@ import {
   RefetchOptions,
   RefetchQueryFilters,
 } from "@tanstack/react-query";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { FiChevronsDown } from "react-icons/fi";
 import { NearbySearchResult } from "../../types/NearbySearchResult";
 import {
@@ -26,6 +26,7 @@ interface Props {
   setRadius: Dispatch<SetStateAction<number>>;
   sortBy: SortOptions;
   setSortBy: Dispatch<SetStateAction<SortOptions>>;
+  clickedPlace: string | undefined;
 }
 
 export default function ResultsForm({
@@ -38,8 +39,13 @@ export default function ResultsForm({
   setRadius,
   sortBy,
   setSortBy,
+  clickedPlace,
 }: Props) {
   const [showOptions, setShowOptions] = useState(true);
+
+  useEffect(() => {
+    if (clickedPlace) setShowOptions(false);
+  }, [clickedPlace]);
 
   return (
     <form

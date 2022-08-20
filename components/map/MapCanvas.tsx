@@ -149,7 +149,10 @@ export default function MapCanvas({
                       url: places.icon,
                       scaledSize: new google.maps.Size(35, 35),
                     }}
-                    onClick={() => setClickedPlace(places.place_id)}
+                    onClick={() => {
+                      setClickedPlace(places.place_id);
+                      setSelectedPlace(places);
+                    }}
                     onMouseOver={() => setSelectedPlace(places)}
                     onMouseOut={() => setSelectedPlace(undefined)}
                   />

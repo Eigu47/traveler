@@ -88,14 +88,14 @@ export default function ResultCard({
             {place.name}
           </a>
         </div>
-        <div className="flex justify-center px-2">
+        <div className="flex justify-center space-x-2 sm:flex-wrap">
           {place.types
             .filter(
               (type) => type !== "point_of_interest" && type !== "establishment"
             )
             .map((type) => (
               <p
-                className="mx-1.5 rounded-lg bg-gray-300/30 px-2 py-0.5 text-sm shadow-sm ring-1 ring-black/10"
+                className="whitespace-nowrap rounded-lg bg-gray-300/30  px-1 py-0.5 text-sm shadow-sm ring-1 ring-black/10 sm:px-2"
                 key={type}
               >
                 {type.charAt(0).toUpperCase() +
