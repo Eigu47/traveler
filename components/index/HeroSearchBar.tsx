@@ -36,7 +36,7 @@ export default function HeroSearchBar({}: Props) {
   }
 
   return (
-    <div className="relative m-16 w-10/12 sm:w-6/12">
+    <div className="relative m-16 w-10/12 md:w-6/12">
       <Combobox value={value} onChange={handleChange} disabled={!ready}>
         <div
           className={`flex overflow-hidden rounded-full bg-white p-2 pl-4 text-2xl shadow-lg ring-1 ring-black/30 ${

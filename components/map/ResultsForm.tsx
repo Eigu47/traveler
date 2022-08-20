@@ -54,22 +54,22 @@ export default function ResultsForm({
         setShowOptions(false);
         refetch();
       }}
-      className={`relative flex min-w-0 max-w-0 flex-col whitespace-nowrap bg-slate-200 px-3 shadow-md ring-1 ring-black/10 duration-300 sm:block sm:min-w-full sm:max-w-full sm:px-4 sm:transition-none ${
+      className={`relative flex min-w-0 max-w-0 flex-col whitespace-nowrap bg-slate-200 px-3 shadow-md ring-1 ring-black/10 duration-300 md:block md:min-w-full md:max-w-full md:px-4 md:transition-none ${
         showOptions && "min-w-[calc(100vw-30px)] max-w-[calc(100vw-30px)]"
       }`}
     >
-      <div className="flex w-full flex-col items-center justify-center space-x-3 space-y-3 overflow-hidden pt-6 pb-3 sm:flex-row sm:space-y-0 sm:overflow-visible sm:py-8">
+      <div className="flex w-full flex-col items-center justify-center space-x-3 space-y-3 overflow-hidden pt-6 pb-3 md:flex-row md:space-y-0 md:overflow-visible md:py-8">
         <div className="relative w-full">
           <label
             htmlFor="search-keyword"
-            className="absolute -top-5 left-1 text-sm sm:-top-6 sm:text-base"
+            className="absolute -top-5 left-1 text-sm md:-top-6 md:text-base"
           >
             Search by keyword:
           </label>
           <input
             type="text"
             id="search-keyboard"
-            className="w-full rounded px-2 py-1 text-xl outline-none ring-1 ring-black/20 focus:ring-2 focus:ring-blue-500/50 sm:py-1"
+            className="w-full rounded px-2 py-1 text-xl outline-none ring-1 ring-black/20 focus:ring-2 focus:ring-blue-500/50 md:py-1"
             placeholder="Optional"
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
@@ -77,7 +77,7 @@ export default function ResultsForm({
           />
         </div>
         <button
-          className={`h-fit rounded-md bg-blue-700 px-12 py-3 text-white shadow-md ring-1 ring-black/20 sm:px-4 ${
+          className={`h-fit rounded-md bg-blue-700 px-12 py-3 text-white shadow-md ring-1 ring-black/20 md:px-4 ${
             queryLatLng
               ? "hover:bg-blue-800 active:scale-95"
               : "bg-gray-600/20 text-black"
@@ -97,7 +97,7 @@ export default function ResultsForm({
             <div className="w-4/6">
               <label
                 htmlFor="search-type"
-                className="block text-sm sm:text-base"
+                className="block text-sm md:text-base"
               >
                 Filter by
               </label>
@@ -121,7 +121,7 @@ export default function ResultsForm({
               </select>
             </div>
             <div className="w-2/6">
-              <label htmlFor="sort-by" className="block text-sm sm:text-base">
+              <label htmlFor="sort-by" className="block text-sm md:text-base">
                 Sort by
               </label>
               <select
@@ -144,7 +144,7 @@ export default function ResultsForm({
           <div className="">
             <label
               htmlFor="search-radius"
-              className="block text-sm sm:text-base"
+              className="block text-sm md:text-base"
             >
               {`Max radius: ${radius} meters`}
             </label>
@@ -163,7 +163,7 @@ export default function ResultsForm({
       </div>
       <button
         type="button"
-        className="absolute -right-6 z-10 block h-6 w-12 translate-y-28 -rotate-90 rounded border border-black/30 bg-slate-200 text-slate-700 shadow sm:left-6 sm:-translate-y-3 sm:rotate-0"
+        className="absolute -right-6 z-10 block h-6 w-12 translate-y-28 -rotate-90 rounded border border-black/30 bg-slate-200 text-slate-700 shadow md:left-6 md:-translate-y-3 md:rotate-0"
         onClick={() => setShowOptions((prev) => !prev)}
       >
         <FiChevronsDown
