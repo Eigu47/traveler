@@ -70,8 +70,8 @@ export default function Results({
 
   return (
     <aside
-      className="z-10 flex w-full
-     max-w-[25vw] flex-col bg-slate-300 shadow-[0_10px_10px_5px_rgba(0,0,0,0.15)] ring-1 ring-black/10"
+      className="z-10 flex
+     w-full flex-row bg-slate-300 shadow-[0_10px_10px_5px_rgba(0,0,0,0.15)] ring-1 ring-black/10 sm:max-w-[25vw] sm:flex-col"
     >
       <ResultsForm
         refetch={refetch}
@@ -85,7 +85,7 @@ export default function Results({
         setSortBy={setSortBy}
       />
       {data && (
-        <div className="m-[12px_8px_8px_4px] space-y-5 overflow-y-auto">
+        <div className="m-[12px_8px_8px_4px] flex flex-row overflow-x-auto sm:flex-col sm:space-y-5 sm:overflow-y-auto sm:overflow-x-hidden">
           {(isFetchingNextPage || !isFetching) &&
             sortResults(allResults, sortBy).map((place) => (
               <ResultCard

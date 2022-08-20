@@ -34,7 +34,7 @@ export default function SearchBar() {
   }
 
   return (
-    <div className="absolute top-6 right-6 z-10 w-96 text-xl">
+    <div className="absolute top-4 z-10 w-full px-4 text-xl sm:top-6 sm:right-6 sm:w-96 sm:px-0">
       <Combobox value={value} onChange={handleChange} disabled={!ready}>
         <div
           className={`relative flex w-full overflow-hidden rounded-lg bg-white px-3 py-2 shadow-lg ring-1 ring-black/20 ${

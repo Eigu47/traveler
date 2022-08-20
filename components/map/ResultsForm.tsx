@@ -48,17 +48,22 @@ export default function ResultsForm({
         setShowOptions(false);
         refetch();
       }}
-      className="bg-slate-200 px-4 shadow-md"
+      className={`relative flex h-72 min-w-0 max-w-0 flex-col bg-slate-200 px-3 shadow-md duration-200 sm:block sm:min-w-full sm:max-w-full sm:px-4 sm:transition-none ${
+        showOptions && "min-w-[calc(100vw-30px)] max-w-[calc(100vw-30px)]"
+      }`}
     >
-      <div className="flex w-full items-center space-x-3 py-8">
-        <div className="relative grow">
-          <label htmlFor="search-keyword" className="absolute -top-6 left-1">
+      <div className="flex w-full flex-col items-center space-x-3 space-y-3 overflow-hidden pt-6 pb-3 sm:flex-row sm:py-8">
+        <div className="relative w-full">
+          <label
+            htmlFor="search-keyword"
+            className="absolute -top-5 left-1 text-sm sm:-top-6 sm:text-base"
+          >
             Search by keyword:
           </label>
           <input
             type="text"
             id="search-keyboard"
-            className="w-full rounded px-2 py-1 text-xl outline-none ring-1 ring-black/20 focus:ring-2 focus:ring-blue-500/50"
+            className="w-full rounded px-2 py-1 text-xl outline-none ring-1 ring-black/20 focus:ring-2 focus:ring-blue-500/50 sm:py-1"
             placeholder="Optional"
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
@@ -66,7 +71,7 @@ export default function ResultsForm({
           />
         </div>
         <button
-          className={`h-fit whitespace-nowrap rounded-md bg-blue-700 px-4 py-3 text-white shadow-md ring-1 ring-black/20 ${
+          className={`h-fit whitespace-nowrap rounded-md bg-blue-700 px-12 py-3 text-white shadow-md ring-1 ring-black/20 sm:px-4 ${
             queryLatLng
               ? "hover:bg-blue-800 active:scale-95"
               : "bg-gray-600/20 text-black"
@@ -77,38 +82,68 @@ export default function ResultsForm({
         </button>
       </div>
       <div
-        className={`relative max-h-0 w-full overflow-hidden transition-all duration-300 ${
-          showOptions && "max-h-[150px]"
+        className={`relative w-full overflow-hidden duration-300 sm:max-h-0 ${
+          showOptions && "sm:max-h-[170px]"
         }`}
       >
-        <div className="flex space-x-3 border-t border-t-black/20 py-4">
-          <div className="basis-4/6">
-            <label htmlFor="search-type" className="block">
-              Filter by
-            </label>
-            <select
-              id="search-type"
-              className="mb-3 w-full rounded text-lg outline-none focus:ring-1"
-              defaultValue="tourist_attraction"
-              onChange={(e) => setType(e.target.value as SearchTypes)}
+        <div className="flex flex-col border-t border-t-black/20 py-4">
+          <div className="flex space-x-4">
+            <div className="w-4/6">
+              <label
+                htmlFor="search-type"
+                className="block text-sm sm:text-base"
+              >
+                Filter by
+              </label>
+              <select
+                id="search-type"
+                className="mb-3 w-full rounded text-lg outline-none focus:ring-1"
+                defaultValue="tourist_attraction"
+                onChange={(e) => setType(e.target.value as SearchTypes)}
+              >
+                <option>Search all</option>
+                {SEARCH_TYPES.map((type) => (
+                  <option
+                    key={type}
+                    value={type}
+                    label={
+                      type.charAt(0).toUpperCase() +
+                      type.slice(1).replaceAll("_", " ")
+                    }
+                  />
+                ))}
+              </select>
+            </div>
+            <div className="w-2/6">
+              <label htmlFor="sort-by" className="block text-sm sm:text-base">
+                Sort by
+              </label>
+              <select
+                name="sort-by"
+                id="sort-by"
+                className="w-full rounded text-lg outline-none focus:ring-1"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as SortOptions)}
+              >
+                {SORT_OPTIONS.map((sort) => (
+                  <option
+                    key={sort}
+                    value={sort}
+                    label={sort.charAt(0).toUpperCase() + sort.slice(1)}
+                  />
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="">
+            <label
+              htmlFor="search-radius"
+              className="block text-sm sm:text-base"
             >
-              <option>Search all</option>
-              {SEARCH_TYPES.map((type) => (
-                <option
-                  key={type}
-                  value={type}
-                  label={
-                    type.charAt(0).toUpperCase() +
-                    type.slice(1).replaceAll("_", " ")
-                  }
-                />
-              ))}
-            </select>
-            <label htmlFor="search-radius" className="block">
               {`Max radius: ${radius} meters`}
             </label>
             <input
-              className="radius-sm w-full cursor-pointer"
+              className="w-full cursor-pointer"
               id="search-radius"
               type="range"
               value={radius}
@@ -118,35 +153,15 @@ export default function ResultsForm({
               step={100}
             />
           </div>
-          <div className="grow">
-            <label htmlFor="sort-by" className="block">
-              Sort by
-            </label>
-            <select
-              name="sort-by"
-              id="sort-by"
-              className="w-full rounded text-lg outline-none focus:ring-1"
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as SortOptions)}
-            >
-              {SORT_OPTIONS.map((sort) => (
-                <option
-                  key={sort}
-                  value={sort}
-                  label={sort.charAt(0).toUpperCase() + sort.slice(1)}
-                />
-              ))}
-            </select>
-          </div>
         </div>
       </div>
       <button
         type="button"
-        className="absolute left-6 z-10 block h-6 w-12 -translate-y-3 rounded border border-black/30 bg-slate-200 text-slate-700 shadow"
+        className="absolute -right-6 z-10 block h-6 w-12 translate-y-28 -rotate-90 rounded border border-black/30 bg-slate-200 text-slate-700 shadow sm:left-6 sm:-translate-y-3 sm:rotate-0"
         onClick={() => setShowOptions((prev) => !prev)}
       >
         <FiChevronsDown
-          className={`mx-auto text-xl transition-all duration-300 ${
+          className={`mx-auto text-xl duration-300 ${
             showOptions && "-rotate-180"
           }`}
         />

@@ -98,7 +98,7 @@ export default function MapCanvas({
   }, []);
 
   return (
-    <section className="h-full w-full bg-[#e5e3df]">
+    <section className="relative h-full w-full bg-[#e5e3df]">
       {!loadFinish && (
         <div className="flex h-full w-full items-center justify-center">
           <Image src="/loading.svg" alt="Loading..." height={200} width={200} />
