@@ -160,8 +160,8 @@ export default function MapCanvas({
                 position={selectedPlace.geometry.location}
                 mapPaneName="overlayMouseTarget"
               >
-                <div className="w-48 rounded-lg bg-slate-100 shadow ring-1 ring-black/20">
-                  <p className="p-2 text-center text-lg">
+                <div className="w-24 rounded-lg bg-slate-100 text-center shadow ring-1 ring-black/20 sm:w-48">
+                  <p className="px-1 text-xs sm:p-2 sm:text-lg">
                     {selectedPlace.name}
                   </p>
                   <Image
@@ -178,7 +178,7 @@ export default function MapCanvas({
                         type !== "point_of_interest" && type !== "establishment"
                     )
                     .map((type) => (
-                      <p className="text-center text-base" key={type}>
+                      <p className="hidden text-base sm:block" key={type}>
                         {type.charAt(0).toUpperCase() +
                           type.slice(1).replaceAll("_", " ")}
                       </p>

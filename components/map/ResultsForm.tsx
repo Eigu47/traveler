@@ -48,11 +48,11 @@ export default function ResultsForm({
         setShowOptions(false);
         refetch();
       }}
-      className={`relative flex h-72 min-w-0 max-w-0 flex-col bg-slate-200 px-3 shadow-md duration-200 sm:block sm:min-w-full sm:max-w-full sm:px-4 sm:transition-none ${
+      className={`relative flex min-w-0 max-w-0 flex-col whitespace-nowrap bg-slate-200 px-3 shadow-md ring-1 ring-black/10 duration-300 sm:block sm:min-w-full sm:max-w-full sm:px-4 sm:transition-none ${
         showOptions && "min-w-[calc(100vw-30px)] max-w-[calc(100vw-30px)]"
       }`}
     >
-      <div className="flex w-full flex-col items-center space-x-3 space-y-3 overflow-hidden pt-6 pb-3 sm:flex-row sm:py-8">
+      <div className="flex w-full flex-col items-center justify-center space-x-3 space-y-3 overflow-hidden pt-6 pb-3 sm:flex-row sm:space-y-0 sm:overflow-visible sm:py-8">
         <div className="relative w-full">
           <label
             htmlFor="search-keyword"
@@ -71,7 +71,7 @@ export default function ResultsForm({
           />
         </div>
         <button
-          className={`h-fit whitespace-nowrap rounded-md bg-blue-700 px-12 py-3 text-white shadow-md ring-1 ring-black/20 sm:px-4 ${
+          className={`h-fit rounded-md bg-blue-700 px-12 py-3 text-white shadow-md ring-1 ring-black/20 sm:px-4 ${
             queryLatLng
               ? "hover:bg-blue-800 active:scale-95"
               : "bg-gray-600/20 text-black"

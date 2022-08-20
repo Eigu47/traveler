@@ -69,10 +69,7 @@ export default function Results({
   );
 
   return (
-    <aside
-      className="z-10 flex
-     w-full flex-row bg-slate-300 shadow-[0_10px_10px_5px_rgba(0,0,0,0.15)] ring-1 ring-black/10 sm:max-w-[25vw] sm:flex-col"
-    >
+    <aside className="z-10 flex h-64 w-full flex-row bg-slate-300 shadow-[0_10px_10px_5px_rgba(0,0,0,0.15)] ring-1 ring-black/10 sm:h-full sm:max-w-[25vw] sm:flex-col">
       <ResultsForm
         refetch={refetch}
         keyword={keyword}
@@ -85,7 +82,7 @@ export default function Results({
         setSortBy={setSortBy}
       />
       {data && (
-        <div className="m-[12px_8px_8px_4px] flex flex-row overflow-x-auto sm:flex-col sm:space-y-5 sm:overflow-y-auto sm:overflow-x-hidden">
+        <div className="mx-1.5 flex flex-row overflow-x-auto sm:m-[12px_8px_8px_4px] sm:flex-col sm:space-y-5 sm:overflow-y-auto sm:overflow-x-hidden">
           {(isFetchingNextPage || !isFetching) &&
             sortResults(allResults, sortBy).map((place) => (
               <ResultCard
@@ -96,10 +93,10 @@ export default function Results({
                 isClicked={clickedPlace === place.place_id}
               />
             ))}
-          <div className="flex justify-center p-2 pb-4 text-xl">
+          <div className="flex justify-center whitespace-nowrap py-2 px-2 text-xl sm:py-0 sm:pb-4">
             {hasNextPage && (
               <button
-                className="w-full rounded-xl bg-blue-600 p-6 text-slate-100 shadow ring-1 ring-black/30 duration-100 hover:scale-[102%] hover:bg-blue-700 active:scale-[98%]"
+                className="w-full rounded-xl bg-blue-600 p-3 text-slate-100 shadow ring-1 ring-black/30 duration-100 hover:scale-[102%] hover:bg-blue-700 active:scale-[98%] sm:p-6"
                 onClick={() => {
                   fetchNextPage();
                 }}
@@ -109,9 +106,12 @@ export default function Results({
               </button>
             )}
             {!hasNextPage && (
-              <p className="w-full rounded-xl bg-blue-700/50 p-6 text-center text-slate-100 shadow ring-1 ring-black/30 duration-100">
+              <button
+                className="w-full rounded-xl bg-blue-700/50 p-3 text-slate-100 shadow ring-1 ring-black/30 duration-100 sm:p-6"
+                disabled
+              >
                 No more results
-              </p>
+              </button>
             )}
           </div>
         </div>

@@ -9,7 +9,7 @@ export default function Map({ isLoaded }: { isLoaded: boolean }) {
   const [clickedPlace, setClickedPlace] = useState<string>();
 
   return (
-    <main className="relative top-14 flex h-[calc((var(--vh,1vh)*100)-56px)] max-h-full max-w-full flex-col-reverse sm:h-[calc(100vh-56px)] sm:flex-row">
+    <main className="relative z-20 flex h-screen max-h-full max-w-full flex-col-reverse sm:top-14 sm:z-0 sm:h-[calc(100vh-56px)] sm:flex-row">
       <Results
         radius={radius}
         setRadius={setRadius}
