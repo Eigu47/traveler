@@ -14,15 +14,15 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   });
 
   useEffect(() => {
-    function addStyle() {
+    function addVar() {
       const vh = window.innerHeight * 0.01;
       document.documentElement.style.setProperty("--vh", `${vh}px`);
     }
 
-    window.addEventListener("resize", addStyle);
+    window.addEventListener("resize", addVar);
 
     return () => {
-      window.removeEventListener("resize", addStyle);
+      window.removeEventListener("resize", addVar);
     };
   }, []);
 
