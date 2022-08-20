@@ -1,10 +1,9 @@
-import type { NextPage } from "next";
 import Hero from "../components/index/Hero";
 
-const Home: NextPage = () => {
+const Home = ({ isLoaded }: { isLoaded: boolean }) => {
   return (
     <>
-      <Hero />
+      <Hero isLoaded={isLoaded} />
     </>
   );
 };

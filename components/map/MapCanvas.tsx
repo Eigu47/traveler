@@ -3,9 +3,8 @@ import {
   GoogleMap,
   MarkerF,
   OverlayView,
-  useLoadScript,
 } from "@react-google-maps/api/";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { Dispatch, useEffect, useMemo, useRef } from "react";
 import { MdGpsFixed, MdLocationPin } from "react-icons/md";
 import SearchBar from "./SearchBar";
@@ -20,6 +19,7 @@ interface Props {
   selectedPlace: Result | undefined;
   setSelectedPlace: Dispatch<SetStateAction<Result | undefined>>;
   setClickedPlace: Dispatch<SetStateAction<string | undefined>>;
+  isLoaded: boolean;
 }
 
 export default function MapCanvas({
@@ -27,6 +27,7 @@ export default function MapCanvas({
   selectedPlace,
   setSelectedPlace,
   setClickedPlace,
+  isLoaded,
 }: Props) {
   const router = useRouter();
   const mapRef = useRef<google.maps.Map>();
@@ -49,11 +50,6 @@ export default function MapCanvas({
       enabled: false,
     }
   );
-
-  const { isLoaded } = useLoadScript({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_MAP_API_KEY as string,
-    libraries,
-  });
 
   function getCurrentPosition() {
     navigator?.geolocation?.getCurrentPosition((pos) => {
@@ -214,14 +210,6 @@ export default function MapCanvas({
     </section>
   );
 }
-
-const libraries: (
-  | "drawing"
-  | "geometry"
-  | "localContext"
-  | "places"
-  | "visualization"
-)[] = ["places"];
 
 const DEFAULT_CENTER = {
   lat: 35.6762,

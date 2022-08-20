@@ -33,7 +33,7 @@ export default function ResultCard({
 
   return (
     <article
-      className={`m-2 flex cursor-default flex-col rounded-xl bg-slate-100 text-center shadow ring-1 ring-black/20 duration-75 ease-out active:scale-[99%] ${
+      className={`m-2 flex cursor-default flex-col rounded-xl bg-slate-100 text-center shadow ring-1 ring-black/20 duration-75 ease-out ${
         isSelected && "shadow-[0_0_8px_4px_#3b82f6]"
       }`}
       onMouseOver={() => setSelectedPlace(place)}

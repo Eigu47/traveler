@@ -3,7 +3,7 @@ import Results from "../components/map/Results";
 import { useState } from "react";
 import { Result } from "../types/NearbySearchResult";
 
-export default function Map() {
+export default function Map({ isLoaded }: { isLoaded: boolean }) {
   const [radius, setRadius] = useState<number>(5000);
   const [selectedPlace, setSelectedPlace] = useState<Result>();
   const [clickedPlace, setClickedPlace] = useState<string>();
@@ -22,6 +22,7 @@ export default function Map() {
         selectedPlace={selectedPlace}
         setSelectedPlace={setSelectedPlace}
         setClickedPlace={setClickedPlace}
+        isLoaded={isLoaded}
       />
     </main>
   );
