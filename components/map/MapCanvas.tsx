@@ -33,6 +33,7 @@ export default function MapCanvas({
   const mapRef = useRef<google.maps.Map>();
   const [showMenu, setShowMenu] = useState<google.maps.LatLngLiteral>();
   const [loadFinish, setLoadFinish] = useState(false);
+  const timerRef = useRef<NodeJS.Timeout>();
 
   const queryLatLng = useMemo(() => {
     if (
@@ -88,9 +89,27 @@ export default function MapCanvas({
     setShowMenu(undefined);
   }
 
+  function handleMouseDown(e: google.maps.MapMouseEvent) {
+    startPressTimer({
+      lat: e.latLng?.lat() ?? 0,
+      lng: e.latLng?.lng() ?? 0,
+    });
+  }
+
+  function handleMouseUp() {
+    clearTimeout(timerRef.current);
+  }
+
+  function startPressTimer({ lat, lng }: google.maps.LatLngLiteral) {
+    timerRef.current = setTimeout(() => {
+      setShowMenu({ lat, lng });
+      timerRef.current = undefined;
+    }, 500);
+  }
+
   useEffect(() => {
     function handleClick() {
-      setShowMenu(undefined);
+      if (timerRef.current) setShowMenu(undefined);
     }
     window.addEventListener("click", handleClick);
 
@@ -120,6 +139,8 @@ export default function MapCanvas({
               disableDefaultUI: true,
               clickableIcons: false,
             }}
+            onMouseDown={handleMouseDown}
+            onMouseUp={handleMouseUp}
           >
             {queryLatLng && (
               <>
@@ -193,9 +214,9 @@ export default function MapCanvas({
               <OverlayView position={showMenu} mapPaneName="overlayMouseTarget">
                 <button
                   onClick={handleClickBtn}
-                  className="m-1 flex items-center space-x-2 rounded-md bg-slate-50 px-3 py-2 text-lg shadow ring-1 ring-black/20 hover:bg-blue-200"
+                  className="m-1 flex items-center space-x-1 rounded-md bg-slate-50 px-1 py-2 text-sm shadow ring-1 ring-black/20 hover:bg-blue-200 md:space-x-2 md:py-2 md:px-3 md:text-lg"
                 >
-                  <MdLocationPin className="-mx-1 text-2xl" />
+                  <MdLocationPin className="-mx-1 select-none text-2xl" />
                   <span>Set center here</span>
                 </button>
               </OverlayView>

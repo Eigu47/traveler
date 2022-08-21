@@ -54,8 +54,8 @@ export default function ResultsForm({
         setShowOptions(false);
         refetch();
       }}
-      className={`relative flex min-w-0 max-w-0 flex-col whitespace-nowrap bg-slate-200 px-3 shadow-md ring-1 ring-black/10 duration-300 md:block md:min-w-full md:max-w-full md:px-4 md:transition-none ${
-        showOptions && "min-w-[calc(100vw-30px)] max-w-[calc(100vw-30px)]"
+      className={`absolute top-24 flex min-w-0 max-w-0 -translate-x-4 flex-col whitespace-nowrap rounded-xl bg-slate-200 px-3 shadow-md ring-1 ring-black/10 duration-300 md:static md:block md:min-w-full md:max-w-full md:translate-x-0 md:rounded-none md:px-4 md:transition-none ${
+        showOptions && "min-w-[calc(100vw-25px)] max-w-[calc(100vw-25x)] pl-6"
       }`}
     >
       <div className="flex w-full flex-col items-center justify-center space-x-3 space-y-3 overflow-hidden pt-6 pb-3 md:flex-row md:space-y-0 md:overflow-visible md:py-8">
@@ -88,8 +88,8 @@ export default function ResultsForm({
         </button>
       </div>
       <div
-        className={`relative w-full overflow-hidden duration-300 sm:max-h-0 ${
-          showOptions && "sm:max-h-[170px]"
+        className={`relative w-full overflow-hidden duration-300 md:max-h-0 ${
+          showOptions && "md:max-h-[170px]"
         }`}
       >
         <div className="flex flex-col border-t border-t-black/20 py-4">
@@ -163,11 +163,13 @@ export default function ResultsForm({
       </div>
       <button
         type="button"
-        className="absolute -right-6 z-10 block h-6 w-12 translate-y-28 -rotate-90 rounded border border-black/30 bg-slate-200 text-slate-700 shadow md:left-6 md:-translate-y-3 md:rotate-0"
+        className={`z-8 absolute block h-12 w-12 translate-y-[108px] -rotate-90 rounded-full border border-black/30 bg-slate-200 text-slate-700 shadow duration-300 md:left-6 md:h-6 md:-translate-y-3 md:rotate-0 md:rounded ${
+          showOptions ? "-right-6" : "-right-10"
+        }`}
         onClick={() => setShowOptions((prev) => !prev)}
       >
         <FiChevronsDown
-          className={`mx-auto text-xl duration-300 ${
+          className={`mx-auto text-2xl duration-300 md:text-xl ${
             showOptions && "-rotate-180"
           }`}
         />

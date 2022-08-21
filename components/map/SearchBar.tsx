@@ -4,11 +4,12 @@ import usePlacesAutocomplete, {
 } from "use-places-autocomplete";
 import { Combobox, Transition } from "@headlessui/react";
 import { FiSearch } from "react-icons/fi";
-import { ChangeEvent } from "react";
+import { ChangeEvent, useRef } from "react";
 import { useRouter } from "next/router";
 
 export default function SearchBar() {
   const router = useRouter();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const {
     ready,
@@ -35,7 +36,14 @@ export default function SearchBar() {
 
   return (
     <div className="absolute top-4 z-10 w-full px-4 text-xl sm:top-6 sm:right-6 sm:w-96 sm:px-0">
-      <Combobox value={value} onChange={handleChange} disabled={!ready}>
+      <Combobox
+        value={value}
+        onChange={(e) => {
+          handleChange(e);
+          inputRef.current!.blur();
+        }}
+        disabled={!ready}
+      >
         <div
           className={`relative flex w-full overflow-hidden rounded-lg bg-white px-3 py-2 shadow-lg ring-1 ring-black/20 ${
             !ready && "bg-slate-200"
@@ -48,6 +56,7 @@ export default function SearchBar() {
               setValue(e.target.value)
             }
             placeholder={ready ? "Search city..." : "Loading..."}
+            ref={inputRef}
           />
           <FiSearch className="text-2xl" />
         </div>

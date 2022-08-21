@@ -50,6 +50,7 @@ export default function HeroSearchBar({}: Props) {
               setValue(e.target.value)
             }
             placeholder={ready ? "Search city..." : "Loading..."}
+            autoFocus
           />
           <button
             className="rounded-full bg-indigo-600 p-2 text-2xl text-white shadow-md ring-1 ring-black/30 duration-75 ease-in-out hover:scale-105 active:scale-95"
