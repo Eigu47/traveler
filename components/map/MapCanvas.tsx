@@ -5,12 +5,12 @@ import {
   OverlayView,
 } from "@react-google-maps/api/";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { MdGpsFixed, MdLocationPin } from "react-icons/md";
 import { useRouter } from "next/router";
 import SearchBar from "./SearchBar";
 import Image from "next/image";
-import { NearbySearchResult } from "../../types/NearbySearchResult";
+import { NearbySearchResult, Result } from "../../types/NearbySearchResult";
 import { useAtom } from "jotai";
 import {
   clickedPlaceAtom,
@@ -27,9 +27,8 @@ interface Props {
 export default function MapCanvas({ isLoaded }: Props) {
   const router = useRouter();
   const mapRef = useRef<google.maps.Map>();
-  const [showMenu, setShowMenu] = useState<google.maps.LatLngLiteral>();
+  const [centerMenu, setCenterMenu] = useState<google.maps.LatLngLiteral>();
   const [loadFinish, setLoadFinish] = useState(false);
-  const [showRefetch, setShowRefetch] = useState(false);
   const timerRef = useRef<NodeJS.Timeout>();
   const [radius] = useAtom(radiusAtom);
   const [selectedPlace, setSelectedPlace] = useAtom(selectedPlaceAtom);
@@ -69,30 +68,29 @@ export default function MapCanvas({ isLoaded }: Props) {
   useEffect(() => {
     if (queryLatLng) {
       mapRef.current?.panTo(queryLatLng);
-      setShowRefetch(true);
 
       if (mapRef.current?.getZoom() ?? 12 < 12) mapRef.current?.setZoom(13);
     }
   }, [queryLatLng]);
 
   function handleRightClick(e: google.maps.MapMouseEvent) {
-    setShowMenu({
+    setCenterMenu({
       lat: e.latLng?.lat() ?? 0,
       lng: e.latLng?.lng() ?? 0,
     });
   }
 
-  function handleClickBtn() {
-    if (showMenu) {
+  function handleCenterMenu() {
+    if (centerMenu) {
       router.replace({
         pathname: "map",
         query: {
-          lat: showMenu?.lat,
-          lng: showMenu?.lng,
+          lat: centerMenu?.lat,
+          lng: centerMenu?.lng,
         },
       });
     }
-    setShowMenu(undefined);
+    setCenterMenu(undefined);
   }
 
   function handleMouseDown(e: google.maps.MapMouseEvent) {
@@ -108,21 +106,26 @@ export default function MapCanvas({ isLoaded }: Props) {
 
   function startPressTimer({ lat, lng }: google.maps.LatLngLiteral) {
     timerRef.current = setTimeout(() => {
-      setShowMenu({ lat, lng });
+      setCenterMenu({ lat, lng });
       timerRef.current = undefined;
     }, 500);
   }
 
-  function handleClick() {
-    if (timerRef.current) setShowMenu(undefined);
-    setShowRefetch(false);
-  }
+  const clearOverlay = useCallback(
+    (e?: MouseEvent) => {
+      if (timerRef.current) setCenterMenu(undefined);
+
+      if (e?.target?.localName !== "img") setSelectedPlace(undefined);
+    },
+
+    [setSelectedPlace]
+  );
 
   useEffect(() => {
-    window.addEventListener("click", handleClick);
+    window.addEventListener("click", clearOverlay);
 
-    return () => window.removeEventListener("click", handleClick);
-  }, []);
+    return () => window.removeEventListener("click", clearOverlay);
+  }, [clearOverlay]);
 
   return (
     <section className="relative h-full w-full bg-[#e5e3df]">
@@ -151,11 +154,11 @@ export default function MapCanvas({ isLoaded }: Props) {
             onMouseUp={handleMouseUp}
             onCenterChanged={() => {
               handleMouseUp();
-              handleClick();
+              clearOverlay();
             }}
             onZoomChanged={() => {
               handleMouseUp();
-              handleClick();
+              clearOverlay();
             }}
           >
             {queryLatLng && (
@@ -188,7 +191,7 @@ export default function MapCanvas({ isLoaded }: Props) {
                     }}
                     onClick={() => {
                       setClickedPlace(places.place_id);
-                      setSelectedPlace(places);
+                      setSelectedPlace(() => places);
                     }}
                     onMouseOver={() => setSelectedPlace(places)}
                     onMouseOut={() => setSelectedPlace(undefined)}
@@ -226,27 +229,17 @@ export default function MapCanvas({ isLoaded }: Props) {
                 </div>
               </OverlayView>
             )}
-            {showMenu && (
-              <OverlayView position={showMenu} mapPaneName="overlayMouseTarget">
+            {centerMenu && (
+              <OverlayView
+                position={centerMenu}
+                mapPaneName="overlayMouseTarget"
+              >
                 <button
-                  onClick={handleClickBtn}
+                  onClick={handleCenterMenu}
                   className="m-1 flex items-center space-x-1 rounded-md bg-slate-50 px-1 py-2 text-sm shadow ring-1 ring-black/20 hover:bg-blue-200 md:space-x-2 md:py-2 md:px-3 md:text-lg"
                 >
                   <MdLocationPin className="-mx-1 select-none text-2xl" />
                   <span>Set center here</span>
-                </button>
-              </OverlayView>
-            )}
-            {showRefetch && (
-              <OverlayView
-                position={queryLatLng}
-                mapPaneName="overlayMouseTarget"
-              >
-                <button
-                  onClick={handleClickBtn}
-                  className="m-1 flex items-center space-x-1 rounded-md bg-slate-50 px-1 py-2 text-sm shadow ring-1 ring-black/20 hover:bg-blue-200 md:hidden md:space-x-2 md:py-2 md:px-3 md:text-lg"
-                >
-                  Search here
                 </button>
               </OverlayView>
             )}

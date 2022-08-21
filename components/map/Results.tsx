@@ -81,9 +81,17 @@ export default function Results({}: Props) {
     if (!data?.pages[0].results) setShowResults(false);
   }, [searchbarOnFocus, clickedPlace, data?.pages, setShowResults]);
 
+  useEffect(() => {
+    if (window.innerWidth > 768) {
+      setShowOptions(true);
+    } else {
+      setShowOptions(false);
+    }
+  }, []);
+
   return (
     <aside
-      className={`absolute z-10 flex h-64 max-h-0 min-h-0 w-full flex-row bg-slate-300 pt-4 ring-2 ring-slate-500/80 duration-300 md:static md:h-full md:max-h-full md:min-h-full md:min-w-[420px] md:max-w-[25vw] md:flex-col md:py-0 md:shadow-[0_10px_10px_5px_rgba(0,0,0,0.15)] md:ring-1 md:ring-black/20 ${
+      className={`absolute z-10 flex h-64 max-h-0 min-h-0 w-full flex-row bg-slate-300 pt-4 ring-2 ring-slate-500/80 duration-300 md:static md:h-full md:max-h-full md:min-h-full md:min-w-[420px] md:max-w-[25vw] md:flex-col md:py-0 md:shadow-[0_10px_10px_5px_rgba(0,0,0,0.15)] md:ring-1 md:ring-black/20 md:transition-none ${
         showResults && "max-h-[256px] min-h-[256px] pt-0"
       }`}
     >
