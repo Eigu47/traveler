@@ -25,7 +25,6 @@ export default function Map({ isLoaded }: { isLoaded: boolean }) {
         setSelectedPlace={setSelectedPlace}
         setClickedPlace={setClickedPlace}
         isLoaded={isLoaded}
-        searchbarOnFocus={searchbarOnFocus}
         setSearchbarOnFocus={setSearchbarOnFocus}
       />
     </main>

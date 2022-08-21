@@ -87,8 +87,8 @@ export default function Results({
 
   return (
     <aside
-      className={`z-10 flex h-64 max-h-0 min-h-0 w-full flex-row bg-slate-300 pt-2 ring-2 ring-slate-500/80 duration-100 md:h-full md:max-h-full md:min-h-full md:min-w-[420px] md:max-w-[25vw] md:flex-col md:py-0 md:shadow-[0_10px_10px_5px_rgba(0,0,0,0.15)] md:ring-1 md:ring-black/20 ${
-        showResults && "max-h-[256px] min-h-[256px]"
+      className={`absolute z-10 flex h-64 max-h-0 min-h-0 w-full flex-row bg-slate-300 pt-4 ring-2 ring-slate-500/80 duration-200 md:static md:h-full md:max-h-full md:min-h-full md:min-w-[420px] md:max-w-[25vw] md:flex-col md:py-0 md:shadow-[0_10px_10px_5px_rgba(0,0,0,0.15)] md:ring-1 md:ring-black/20 ${
+        showResults && "max-h-[256px] min-h-[256px] pt-0"
       }`}
     >
       <ResultsForm
@@ -140,7 +140,9 @@ export default function Results({
         </div>
       )}
       <div
-        className="absolute h-6 w-screen -translate-y-5"
+        className={`absolute h-6 w-screen -translate-y-6 duration-200 ${
+          showResults && "-translate-y-3"
+        }`}
         onClick={() => setShowResults((prev) => !prev)}
       >
         <button
@@ -148,7 +150,7 @@ export default function Results({
           className="mx-auto block h-6 w-2/6 rounded-md bg-gray-300 text-slate-700 shadow ring-1 ring-black/20 md:hidden"
         >
           <FiChevronsDown
-            className={`mx-auto text-2xl duration-100 md:text-xl ${
+            className={`mx-auto text-2xl duration-200 md:text-xl ${
               showResults && "-rotate-180"
             }`}
           />

@@ -25,7 +25,6 @@ interface Props {
   setSelectedPlace: Dispatch<SetStateAction<Result | undefined>>;
   setClickedPlace: Dispatch<SetStateAction<string | undefined>>;
   isLoaded: boolean;
-  searchbarOnFocus: boolean;
   setSearchbarOnFocus: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -35,13 +34,13 @@ export default function MapCanvas({
   setSelectedPlace,
   setClickedPlace,
   isLoaded,
-  searchbarOnFocus,
   setSearchbarOnFocus,
 }: Props) {
   const router = useRouter();
   const mapRef = useRef<google.maps.Map>();
   const [showMenu, setShowMenu] = useState<google.maps.LatLngLiteral>();
   const [loadFinish, setLoadFinish] = useState(false);
+  const [showRefetch, setShowRefetch] = useState(false);
   const timerRef = useRef<NodeJS.Timeout>();
 
   const queryLatLng = useMemo(() => {
@@ -54,7 +53,7 @@ export default function MapCanvas({
       return { lat: +router.query.lat, lng: +router.query.lng };
   }, [router.query]);
 
-  const { data, isSuccess } = useInfiniteQuery<NearbySearchResult>(
+  const { data, isSuccess, refetch } = useInfiniteQuery<NearbySearchResult>(
     ["nearby", queryLatLng],
     {
       enabled: false,
@@ -76,6 +75,7 @@ export default function MapCanvas({
   useEffect(() => {
     if (queryLatLng) {
       mapRef.current?.panTo(queryLatLng);
+      setShowRefetch(true);
 
       if (mapRef.current?.getZoom() ?? 12 < 12) mapRef.current?.setZoom(13);
     }
@@ -121,6 +121,7 @@ export default function MapCanvas({
 
   function handleClick() {
     if (timerRef.current) setShowMenu(undefined);
+    setShowRefetch(false);
   }
 
   useEffect(() => {
@@ -239,6 +240,19 @@ export default function MapCanvas({
                 >
                   <MdLocationPin className="-mx-1 select-none text-2xl" />
                   <span>Set center here</span>
+                </button>
+              </OverlayView>
+            )}
+            {showRefetch && (
+              <OverlayView
+                position={queryLatLng}
+                mapPaneName="overlayMouseTarget"
+              >
+                <button
+                  onClick={handleClickBtn}
+                  className="m-1 flex items-center space-x-1 rounded-md bg-slate-50 px-1 py-2 text-sm shadow ring-1 ring-black/20 hover:bg-blue-200 md:hidden md:space-x-2 md:py-2 md:px-3 md:text-lg"
+                >
+                  Search here
                 </button>
               </OverlayView>
             )}

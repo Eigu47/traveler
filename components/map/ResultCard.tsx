@@ -2,7 +2,6 @@ import Image from "next/image";
 import { SetStateAction, useRef, useEffect, Dispatch } from "react";
 import { Result } from "../../types/NearbySearchResult";
 import Rating from "./Rating";
-import { SiGooglemaps } from "react-icons/si";
 
 interface Props {
   place: Result;
@@ -75,17 +74,14 @@ export default function ResultCard({
         </div>
       </div>
       <div className="w-full space-y-2 p-2 pt-4 md:space-y-4">
-        <div className="inline-block">
-          <a
-            href={`https://www.google.com/maps/place/?q=place_id:${place.place_id}`}
-            target="_blank"
-            rel="noreferrer"
-            className="flex items-center whitespace-nowrap text-2xl hover:text-blue-700"
-          >
-            <SiGooglemaps className="mr-2" size={24} />
-            {place.name}
-          </a>
-        </div>
+        <a
+          href={`https://www.google.com/maps/place/?q=place_id:${place.place_id}`}
+          target="_blank"
+          rel="noreferrer"
+          className="whitespace-nowrap text-center text-2xl hover:text-blue-700 md:whitespace-normal"
+        >
+          {place.name}
+        </a>
         <div className="flex justify-center space-x-2 md:flex-wrap">
           {place.types
             .filter(

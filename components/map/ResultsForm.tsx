@@ -50,7 +50,7 @@ export default function ResultsForm({
         setShowOptions(false);
         refetch();
       }}
-      className={`absolute top-24 flex min-w-0 max-w-0 -translate-x-4 flex-col whitespace-nowrap rounded-xl bg-slate-200 px-3 shadow-md ring-1 ring-black/10 duration-300 md:static md:block md:min-w-full md:max-w-full md:translate-x-0 md:rounded-none md:px-4 md:transition-none ${
+      className={`fixed top-24 flex min-w-0 max-w-0 -translate-x-4 flex-col whitespace-nowrap rounded-xl bg-slate-200 px-3 shadow-md ring-1 ring-black/10 duration-300 md:static md:block md:min-w-full md:max-w-full md:translate-x-0 md:rounded-none md:px-4 md:transition-none ${
         showOptions && "min-w-[calc(100vw-25px)] max-w-[calc(100vw-25x)] pl-6"
       }`}
     >
