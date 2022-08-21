@@ -5,14 +5,19 @@ import {
   OverlayView,
 } from "@react-google-maps/api/";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { Dispatch, useEffect, useMemo, useRef } from "react";
+import {
+  Dispatch,
+  useEffect,
+  useMemo,
+  useRef,
+  SetStateAction,
+  useState,
+} from "react";
 import { MdGpsFixed, MdLocationPin } from "react-icons/md";
-import SearchBar from "./SearchBar";
 import { useRouter } from "next/router";
-import { NearbySearchResult, Result } from "../../types/NearbySearchResult";
-import { useState } from "react";
+import SearchBar from "./SearchBar";
 import Image from "next/image";
-import { SetStateAction } from "react";
+import { NearbySearchResult, Result } from "../../types/NearbySearchResult";
 
 interface Props {
   radius: number;
@@ -20,6 +25,8 @@ interface Props {
   setSelectedPlace: Dispatch<SetStateAction<Result | undefined>>;
   setClickedPlace: Dispatch<SetStateAction<string | undefined>>;
   isLoaded: boolean;
+  searchbarOnFocus: boolean;
+  setSearchbarOnFocus: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function MapCanvas({
@@ -28,6 +35,8 @@ export default function MapCanvas({
   setSelectedPlace,
   setClickedPlace,
   isLoaded,
+  searchbarOnFocus,
+  setSearchbarOnFocus,
 }: Props) {
   const router = useRouter();
   const mapRef = useRef<google.maps.Map>();
@@ -49,6 +58,9 @@ export default function MapCanvas({
     ["nearby", queryLatLng],
     {
       enabled: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchOnMount: false,
     }
   );
 
@@ -107,10 +119,11 @@ export default function MapCanvas({
     }, 500);
   }
 
+  function handleClick() {
+    if (timerRef.current) setShowMenu(undefined);
+  }
+
   useEffect(() => {
-    function handleClick() {
-      if (timerRef.current) setShowMenu(undefined);
-    }
     window.addEventListener("click", handleClick);
 
     return () => window.removeEventListener("click", handleClick);
@@ -133,14 +146,22 @@ export default function MapCanvas({
               mapRef.current = map;
               setLoadFinish(true);
             }}
-            onRightClick={handleRightClick}
             options={{
               mapId: "a73e177530bb64aa",
               disableDefaultUI: true,
               clickableIcons: false,
             }}
+            onRightClick={handleRightClick}
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
+            onCenterChanged={() => {
+              handleMouseUp();
+              handleClick();
+            }}
+            onZoomChanged={() => {
+              handleMouseUp();
+              handleClick();
+            }}
           >
             {queryLatLng && (
               <>
@@ -222,7 +243,7 @@ export default function MapCanvas({
               </OverlayView>
             )}
           </GoogleMap>
-          <SearchBar />
+          <SearchBar setSearchbarOnFocus={setSearchbarOnFocus} />
         </>
       )}
       <button

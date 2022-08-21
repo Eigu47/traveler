@@ -26,7 +26,8 @@ interface Props {
   setRadius: Dispatch<SetStateAction<number>>;
   sortBy: SortOptions;
   setSortBy: Dispatch<SetStateAction<SortOptions>>;
-  clickedPlace: string | undefined;
+  showOptions: boolean;
+  setShowOptions: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function ResultsForm({
@@ -39,14 +40,9 @@ export default function ResultsForm({
   setRadius,
   sortBy,
   setSortBy,
-  clickedPlace,
+  showOptions,
+  setShowOptions,
 }: Props) {
-  const [showOptions, setShowOptions] = useState(true);
-
-  useEffect(() => {
-    if (clickedPlace) setShowOptions(false);
-  }, [clickedPlace]);
-
   return (
     <form
       onSubmit={(e) => {
@@ -163,9 +159,7 @@ export default function ResultsForm({
       </div>
       <button
         type="button"
-        className={`z-8 absolute block h-12 w-12 translate-y-[108px] -rotate-90 rounded-full border border-black/30 bg-slate-200 text-slate-700 shadow duration-300 md:left-6 md:h-6 md:-translate-y-3 md:rotate-0 md:rounded ${
-          showOptions ? "-right-6" : "-right-10"
-        }`}
+        className="z-8 absolute -right-8 block h-12 w-12 translate-y-[108px] -rotate-90 rounded-full border border-black/30 bg-slate-200 text-slate-700 shadow md:left-6 md:h-6 md:-translate-y-3 md:rotate-0 md:rounded"
         onClick={() => setShowOptions((prev) => !prev)}
       >
         <FiChevronsDown

@@ -2,12 +2,16 @@ import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
 } from "use-places-autocomplete";
+import { ChangeEvent, useRef, Dispatch, SetStateAction } from "react";
 import { Combobox, Transition } from "@headlessui/react";
 import { FiSearch } from "react-icons/fi";
-import { ChangeEvent, useRef } from "react";
 import { useRouter } from "next/router";
 
-export default function SearchBar() {
+interface Props {
+  setSearchbarOnFocus: Dispatch<SetStateAction<boolean>>;
+}
+
+export default function SearchBar({ setSearchbarOnFocus }: Props) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -57,6 +61,8 @@ export default function SearchBar() {
             }
             placeholder={ready ? "Search city..." : "Loading..."}
             ref={inputRef}
+            onFocus={() => setSearchbarOnFocus(true)}
+            onBlur={() => setSearchbarOnFocus(false)}
           />
           <FiSearch className="text-2xl" />
         </div>

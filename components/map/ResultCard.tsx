@@ -1,10 +1,8 @@
 import Image from "next/image";
-import { SetStateAction, useRef } from "react";
-import { Dispatch } from "react";
+import { SetStateAction, useRef, useEffect, Dispatch } from "react";
 import { Result } from "../../types/NearbySearchResult";
 import Rating from "./Rating";
 import { SiGooglemaps } from "react-icons/si";
-import { useEffect } from "react";
 
 interface Props {
   place: Result;

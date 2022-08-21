@@ -1,7 +1,6 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
-import { SetStateAction, useState } from "react";
-import { Dispatch, useMemo } from "react";
+import { SetStateAction, useState, Dispatch, useMemo, useEffect } from "react";
 import { NearbySearchResult, Result } from "../../types/NearbySearchResult";
 import ResultCard from "./ResultCard";
 import {
@@ -13,6 +12,7 @@ import {
 } from "./ResultsUtil";
 import Image from "next/image";
 import ResultsForm from "./ResultsForm";
+import { FiChevronsDown } from "react-icons/fi";
 
 interface Props {
   radius: number;
@@ -20,6 +20,7 @@ interface Props {
   selectedPlace: Result | undefined;
   setSelectedPlace: Dispatch<SetStateAction<Result | undefined>>;
   clickedPlace: string | undefined;
+  searchbarOnFocus: boolean;
 }
 
 export default function Results({
@@ -28,11 +29,14 @@ export default function Results({
   selectedPlace,
   setSelectedPlace,
   clickedPlace,
+  searchbarOnFocus,
 }: Props) {
   const [keyword, setKeyword] = useState<string>();
   const [type, setType] = useState<SearchTypes>("tourist_attraction");
   const [sortBy, setSortBy] = useState<SortOptions>("relevance");
   const [allResults, setAllResults] = useState<Result[]>([]);
+  const [showResults, setShowResults] = useState(false);
+  const [showOptions, setShowOptions] = useState(true);
   const router = useRouter();
 
   const queryLatLng = useMemo(() => {
@@ -58,18 +62,35 @@ export default function Results({
       fetchResults(pageParam, queryLatLng, radius, keyword, type),
     {
       enabled: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchOnMount: false,
       getNextPageParam: (lastPage) => {
         return lastPage.next_page_token;
       },
       onSuccess: (data) => {
         const allData = data.pages.flatMap((pages) => pages.results);
         setAllResults(addDistance(allData, queryLatLng));
+        setShowResults(true);
       },
     }
   );
 
+  useEffect(() => {
+    if (clickedPlace) setShowOptions(false);
+
+    if (searchbarOnFocus) setShowResults(false);
+    if (searchbarOnFocus) setShowOptions(false);
+
+    if (!data?.pages[0].results) setShowResults(false);
+  }, [searchbarOnFocus, clickedPlace, data?.pages]);
+
   return (
-    <aside className="z-10 flex h-64 w-full flex-row bg-slate-300 shadow-[0_10px_10px_5px_rgba(0,0,0,0.15)] ring-1 ring-black/10 md:h-full md:min-w-[420px] md:max-w-[25vw] md:flex-col">
+    <aside
+      className={`z-10 flex h-64 max-h-0 min-h-0 w-full flex-row bg-slate-300 pt-2 ring-2 ring-slate-500/80 duration-100 md:h-full md:max-h-full md:min-h-full md:min-w-[420px] md:max-w-[25vw] md:flex-col md:py-0 md:shadow-[0_10px_10px_5px_rgba(0,0,0,0.15)] md:ring-1 md:ring-black/20 ${
+        showResults && "max-h-[256px] min-h-[256px]"
+      }`}
+    >
       <ResultsForm
         refetch={refetch}
         keyword={keyword}
@@ -80,7 +101,8 @@ export default function Results({
         setRadius={setRadius}
         sortBy={sortBy}
         setSortBy={setSortBy}
-        clickedPlace={clickedPlace}
+        showOptions={showOptions}
+        setShowOptions={setShowOptions}
       />
       {data && (
         <div className="mx-1.5 flex flex-row overflow-x-auto overflow-y-hidden md:m-[12px_8px_8px_4px] md:flex-col md:space-y-5 md:overflow-y-auto md:overflow-x-hidden">
@@ -117,6 +139,21 @@ export default function Results({
           </div>
         </div>
       )}
+      <div
+        className="absolute h-6 w-screen -translate-y-5"
+        onClick={() => setShowResults((prev) => !prev)}
+      >
+        <button
+          type="button"
+          className="mx-auto block h-6 w-2/6 rounded-md bg-gray-300 text-slate-700 shadow ring-1 ring-black/20 md:hidden"
+        >
+          <FiChevronsDown
+            className={`mx-auto text-2xl duration-100 md:text-xl ${
+              showResults && "-rotate-180"
+            }`}
+          />
+        </button>
+      </div>
       {isFetching && !isFetchingNextPage && (
         <div className="flex h-full w-full justify-center">
           <Image src="/loading.svg" alt="Loading..." height={150} width={150} />
