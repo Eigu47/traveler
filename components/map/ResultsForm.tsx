@@ -13,6 +13,8 @@ import {
   SortOptions,
   SORT_OPTIONS,
 } from "./ResultsUtil";
+import { useAtom } from "jotai";
+import { radiusAtom } from "../../store/store";
 
 interface Props {
   refetch: <TPageData>(
@@ -22,8 +24,6 @@ interface Props {
   setKeyword: Dispatch<SetStateAction<string | undefined>>;
   queryLatLng: google.maps.LatLngLiteral | undefined;
   setType: Dispatch<SetStateAction<SearchTypes>>;
-  radius: number;
-  setRadius: Dispatch<SetStateAction<number>>;
   sortBy: SortOptions;
   setSortBy: Dispatch<SetStateAction<SortOptions>>;
   showOptions: boolean;
@@ -36,13 +36,13 @@ export default function ResultsForm({
   setKeyword,
   queryLatLng,
   setType,
-  radius,
-  setRadius,
   sortBy,
   setSortBy,
   showOptions,
   setShowOptions,
 }: Props) {
+  const [radius, setRadius] = useAtom(radiusAtom);
+
   return (
     <form
       onSubmit={(e) => {

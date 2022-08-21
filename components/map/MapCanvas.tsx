@@ -5,43 +5,37 @@ import {
   OverlayView,
 } from "@react-google-maps/api/";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import {
-  Dispatch,
-  useEffect,
-  useMemo,
-  useRef,
-  SetStateAction,
-  useState,
-} from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { MdGpsFixed, MdLocationPin } from "react-icons/md";
 import { useRouter } from "next/router";
 import SearchBar from "./SearchBar";
 import Image from "next/image";
-import { NearbySearchResult, Result } from "../../types/NearbySearchResult";
+import { NearbySearchResult } from "../../types/NearbySearchResult";
+import { useAtom } from "jotai";
+import {
+  clickedPlaceAtom,
+  radiusAtom,
+  searchbarOnFocusAtom,
+  selectedPlaceAtom,
+  showResultsAtom,
+} from "../../store/store";
 
 interface Props {
-  radius: number;
-  selectedPlace: Result | undefined;
-  setSelectedPlace: Dispatch<SetStateAction<Result | undefined>>;
-  setClickedPlace: Dispatch<SetStateAction<string | undefined>>;
   isLoaded: boolean;
-  setSearchbarOnFocus: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function MapCanvas({
-  radius,
-  selectedPlace,
-  setSelectedPlace,
-  setClickedPlace,
-  isLoaded,
-  setSearchbarOnFocus,
-}: Props) {
+export default function MapCanvas({ isLoaded }: Props) {
   const router = useRouter();
   const mapRef = useRef<google.maps.Map>();
   const [showMenu, setShowMenu] = useState<google.maps.LatLngLiteral>();
   const [loadFinish, setLoadFinish] = useState(false);
   const [showRefetch, setShowRefetch] = useState(false);
   const timerRef = useRef<NodeJS.Timeout>();
+  const [radius] = useAtom(radiusAtom);
+  const [selectedPlace, setSelectedPlace] = useAtom(selectedPlaceAtom);
+  const [, setClickedPlace] = useAtom(clickedPlaceAtom);
+  const [, setSearchbarOnFocus] = useAtom(searchbarOnFocusAtom);
+  const [showResults] = useAtom(showResultsAtom);
 
   const queryLatLng = useMemo(() => {
     if (
@@ -262,7 +256,9 @@ export default function MapCanvas({
       )}
       <button
         onClick={getCurrentPosition}
-        className="absolute bottom-6 right-4 rounded-lg bg-white p-1 text-4xl text-gray-600 shadow-md ring-1 ring-black/20 duration-75 ease-in-out hover:text-black"
+        className={`fixed right-4 rounded-lg bg-white p-1 text-4xl text-gray-600 shadow-md ring-1 ring-black/20 duration-300 hover:text-black sm:bottom-6 md:transition-none ${
+          showResults ? "bottom-72" : "bottom-12"
+        }`}
       >
         <MdGpsFixed />
       </button>

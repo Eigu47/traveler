@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
-import { SetStateAction, useState, Dispatch, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { NearbySearchResult, Result } from "../../types/NearbySearchResult";
 import ResultCard from "./ResultCard";
 import {
@@ -13,31 +13,27 @@ import {
 import Image from "next/image";
 import ResultsForm from "./ResultsForm";
 import { FiChevronsDown } from "react-icons/fi";
+import { useAtom } from "jotai";
+import {
+  clickedPlaceAtom,
+  radiusAtom,
+  searchbarOnFocusAtom,
+  showResultsAtom,
+} from "../../store/store";
 
-interface Props {
-  radius: number;
-  setRadius: Dispatch<SetStateAction<number>>;
-  selectedPlace: Result | undefined;
-  setSelectedPlace: Dispatch<SetStateAction<Result | undefined>>;
-  clickedPlace: string | undefined;
-  searchbarOnFocus: boolean;
-}
+interface Props {}
 
-export default function Results({
-  radius,
-  setRadius,
-  selectedPlace,
-  setSelectedPlace,
-  clickedPlace,
-  searchbarOnFocus,
-}: Props) {
+export default function Results({}: Props) {
   const [keyword, setKeyword] = useState<string>();
   const [type, setType] = useState<SearchTypes>("tourist_attraction");
   const [sortBy, setSortBy] = useState<SortOptions>("relevance");
   const [allResults, setAllResults] = useState<Result[]>([]);
-  const [showResults, setShowResults] = useState(false);
   const [showOptions, setShowOptions] = useState(true);
   const router = useRouter();
+  const [radius] = useAtom(radiusAtom);
+  const [clickedPlace] = useAtom(clickedPlaceAtom);
+  const [searchbarOnFocus] = useAtom(searchbarOnFocusAtom);
+  const [showResults, setShowResults] = useAtom(showResultsAtom);
 
   const queryLatLng = useMemo(() => {
     if (
@@ -83,11 +79,11 @@ export default function Results({
     if (searchbarOnFocus) setShowOptions(false);
 
     if (!data?.pages[0].results) setShowResults(false);
-  }, [searchbarOnFocus, clickedPlace, data?.pages]);
+  }, [searchbarOnFocus, clickedPlace, data?.pages, setShowResults]);
 
   return (
     <aside
-      className={`absolute z-10 flex h-64 max-h-0 min-h-0 w-full flex-row bg-slate-300 pt-4 ring-2 ring-slate-500/80 duration-200 md:static md:h-full md:max-h-full md:min-h-full md:min-w-[420px] md:max-w-[25vw] md:flex-col md:py-0 md:shadow-[0_10px_10px_5px_rgba(0,0,0,0.15)] md:ring-1 md:ring-black/20 ${
+      className={`absolute z-10 flex h-64 max-h-0 min-h-0 w-full flex-row bg-slate-300 pt-4 ring-2 ring-slate-500/80 duration-300 md:static md:h-full md:max-h-full md:min-h-full md:min-w-[420px] md:max-w-[25vw] md:flex-col md:py-0 md:shadow-[0_10px_10px_5px_rgba(0,0,0,0.15)] md:ring-1 md:ring-black/20 ${
         showResults && "max-h-[256px] min-h-[256px] pt-0"
       }`}
     >
@@ -97,8 +93,6 @@ export default function Results({
         setKeyword={setKeyword}
         queryLatLng={queryLatLng}
         setType={setType}
-        radius={radius}
-        setRadius={setRadius}
         sortBy={sortBy}
         setSortBy={setSortBy}
         showOptions={showOptions}
@@ -111,8 +105,6 @@ export default function Results({
               <ResultCard
                 key={place.place_id}
                 place={place}
-                selectedPlace={selectedPlace}
-                setSelectedPlace={setSelectedPlace}
                 isClicked={clickedPlace === place.place_id}
               />
             ))}
@@ -140,7 +132,7 @@ export default function Results({
         </div>
       )}
       <div
-        className={`absolute h-6 w-screen -translate-y-6 duration-200 ${
+        className={`absolute h-6 w-screen -translate-y-6 duration-300 ${
           showResults && "-translate-y-3"
         }`}
         onClick={() => setShowResults((prev) => !prev)}
@@ -150,7 +142,7 @@ export default function Results({
           className="mx-auto block h-6 w-2/6 rounded-md bg-gray-300 text-slate-700 shadow ring-1 ring-black/20 md:hidden"
         >
           <FiChevronsDown
-            className={`mx-auto text-2xl duration-200 md:text-xl ${
+            className={`mx-auto text-2xl duration-300 md:text-xl ${
               showResults && "-rotate-180"
             }`}
           />

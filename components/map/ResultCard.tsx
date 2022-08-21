@@ -1,21 +1,18 @@
+import { useAtom } from "jotai";
 import Image from "next/image";
-import { SetStateAction, useRef, useEffect, Dispatch } from "react";
+import { useRef, useEffect } from "react";
+import { selectedPlaceAtom } from "../../store/store";
 import { Result } from "../../types/NearbySearchResult";
 import Rating from "./Rating";
 
 interface Props {
   place: Result;
-  selectedPlace: Result | undefined;
-  setSelectedPlace: Dispatch<SetStateAction<Result | undefined>>;
   isClicked: boolean;
 }
 
-export default function ResultCard({
-  place,
-  selectedPlace,
-  setSelectedPlace,
-  isClicked,
-}: Props) {
+export default function ResultCard({ place, isClicked }: Props) {
+  const [selectedPlace, setSelectedPlace] = useAtom(selectedPlaceAtom);
+
   const resultRef = useRef<HTMLElement>(null);
 
   const isSelected = selectedPlace?.place_id === place.place_id;

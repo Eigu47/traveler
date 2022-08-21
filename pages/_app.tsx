@@ -5,6 +5,7 @@ import Head from "next/head";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useLoadScript } from "@react-google-maps/api";
+import { Provider } from "jotai";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const { isLoaded } = useLoadScript({
@@ -23,13 +24,17 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <QueryClientProvider client={queryClient}>
-        <Navbar />
-        <Component {...pageProps} isLoaded={isLoaded} />
-        {/* <ReactQueryDevtools /> */}
+        <Provider>
+          <Navbar />
+          <Component {...pageProps} isLoaded={isLoaded} />
+          {/* <ReactQueryDevtools /> */}
+        </Provider>
       </QueryClientProvider>
     </>
   );
 }
+
+const queryClient = new QueryClient();
 
 const libraries: (
   | "drawing"
@@ -38,5 +43,3 @@ const libraries: (
   | "places"
   | "visualization"
 )[] = ["places"];
-
-const queryClient = new QueryClient();
