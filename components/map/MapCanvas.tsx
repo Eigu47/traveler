@@ -69,9 +69,11 @@ export default function MapCanvas({ isLoaded }: Props) {
     if (queryLatLng) {
       mapRef.current?.panTo(queryLatLng);
 
+      setClickedPlace(undefined);
+
       if (mapRef.current?.getZoom() ?? 12 < 12) mapRef.current?.setZoom(13);
     }
-  }, [queryLatLng]);
+  }, [queryLatLng, setClickedPlace]);
 
   return (
     <section className="relative h-full w-full bg-[#e5e3df]">

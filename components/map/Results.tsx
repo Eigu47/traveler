@@ -73,6 +73,7 @@ export default function Results({}: Props) {
 
   useEffect(() => {
     if (clickedPlace) setShowOptions(false);
+    if (clickedPlace) setShowResults(true);
 
     if (searchbarOnFocus) setShowResults(false);
     if (searchbarOnFocus) setShowOptions(false);
