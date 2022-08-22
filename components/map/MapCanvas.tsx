@@ -19,13 +19,12 @@ import {
   selectedPlaceAtom,
   showResultsAtom,
 } from "../../utils/store";
-import {
+import useMapCanvasUtil, {
   DEFAULT_CENTER,
   getCurrentPosition,
   handleCenterMenu,
   handleRightClick,
-} from "./MapCanvasUtil";
-import useLongerPress from "../../utils/useLongerPress";
+} from "./useMapCanvasUtil";
 
 interface Props {
   isLoaded: boolean;
@@ -41,10 +40,10 @@ export default function MapCanvas({ isLoaded }: Props) {
   const [, setClickedPlace] = useAtom(clickedPlaceAtom);
   const [, setSearchbarOnFocus] = useAtom(searchbarOnFocusAtom);
   const [showResults] = useAtom(showResultsAtom);
-  const { handleMouseDown, handleMouseUp, clearOverlay } = useLongerPress({
+  const { handleMouseDown, handleMouseUp, clearOverlay } = useMapCanvasUtil(
     setCenterMenu,
-    setSelectedPlace,
-  });
+    setSelectedPlace
+  );
 
   const queryLatLng = useMemo(() => {
     if (
