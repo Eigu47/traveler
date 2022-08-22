@@ -5,12 +5,12 @@ import {
   OverlayView,
 } from "@react-google-maps/api/";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useEffect, useMemo, useRef, useState, useCallback } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { MdGpsFixed, MdLocationPin } from "react-icons/md";
 import { useRouter } from "next/router";
 import SearchBar from "./SearchBar";
 import Image from "next/image";
-import { NearbySearchResult, Result } from "../../types/NearbySearchResult";
+import { NearbySearchResult } from "../../types/NearbySearchResult";
 import { useAtom } from "jotai";
 import {
   clickedPlaceAtom,
@@ -18,7 +18,14 @@ import {
   searchbarOnFocusAtom,
   selectedPlaceAtom,
   showResultsAtom,
-} from "../../store/store";
+} from "../../utils/store";
+import {
+  DEFAULT_CENTER,
+  getCurrentPosition,
+  handleCenterMenu,
+  handleRightClick,
+} from "./MapCanvasUtil";
+import useLongerPress from "../../utils/useLongerPress";
 
 interface Props {
   isLoaded: boolean;
@@ -29,12 +36,15 @@ export default function MapCanvas({ isLoaded }: Props) {
   const mapRef = useRef<google.maps.Map>();
   const [centerMenu, setCenterMenu] = useState<google.maps.LatLngLiteral>();
   const [loadFinish, setLoadFinish] = useState(false);
-  const timerRef = useRef<NodeJS.Timeout>();
   const [radius] = useAtom(radiusAtom);
   const [selectedPlace, setSelectedPlace] = useAtom(selectedPlaceAtom);
   const [, setClickedPlace] = useAtom(clickedPlaceAtom);
   const [, setSearchbarOnFocus] = useAtom(searchbarOnFocusAtom);
   const [showResults] = useAtom(showResultsAtom);
+  const { handleMouseDown, handleMouseUp, clearOverlay } = useLongerPress({
+    setCenterMenu,
+    setSelectedPlace,
+  });
 
   const queryLatLng = useMemo(() => {
     if (
@@ -46,7 +56,7 @@ export default function MapCanvas({ isLoaded }: Props) {
       return { lat: +router.query.lat, lng: +router.query.lng };
   }, [router.query]);
 
-  const { data, isSuccess, refetch } = useInfiniteQuery<NearbySearchResult>(
+  const { data, isSuccess } = useInfiniteQuery<NearbySearchResult>(
     ["nearby", queryLatLng],
     {
       enabled: false,
@@ -56,15 +66,6 @@ export default function MapCanvas({ isLoaded }: Props) {
     }
   );
 
-  function getCurrentPosition() {
-    navigator?.geolocation?.getCurrentPosition((pos) => {
-      router.replace({
-        pathname: "/map",
-        query: { lat: pos.coords.latitude, lng: pos.coords.longitude },
-      });
-    });
-  }
-
   useEffect(() => {
     if (queryLatLng) {
       mapRef.current?.panTo(queryLatLng);
@@ -72,60 +73,6 @@ export default function MapCanvas({ isLoaded }: Props) {
       if (mapRef.current?.getZoom() ?? 12 < 12) mapRef.current?.setZoom(13);
     }
   }, [queryLatLng]);
-
-  function handleRightClick(e: google.maps.MapMouseEvent) {
-    setCenterMenu({
-      lat: e.latLng?.lat() ?? 0,
-      lng: e.latLng?.lng() ?? 0,
-    });
-  }
-
-  function handleCenterMenu() {
-    if (centerMenu) {
-      router.replace({
-        pathname: "map",
-        query: {
-          lat: centerMenu?.lat,
-          lng: centerMenu?.lng,
-        },
-      });
-    }
-    setCenterMenu(undefined);
-  }
-
-  function handleMouseDown(e: google.maps.MapMouseEvent) {
-    startPressTimer({
-      lat: e.latLng?.lat() ?? 0,
-      lng: e.latLng?.lng() ?? 0,
-    });
-  }
-
-  function handleMouseUp() {
-    clearTimeout(timerRef.current);
-  }
-
-  function startPressTimer({ lat, lng }: google.maps.LatLngLiteral) {
-    timerRef.current = setTimeout(() => {
-      setCenterMenu({ lat, lng });
-      timerRef.current = undefined;
-    }, 500);
-  }
-
-  const clearOverlay = useCallback(
-    (e?: MouseEvent) => {
-      if (timerRef.current) setCenterMenu(undefined);
-
-      if (e?.target?.localName !== "img") setSelectedPlace(undefined);
-    },
-
-    [setSelectedPlace]
-  );
-
-  useEffect(() => {
-    window.addEventListener("click", clearOverlay);
-
-    return () => window.removeEventListener("click", clearOverlay);
-  }, [clearOverlay]);
 
   return (
     <section className="relative h-full w-full bg-[#e5e3df]">
@@ -149,7 +96,7 @@ export default function MapCanvas({ isLoaded }: Props) {
               disableDefaultUI: true,
               clickableIcons: false,
             }}
-            onRightClick={handleRightClick}
+            onRightClick={(e) => handleRightClick(e, setCenterMenu)}
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
             onCenterChanged={() => {
@@ -235,7 +182,9 @@ export default function MapCanvas({ isLoaded }: Props) {
                 mapPaneName="overlayMouseTarget"
               >
                 <button
-                  onClick={handleCenterMenu}
+                  onClick={() =>
+                    handleCenterMenu(centerMenu, router, setCenterMenu)
+                  }
                   className="m-1 flex items-center space-x-1 rounded-md bg-slate-50 px-1 py-2 text-sm shadow ring-1 ring-black/20 hover:bg-blue-200 md:space-x-2 md:py-2 md:px-3 md:text-lg"
                 >
                   <MdLocationPin className="-mx-1 select-none text-2xl" />
@@ -248,7 +197,7 @@ export default function MapCanvas({ isLoaded }: Props) {
         </>
       )}
       <button
-        onClick={getCurrentPosition}
+        onClick={() => getCurrentPosition(router)}
         className={`fixed right-4 rounded-lg bg-white p-1 text-4xl text-gray-600 shadow-md ring-1 ring-black/20 duration-300 hover:text-black sm:bottom-6 md:transition-none ${
           showResults ? "bottom-72" : "bottom-12"
         }`}
@@ -258,8 +207,3 @@ export default function MapCanvas({ isLoaded }: Props) {
     </section>
   );
 }
-
-const DEFAULT_CENTER = {
-  lat: 35.6762,
-  lng: 139.6503,
-};

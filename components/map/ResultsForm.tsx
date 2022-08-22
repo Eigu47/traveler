@@ -4,7 +4,7 @@ import {
   RefetchOptions,
   RefetchQueryFilters,
 } from "@tanstack/react-query";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { FiChevronsDown } from "react-icons/fi";
 import { NearbySearchResult } from "../../types/NearbySearchResult";
 import {
@@ -14,7 +14,7 @@ import {
   SORT_OPTIONS,
 } from "./ResultsUtil";
 import { useAtom } from "jotai";
-import { radiusAtom } from "../../store/store";
+import { radiusAtom } from "../../utils/store";
 
 interface Props {
   refetch: <TPageData>(
@@ -28,6 +28,7 @@ interface Props {
   setSortBy: Dispatch<SetStateAction<SortOptions>>;
   showOptions: boolean;
   setShowOptions: Dispatch<SetStateAction<boolean>>;
+  setShowResults: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function ResultsForm({
@@ -40,6 +41,7 @@ export default function ResultsForm({
   setSortBy,
   showOptions,
   setShowOptions,
+  setShowResults,
 }: Props) {
   const [radius, setRadius] = useAtom(radiusAtom);
 
@@ -49,6 +51,7 @@ export default function ResultsForm({
         e.preventDefault();
         setShowOptions(false);
         refetch();
+        setShowResults(true);
       }}
       className={`fixed top-24 flex min-w-0 max-w-0 -translate-x-4 flex-col whitespace-nowrap rounded-xl bg-slate-200 px-3 shadow-md ring-1 ring-black/10 duration-300 md:static md:block md:min-w-full md:max-w-full md:translate-x-0 md:rounded-none md:px-4 md:transition-none ${
         showOptions && "min-w-[calc(100vw-25px)] max-w-[calc(100vw-25x)] pl-6"

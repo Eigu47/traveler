@@ -1,7 +1,7 @@
 import { useAtom } from "jotai";
 import Image from "next/image";
 import { useRef, useEffect } from "react";
-import { selectedPlaceAtom } from "../../store/store";
+import { selectedPlaceAtom } from "../../utils/store";
 import { Result } from "../../types/NearbySearchResult";
 import Rating from "./Rating";
 
@@ -12,7 +12,6 @@ interface Props {
 
 export default function ResultCard({ place, isClicked }: Props) {
   const [selectedPlace, setSelectedPlace] = useAtom(selectedPlaceAtom);
-
   const resultRef = useRef<HTMLElement>(null);
 
   const isSelected = selectedPlace?.place_id === place.place_id;

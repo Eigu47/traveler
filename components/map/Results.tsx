@@ -19,7 +19,7 @@ import {
   radiusAtom,
   searchbarOnFocusAtom,
   showResultsAtom,
-} from "../../store/store";
+} from "../../utils/store";
 
 interface Props {}
 
@@ -67,7 +67,6 @@ export default function Results({}: Props) {
       onSuccess: (data) => {
         const allData = data.pages.flatMap((pages) => pages.results);
         setAllResults(addDistance(allData, queryLatLng));
-        setShowResults(true);
       },
     }
   );
@@ -82,12 +81,14 @@ export default function Results({}: Props) {
   }, [searchbarOnFocus, clickedPlace, data?.pages, setShowResults]);
 
   useEffect(() => {
+    if (queryLatLng) return setShowOptions(true);
+
     if (window.innerWidth > 768) {
       setShowOptions(true);
     } else {
       setShowOptions(false);
     }
-  }, []);
+  }, [queryLatLng]);
 
   return (
     <aside
@@ -105,6 +106,7 @@ export default function Results({}: Props) {
         setSortBy={setSortBy}
         showOptions={showOptions}
         setShowOptions={setShowOptions}
+        setShowResults={setShowResults}
       />
       {data && (
         <div className="mx-1.5 flex flex-row overflow-x-auto overflow-y-hidden md:m-[12px_8px_8px_4px] md:flex-col md:space-y-5 md:overflow-y-auto md:overflow-x-hidden">
