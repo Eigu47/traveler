@@ -15,7 +15,6 @@ import { useAtom } from "jotai";
 import {
   clickedPlaceAtom,
   radiusAtom,
-  searchbarOnFocusAtom,
   selectedPlaceAtom,
   showResultsAtom,
 } from "../../utils/store";
@@ -38,7 +37,6 @@ export default function MapCanvas({ isLoaded }: Props) {
   const [radius] = useAtom(radiusAtom);
   const [selectedPlace, setSelectedPlace] = useAtom(selectedPlaceAtom);
   const [, setClickedPlace] = useAtom(clickedPlaceAtom);
-  const [, setSearchbarOnFocus] = useAtom(searchbarOnFocusAtom);
   const [showResults] = useAtom(showResultsAtom);
   const { handleMouseDown, handleMouseUp, clearOverlay } = useMapCanvasUtil(
     setCenterMenu,
@@ -186,15 +184,15 @@ export default function MapCanvas({ isLoaded }: Props) {
                   onClick={() =>
                     handleCenterMenu(centerMenu, router, setCenterMenu)
                   }
-                  className="m-1 flex items-center space-x-1 rounded-md bg-slate-50 px-1 py-2 text-sm shadow ring-1 ring-black/20 hover:bg-blue-200 md:space-x-2 md:py-2 md:px-3 md:text-lg"
+                  className="m-1 flex items-center space-x-1 rounded-md bg-slate-50 px-2 py-2 text-sm shadow ring-1 ring-black/20 hover:bg-blue-200 md:space-x-2 md:py-2 md:px-3 md:text-lg"
                 >
-                  <MdLocationPin className="-mx-1 select-none text-2xl" />
-                  <span>Set center here</span>
+                  <MdLocationPin className="-mx-1 select-none text-2xl text-blue-900" />
+                  <span>Search here</span>
                 </button>
               </OverlayView>
             )}
           </GoogleMap>
-          <SearchBar setSearchbarOnFocus={setSearchbarOnFocus} />
+          <SearchBar mapRef={mapRef} />
         </>
       )}
       <button

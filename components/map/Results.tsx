@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useState, useMemo, useEffect } from "react";
-import { NearbySearchResult, Result } from "../../types/NearbySearchResult";
+import { Result } from "../../types/NearbySearchResult";
 import ResultCard from "./ResultCard";
 import {
   SearchTypes,
@@ -12,7 +12,7 @@ import {
 } from "./ResultsUtil";
 import Image from "next/image";
 import ResultsForm from "./ResultsForm";
-import { FiChevronsDown } from "react-icons/fi";
+import { FiChevronDown } from "react-icons/fi";
 import { useAtom } from "jotai";
 import {
   clickedPlaceAtom,
@@ -52,20 +52,20 @@ export default function Results({}: Props) {
     isFetchingNextPage,
     fetchNextPage,
     hasNextPage,
-  } = useInfiniteQuery<NearbySearchResult>(
+  } = useInfiniteQuery(
     ["nearby", queryLatLng],
     ({ pageParam = undefined }) =>
-      fetchResults(pageParam, queryLatLng, radius, keyword, type),
+      fetchResults(queryLatLng, pageParam, radius, keyword, type),
     {
       enabled: false,
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
       refetchOnMount: false,
       getNextPageParam: (lastPage) => {
-        return lastPage.next_page_token;
+        return lastPage?.next_page_token;
       },
       onSuccess: (data) => {
-        const allData = data.pages.flatMap((pages) => pages.results);
+        const allData = data.pages.flatMap((pages) => pages?.results);
         setAllResults(addDistance(allData, queryLatLng));
       },
     }
@@ -78,18 +78,15 @@ export default function Results({}: Props) {
     if (searchbarOnFocus) setShowResults(false);
     if (searchbarOnFocus) setShowOptions(false);
 
-    if (!data?.pages[0].results) setShowResults(false);
+    if (!data?.pages[0]?.results) setShowResults(false);
   }, [searchbarOnFocus, clickedPlace, data?.pages, setShowResults]);
 
   useEffect(() => {
-    if (queryLatLng) return setShowOptions(true);
-
-    if (window.innerWidth > 768) {
-      setShowOptions(true);
-    } else {
-      setShowOptions(false);
+    if (queryLatLng) {
+      refetch();
+      setShowResults(true);
     }
-  }, [queryLatLng]);
+  }, [queryLatLng, refetch, setShowResults]);
 
   return (
     <aside
@@ -152,7 +149,7 @@ export default function Results({}: Props) {
           type="button"
           className="mx-auto block h-6 w-2/6 rounded-md bg-gray-300 text-slate-700 shadow ring-1 ring-black/20 md:hidden"
         >
-          <FiChevronsDown
+          <FiChevronDown
             className={`mx-auto text-2xl duration-300 md:text-xl ${
               showResults && "-rotate-180"
             }`}
@@ -164,7 +161,7 @@ export default function Results({}: Props) {
           <Image src="/loading.svg" alt="Loading..." height={150} width={150} />
         </div>
       )}
-      {!isFetching && data?.pages[0].results.length === 0 && (
+      {!isFetching && data?.pages[0]?.results.length === 0 && (
         <p className="my-auto text-center text-2xl">No results found</p>
       )}
     </aside>

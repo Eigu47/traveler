@@ -2,18 +2,21 @@ import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
 } from "use-places-autocomplete";
-import { ChangeEvent, useRef, Dispatch, SetStateAction } from "react";
+import { ChangeEvent, useRef, MutableRefObject } from "react";
 import { Combobox, Transition } from "@headlessui/react";
 import { FiSearch } from "react-icons/fi";
 import { useRouter } from "next/router";
+import { useAtom } from "jotai";
+import { searchbarOnFocusAtom } from "../../utils/store";
 
 interface Props {
-  setSearchbarOnFocus: Dispatch<SetStateAction<boolean>>;
+  mapRef: MutableRefObject<google.maps.Map | undefined>;
 }
 
-export default function SearchBar({ setSearchbarOnFocus }: Props) {
+export default function SearchBar({ mapRef }: Props) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
+  const [, setSearchbarOnFocus] = useAtom(searchbarOnFocusAtom);
 
   const {
     ready,
@@ -28,6 +31,7 @@ export default function SearchBar({ setSearchbarOnFocus }: Props) {
 
     setValue(val, false);
     clearSuggestions();
+    inputRef.current?.blur();
 
     const res = await getGeocode({ address: val });
     const { lat, lng } = await getLatLng(res[0]);
@@ -42,10 +46,7 @@ export default function SearchBar({ setSearchbarOnFocus }: Props) {
     <div className="absolute top-4 z-10 w-full px-4 text-xl sm:top-6 sm:right-6 sm:w-96 sm:px-0">
       <Combobox
         value={value}
-        onChange={(e) => {
-          handleChange(e);
-          inputRef.current!.blur();
-        }}
+        onChange={(val) => handleChange(val)}
         disabled={!ready}
       >
         <div
@@ -54,11 +55,9 @@ export default function SearchBar({ setSearchbarOnFocus }: Props) {
           }`}
         >
           <Combobox.Input
+            type="text"
             className="w-full outline-none"
-            displayValue={(value: string) => value}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setValue(e.target.value)
-            }
+            onChange={(e) => setValue(e.target.value)}
             placeholder={ready ? "Search city..." : "Loading..."}
             ref={inputRef}
             onFocus={() => setSearchbarOnFocus(true)}
@@ -74,7 +73,10 @@ export default function SearchBar({ setSearchbarOnFocus }: Props) {
           leaveFrom="transform translate-y-0 opacity-100"
           leaveTo="transform -translate-y-5 opacity-0"
         >
-          <Combobox.Options className="absolute mt-1 max-h-60 w-full transform divide-y divide-black/5 overflow-auto rounded-lg bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5">
+          <Combobox.Options
+            className="absolute mt-1 max-h-60 w-full transform divide-y divide-black/5 overflow-auto rounded-lg bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5"
+            onClick={() => inputRef.current?.blur()}
+          >
             {status === "OK" &&
               data.map((place) => (
                 <Combobox.Option

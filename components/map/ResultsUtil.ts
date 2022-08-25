@@ -1,14 +1,15 @@
 import axios from "axios";
-import { Result } from "../../types/NearbySearchResult";
+import { NearbySearchResult, Result } from "../../types/NearbySearchResult";
 
 export async function fetchResults(
-  pageParam?: string,
   queryLatLng?: google.maps.LatLngLiteral,
+  pageParam?: string,
   radius?: number,
   keyword?: string,
   type?: string
 ) {
-  if (!queryLatLng) return;
+  if (!queryLatLng) throw new Error("LatLng not found");
+
   const res = await axios.request({
     method: "GET",
     url: "/api/nearby",
@@ -23,7 +24,7 @@ export async function fetchResults(
     },
   });
 
-  return res.data;
+  return res.data as NearbySearchResult;
 }
 
 export function getDistance(
