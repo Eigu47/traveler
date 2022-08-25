@@ -90,8 +90,8 @@ export default function Results({}: Props) {
 
   return (
     <aside
-      className={`absolute z-10 flex h-64 max-h-0 min-h-0 w-full flex-row bg-slate-300 pt-4 ring-2 ring-slate-500/80 duration-300 md:static md:h-full md:max-h-full md:min-h-full md:min-w-[420px] md:max-w-[25vw] md:flex-col md:py-0 md:shadow-[0_10px_10px_5px_rgba(0,0,0,0.15)] md:ring-1 md:ring-black/20 md:transition-none ${
-        showResults && "max-h-[256px] min-h-[256px] pt-0"
+      className={`absolute z-10 flex h-64 w-full flex-row bg-slate-300 ring-2 ring-slate-500/80 duration-300 md:static md:h-full md:min-w-[420px] md:max-w-[25vw] md:flex-col md:shadow-[0_10px_10px_5px_rgba(0,0,0,0.15)] md:ring-1 md:ring-black/20 md:transition-none ${
+        showResults ? "bottom-0" : "-bottom-60"
       }`}
     >
       <ResultsForm
@@ -107,7 +107,7 @@ export default function Results({}: Props) {
         setShowResults={setShowResults}
       />
       {data && (
-        <div className="mx-1.5 flex flex-row overflow-x-auto overflow-y-hidden md:m-[12px_8px_8px_4px] md:flex-col md:space-y-5 md:overflow-y-auto md:overflow-x-hidden">
+        <div className="mx-1 flex w-full flex-row overflow-x-auto pt-3 md:m-[12px_8px_12px_4px] md:w-auto md:flex-col md:space-y-5 md:overflow-y-auto md:overflow-x-hidden md:py-0">
           {(isFetchingNextPage || !isFetching) &&
             sortResults(allResults, sortBy).map((place) => (
               <ResultCard
@@ -116,7 +116,7 @@ export default function Results({}: Props) {
                 isClicked={clickedPlace === place.place_id}
               />
             ))}
-          <div className="flex justify-center whitespace-nowrap py-2 px-2 text-xl md:py-0 md:pb-4">
+          <div className="flex justify-center whitespace-nowrap py-2 px-2 text-xl md:py-0">
             {hasNextPage && (
               <button
                 className="w-full rounded-xl bg-blue-600 p-3 text-slate-100 shadow ring-1 ring-black/30 duration-100 hover:scale-[102%] hover:bg-blue-700 active:scale-[98%] md:p-6"
@@ -140,18 +140,16 @@ export default function Results({}: Props) {
         </div>
       )}
       <div
-        className={`absolute h-6 w-screen -translate-y-6 duration-300 ${
-          showResults && "-translate-y-3"
-        }`}
+        className="absolute -top-2 w-screen duration-200 md:hidden"
         onClick={() => setShowResults((prev) => !prev)}
       >
         <button
           type="button"
-          className="mx-auto block h-6 w-2/6 rounded-md bg-gray-300 text-slate-700 shadow ring-1 ring-black/20 md:hidden"
+          className="mx-auto block w-2/6 rounded-md bg-gray-300 text-slate-700 shadow ring-1 ring-black/20"
         >
           <FiChevronDown
             className={`mx-auto text-2xl duration-300 md:text-xl ${
-              showResults && "-rotate-180"
+              showResults ? "rotate-0" : "rotate-180"
             }`}
           />
         </button>

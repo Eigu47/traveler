@@ -55,8 +55,8 @@ export default function ResultsForm({
         setShowResults(true);
         setClickedPlace(undefined);
       }}
-      className={`fixed top-24 flex min-w-0 max-w-0 -translate-x-4 flex-col whitespace-nowrap rounded-xl bg-slate-200 px-3 shadow-md ring-1 ring-black/10 duration-300 md:static md:block md:min-w-full md:max-w-full md:translate-x-0 md:rounded-none md:px-4 md:transition-none ${
-        showOptions && "min-w-[calc(100vw-25px)] max-w-[calc(100vw-25x)] pl-6"
+      className={`fixed top-24 flex w-11/12 flex-col whitespace-nowrap rounded-xl bg-slate-200 px-3 pl-6 shadow-md ring-1 ring-black/10 duration-300 md:static md:block md:w-full md:translate-x-0 md:rounded-none md:px-4 md:transition-none ${
+        showOptions ? "-translate-x-4" : "-translate-x-[calc(100%-8px)]"
       }`}
     >
       <div className="flex w-full flex-col items-center justify-center space-x-3 space-y-3 overflow-hidden pt-6 pb-3 md:flex-row md:space-y-0 md:overflow-visible md:py-8">
@@ -89,8 +89,8 @@ export default function ResultsForm({
         </button>
       </div>
       <div
-        className={`relative w-full overflow-hidden duration-300 md:max-h-0 ${
-          showOptions && "md:max-h-[170px]"
+        className={`relative w-full overflow-hidden duration-300 ${
+          showOptions ? "md:max-h-[170px]" : "md:max-h-0"
         }`}
       >
         <div className="flex flex-col border-t border-t-black/20 py-4">
@@ -164,7 +164,7 @@ export default function ResultsForm({
       </div>
       <button
         type="button"
-        className="z-8 absolute -right-8 block h-12 w-12 translate-y-[108px] -rotate-90 rounded-full border border-black/30 bg-slate-200 text-slate-700 shadow md:left-6 md:h-6 md:-translate-y-3 md:rotate-0 md:rounded"
+        className="absolute -right-8 block h-12 w-12 translate-y-[108px] -rotate-90 rounded-full border border-black/30 bg-slate-200 text-slate-700 shadow md:left-6 md:h-6 md:-translate-y-3 md:rotate-0 md:rounded"
         onClick={() => setShowOptions((prev) => !prev)}
       >
         <FiChevronsDown

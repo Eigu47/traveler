@@ -1,16 +1,22 @@
 import MapCanvas from "../components/map/MapCanvas";
 import Results from "../components/map/Results";
 import { HiMenu } from "react-icons/hi";
+import { useState } from "react";
 
 export default function Map({ isLoaded }: { isLoaded: boolean }) {
+  const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
+
   return (
     <>
       <nav>
-        <button className="fixed -right-10 -top-8 z-20 rounded-full bg-blue-700 p-4 pt-8 pr-10 text-slate-300 md:hidden">
-          <HiMenu className="text-5xl" />
+        <button
+          className="fixed right-2 top-2 z-20 rounded-full bg-blue-700 p-3 text-slate-300 sm:hidden"
+          onClick={() => setIsHamburgerOpen(true)}
+        >
+          <HiMenu className="text-4xl" />
         </button>
       </nav>
-      <main className="relative flex h-full max-w-full flex-col-reverse sm:top-14 sm:z-0 sm:h-[calc(100%-56px)] md:h-[calc(100%-56px)] md:flex-row">
+      <main className="relative flex h-full max-w-full flex-row sm:top-14 sm:h-[calc(100%-56px)] md:h-[calc(100%-56px)]">
         <Results />
         <MapCanvas isLoaded={isLoaded} />
       </main>
