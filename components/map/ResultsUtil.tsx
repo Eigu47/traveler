@@ -1,5 +1,6 @@
 import axios from "axios";
 import { NearbySearchResult, Result } from "../../types/NearbySearchResult";
+import { BsStarFill, BsStarHalf, BsStar } from "react-icons/bs";
 
 export async function fetchResults(
   queryLatLng?: google.maps.LatLngLiteral,
@@ -75,6 +76,30 @@ export function sortResults(results: Result[], sortBy: SortOptions) {
   }
 
   return results;
+}
+
+export function Rating({
+  rating,
+  className = "",
+}: {
+  rating: number;
+  className: string;
+}) {
+  return (
+    <div className={`flex text-amber-400 ${className}`}>
+      {rating < 1 ? <BsStarHalf /> : <BsStarFill />}
+      {rating < 2 ? <BsStar /> : rating < 1.5 ? <BsStarHalf /> : <BsStarFill />}
+      {rating < 3 ? <BsStar /> : rating < 3.5 ? <BsStarHalf /> : <BsStarFill />}
+      {rating < 4 ? <BsStar /> : rating < 4.5 ? <BsStarHalf /> : <BsStarFill />}
+      {rating < 5 ? (
+        <BsStar />
+      ) : rating < 4.75 ? (
+        <BsStarHalf />
+      ) : (
+        <BsStarFill />
+      )}
+    </div>
+  );
 }
 
 export type SearchTypes = typeof SEARCH_TYPES[number];

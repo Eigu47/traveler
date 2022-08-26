@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useRef, useEffect } from "react";
 import { selectedPlaceAtom } from "../../utils/store";
 import { Result } from "../../types/NearbySearchResult";
-import Rating from "./Rating";
+import { Rating } from "./ResultsUtil";
 
 interface Props {
   place: Result;
