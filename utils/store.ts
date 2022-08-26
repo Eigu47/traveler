@@ -10,3 +10,5 @@ export const clickedPlaceAtom = atom<string | undefined>(undefined);
 export const searchbarOnFocusAtom = atom(false);
 
 export const showResultsAtom = atom(false);
+
+export const showHamburgerAtom = atom(false);

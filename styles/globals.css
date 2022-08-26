@@ -10,3 +10,9 @@
     overflow: hidden;
   }
 }
+
+@layer components {
+  button {
+    -webkit-tap-highlight-color: transparent;
+  }
+}

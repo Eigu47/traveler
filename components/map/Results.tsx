@@ -18,6 +18,7 @@ import {
   clickedPlaceAtom,
   radiusAtom,
   searchbarOnFocusAtom,
+  showHamburgerAtom,
   showResultsAtom,
 } from "../../utils/store";
 
@@ -34,6 +35,7 @@ export default function Results({}: Props) {
   const [clickedPlace] = useAtom(clickedPlaceAtom);
   const [searchbarOnFocus] = useAtom(searchbarOnFocusAtom);
   const [showResults, setShowResults] = useAtom(showResultsAtom);
+  const [showHamburger] = useAtom(showHamburgerAtom);
 
   const queryLatLng = useMemo(() => {
     if (
@@ -72,25 +74,35 @@ export default function Results({}: Props) {
   );
 
   useEffect(() => {
-    if (clickedPlace) setShowOptions(false);
-    if (clickedPlace) setShowResults(true);
+    if (clickedPlace) {
+      setShowOptions(false);
+      setShowResults(true);
+    }
 
-    if (searchbarOnFocus) setShowResults(false);
-    if (searchbarOnFocus) setShowOptions(false);
+    if (searchbarOnFocus) {
+      setShowResults(false);
+      setShowOptions(false);
+    }
 
     if (!data?.pages[0]?.results) setShowResults(false);
   }, [searchbarOnFocus, clickedPlace, data?.pages, setShowResults]);
 
   useEffect(() => {
+    if (showHamburger) setShowOptions(false);
+  }, [showHamburger]);
+
+  useEffect(() => {
     if (queryLatLng) {
       refetch();
       setShowResults(true);
+
+      if (window?.innerWidth < 768) setShowOptions(false);
     }
   }, [queryLatLng, refetch, setShowResults]);
 
   return (
     <aside
-      className={`absolute z-10 flex h-64 w-full flex-row bg-slate-300 ring-2 ring-slate-500/80 duration-300 md:static md:h-full md:min-w-[420px] md:max-w-[25vw] md:flex-col md:shadow-[0_10px_10px_5px_rgba(0,0,0,0.15)] md:ring-1 md:ring-black/20 md:transition-none ${
+      className={`absolute z-10 flex h-64 w-full flex-row bg-slate-300 ring-1 ring-black/50 duration-300 md:static md:h-full md:min-w-[420px] md:max-w-[25vw] md:flex-col md:shadow-[0_10px_10px_5px_rgba(0,0,0,0.15)] md:ring-1 md:ring-black/20 md:transition-none ${
         showResults ? "bottom-0" : "-bottom-60"
       }`}
     >
@@ -107,7 +119,7 @@ export default function Results({}: Props) {
         setShowResults={setShowResults}
       />
       {data && (
-        <div className="mx-1 flex w-full flex-row overflow-x-auto pt-3 md:m-[12px_8px_12px_4px] md:w-auto md:flex-col md:space-y-5 md:overflow-y-auto md:overflow-x-hidden md:py-0">
+        <div className="mx-1 flex w-full flex-row overflow-x-auto overflow-y-hidden pt-3 md:m-[12px_8px_12px_4px] md:w-auto md:flex-col md:space-y-5 md:overflow-y-auto md:overflow-x-hidden md:py-0">
           {(isFetchingNextPage || !isFetching) &&
             sortResults(allResults, sortBy).map((place) => (
               <ResultCard
