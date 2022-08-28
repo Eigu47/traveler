@@ -4,6 +4,10 @@ if (!process.env.MONGODB_URI)
   throw new Error('Invalid environment variable: "MONGODB_URI"');
 
 const uri = process.env.MONGODB_URI;
+const options = {
+  useUnifiedTopology: true,
+  useNewUrlParser: true,
+};
 
 type GlobalWithMongoClient = typeof globalThis & {
   _mongoClientPromise: Promise<MongoClient>;
@@ -17,14 +21,14 @@ if (process.env.NODE_ENV === "development") {
   // is preserved across module reloads caused by HMR (Hot Module Replacement).
 
   if (!(global as GlobalWithMongoClient)._mongoClientPromise) {
-    client = new MongoClient(uri);
+    client = new MongoClient(uri, options);
     (global as GlobalWithMongoClient)._mongoClientPromise = client.connect();
   }
 
   clientPromise = (global as GlobalWithMongoClient)._mongoClientPromise;
 } else {
   // In production mode, it's best to not use a global variable.
-  client = new MongoClient(uri);
+  client = new MongoClient(uri, options);
   clientPromise = client.connect();
 }
 
