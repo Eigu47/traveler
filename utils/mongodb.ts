@@ -4,10 +4,7 @@ if (!process.env.MONGODB_URI)
   throw new Error('Invalid environment variable: "MONGODB_URI"');
 
 const uri = process.env.MONGODB_URI;
-const options = {
-  useUnifiedTopology: true,
-  useNewUrlParser: true,
-};
+const options = {};
 
 type GlobalWithMongoClient = typeof globalThis & {
   _mongoClientPromise: Promise<MongoClient>;
