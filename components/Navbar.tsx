@@ -1,9 +1,12 @@
 import { useAtom } from "jotai";
 import Link from "next/link";
 import { showHamburgerAtom } from "../utils/store";
+import { useSession, signIn, signOut } from "next-auth/react";
+import { FcGoogle } from "react-icons/fc";
 
 export default function Navbar() {
   const [showHamburger, setShowHamburger] = useAtom(showHamburgerAtom);
+  const { data: session } = useSession();
 
   return (
     <nav
@@ -15,7 +18,7 @@ export default function Navbar() {
         <Link href="/">traveler</Link>
       </div>
       <div
-        className={`flex flex-col items-center justify-center space-y-4 py-4 pt-8 sm:block sm:flex-row sm:space-y-0 sm:space-x-16 sm:py-0 ${
+        className={`flex flex-col items-center justify-center space-y-4 py-4 pt-8 sm:flex sm:flex-row sm:space-y-0 sm:space-x-16 sm:py-0 ${
           showHamburger ? "" : ""
         }`}
       >
@@ -29,6 +32,27 @@ export default function Navbar() {
             </a>
           </Link>
         ))}
+        {session ? (
+          <Link href="/">
+            <a
+              onClick={() => {
+                setShowHamburger(false);
+                signOut({ redirect: false });
+              }}
+              className="hover:text-slate-300"
+            >
+              Account
+            </a>
+          </Link>
+        ) : (
+          <button
+            className="flex items-center space-x-1 hover:text-slate-300"
+            onClick={() => signIn("google")}
+          >
+            <span>Sign with</span>
+            <FcGoogle />
+          </button>
+        )}
       </div>
     </nav>
   );
@@ -44,7 +68,7 @@ const LINKS = [
     link: "/map",
   },
   {
-    id: "Log In",
+    id: "About",
     link: "/",
   },
 ];

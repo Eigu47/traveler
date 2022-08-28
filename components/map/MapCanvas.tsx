@@ -192,7 +192,7 @@ export default function MapCanvas({ isLoaded }: Props) {
               </OverlayView>
             )}
           </GoogleMap>
-          <SearchBar mapRef={mapRef} />
+          <SearchBar />
         </>
       )}
       <button

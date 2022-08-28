@@ -21,6 +21,7 @@ import {
   showHamburgerAtom,
   showResultsAtom,
 } from "../../utils/store";
+import { useSession } from "next-auth/react";
 
 interface Props {}
 
@@ -36,6 +37,7 @@ export default function Results({}: Props) {
   const [searchbarOnFocus] = useAtom(searchbarOnFocusAtom);
   const [showResults, setShowResults] = useAtom(showResultsAtom);
   const [showHamburger] = useAtom(showHamburgerAtom);
+  const { data: session } = useSession();
 
   const queryLatLng = useMemo(() => {
     if (
@@ -54,6 +56,7 @@ export default function Results({}: Props) {
     isFetchingNextPage,
     fetchNextPage,
     hasNextPage,
+    isError,
   } = useInfiniteQuery(
     ["nearby", queryLatLng],
     ({ pageParam = undefined }) =>
@@ -93,7 +96,7 @@ export default function Results({}: Props) {
 
   useEffect(() => {
     if (queryLatLng) {
-      refetch();
+      // refetch();
       setShowResults(true);
 
       if (window?.innerWidth < 768) setShowOptions(false);
@@ -126,6 +129,7 @@ export default function Results({}: Props) {
                 key={place.place_id}
                 place={place}
                 isClicked={clickedPlace === place.place_id}
+                session={session}
               />
             ))}
           <div className="flex justify-center whitespace-nowrap py-2 px-2 text-xl md:py-0">
@@ -173,6 +177,9 @@ export default function Results({}: Props) {
       )}
       {!isFetching && data?.pages[0]?.results.length === 0 && (
         <p className="my-auto text-center text-2xl">No results found</p>
+      )}
+      {isError && (
+        <p className="my-auto text-center text-2xl">Something went wrong...</p>
       )}
     </aside>
   );

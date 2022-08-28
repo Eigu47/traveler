@@ -1,18 +1,22 @@
 import { useAtom } from "jotai";
 import Image from "next/image";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { selectedPlaceAtom } from "../../utils/store";
 import { Result } from "../../types/NearbySearchResult";
-import { Rating } from "./ResultsUtil";
+import { handleFavorite, Rating } from "./ResultsUtil";
+import { BsSuitHeart, BsSuitHeartFill } from "react-icons/bs";
+import { Session } from "next-auth";
 
 interface Props {
   place: Result;
   isClicked: boolean;
+  session: Session | null;
 }
 
-export default function ResultCard({ place, isClicked }: Props) {
+export default function ResultCard({ place, isClicked, session }: Props) {
   const [selectedPlace, setSelectedPlace] = useAtom(selectedPlaceAtom);
   const resultRef = useRef<HTMLElement>(null);
+  const [fav, setFav] = useState(false);
 
   const isSelected = selectedPlace?.place_id === place.place_id;
 
@@ -34,7 +38,7 @@ export default function ResultCard({ place, isClicked }: Props) {
       ref={resultRef}
     >
       <div className="flex h-36 rounded-xl border-b border-black/10 bg-slate-200 md:h-44">
-        <div className="w-36 flex-none md:w-44">
+        <div className="relative w-36 flex-none md:w-44">
           <Image
             className="rounded-l-md bg-slate-300"
             src={`https://maps.googleapis.com/maps/api/place/photo?photo_reference=${place.photos[0].photo_reference}&maxheight=200&maxwidth=200&key=${process.env.NEXT_PUBLIC_MAP_API_KEY}`}
@@ -43,6 +47,19 @@ export default function ResultCard({ place, isClicked }: Props) {
             height={250}
             objectFit="cover"
           />
+          <button
+            className="absolute top-2 left-2 text-2xl duration-200 active:scale-125"
+            onClick={() => {
+              setFav((prev) => !prev);
+              handleFavorite(place, session);
+            }}
+          >
+            {fav ? (
+              <BsSuitHeartFill className="text-red-500" />
+            ) : (
+              <BsSuitHeart className="text-white" />
+            )}
+          </button>
         </div>
         <div className="flex w-full flex-col px-3 md:pt-2">
           <div className="w-full grow space-y-3">

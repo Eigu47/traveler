@@ -2,18 +2,16 @@ import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
 } from "use-places-autocomplete";
-import { ChangeEvent, useRef, MutableRefObject } from "react";
+import { useRef } from "react";
 import { Combobox, Transition } from "@headlessui/react";
 import { FiSearch } from "react-icons/fi";
 import { useRouter } from "next/router";
 import { useAtom } from "jotai";
 import { searchbarOnFocusAtom } from "../../utils/store";
 
-interface Props {
-  mapRef: MutableRefObject<google.maps.Map | undefined>;
-}
+interface Props {}
 
-export default function SearchBar({ mapRef }: Props) {
+export default function SearchBar({}: Props) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const [, setSearchbarOnFocus] = useAtom(searchbarOnFocusAtom);

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { NearbySearchResult, Result } from "../../types/NearbySearchResult";
 import { BsStarFill, BsStarHalf, BsStar } from "react-icons/bs";
+import { Session } from "next-auth";
 
 export async function fetchResults(
   queryLatLng?: google.maps.LatLngLiteral,
@@ -21,7 +22,6 @@ export async function fetchResults(
       radius,
       type,
       keyword,
-      key: process.env.NEXT_PUBLIC_MAP_API_KEY,
     },
   });
 
@@ -76,6 +76,21 @@ export function sortResults(results: Result[], sortBy: SortOptions) {
   }
 
   return results;
+}
+
+export async function handleFavorite(place: Result, session: Session | null) {
+  if (!session) return;
+
+  const res = await axios.request({
+    method: "POST",
+    url: "/api/favorites",
+    data: {
+      place,
+      session,
+    },
+  });
+
+  console.log(res);
 }
 
 export function Rating({
