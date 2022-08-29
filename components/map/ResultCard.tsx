@@ -5,15 +5,14 @@ import { selectedPlaceAtom } from "../../utils/store";
 import { Result } from "../../types/NearbySearchResult";
 import { handleFavorite, Rating } from "./ResultsUtil";
 import { BsSuitHeart, BsSuitHeartFill } from "react-icons/bs";
-import { Session } from "next-auth";
 
 interface Props {
   place: Result;
   isClicked: boolean;
-  session: Session | null;
+  userId: string | null;
 }
 
-export default function ResultCard({ place, isClicked, session }: Props) {
+export default function ResultCard({ place, isClicked, userId }: Props) {
   const [selectedPlace, setSelectedPlace] = useAtom(selectedPlaceAtom);
   const resultRef = useRef<HTMLElement>(null);
   const [fav, setFav] = useState(false);
@@ -51,7 +50,7 @@ export default function ResultCard({ place, isClicked, session }: Props) {
             className="absolute top-2 left-2 text-2xl duration-200 active:scale-125"
             onClick={() => {
               setFav((prev) => !prev);
-              handleFavorite(place, session);
+              handleFavorite(place.place_id, userId);
             }}
           >
             {fav ? (

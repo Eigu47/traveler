@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useState, useMemo, useEffect } from "react";
 import { Result } from "../../types/NearbySearchResult";
@@ -9,6 +9,7 @@ import {
   fetchResults,
   addDistance,
   sortResults,
+  getFavorites,
 } from "./ResultsUtil";
 import Image from "next/image";
 import ResultsForm from "./ResultsForm";
@@ -38,6 +39,8 @@ export default function Results({}: Props) {
   const [showResults, setShowResults] = useAtom(showResultsAtom);
   const [showHamburger] = useAtom(showHamburgerAtom);
   const { data: session } = useSession();
+
+  const userId = (session?.user as { _id: string | null })?._id;
 
   const queryLatLng = useMemo(() => {
     if (
@@ -75,6 +78,8 @@ export default function Results({}: Props) {
       },
     }
   );
+
+  const { data: favorites } = useQuery(["favorites", userId], getFavorites);
 
   useEffect(() => {
     if (clickedPlace) {
@@ -129,7 +134,7 @@ export default function Results({}: Props) {
                 key={place.place_id}
                 place={place}
                 isClicked={clickedPlace === place.place_id}
-                session={session}
+                userId={userId}
               />
             ))}
           <div className="flex justify-center whitespace-nowrap py-2 px-2 text-xl md:py-0">

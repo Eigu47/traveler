@@ -1,7 +1,6 @@
 import axios from "axios";
 import { NearbySearchResult, Result } from "../../types/NearbySearchResult";
 import { BsStarFill, BsStarHalf, BsStar } from "react-icons/bs";
-import { Session } from "next-auth";
 
 export async function fetchResults(
   queryLatLng?: google.maps.LatLngLiteral,
@@ -78,19 +77,35 @@ export function sortResults(results: Result[], sortBy: SortOptions) {
   return results;
 }
 
-export async function handleFavorite(place: Result, session: Session | null) {
-  if (!session) return;
+export async function getFavorites({
+  queryKey: [, userId],
+}: {
+  queryKey: (string | null)[];
+}) {
+  if (!userId) throw new Error("Not logged");
+
+  const res = await axios.request({
+    method: "GET",
+    url: "/api/favorites",
+    params: { userId },
+  });
+
+  return res.data as Result[] | null;
+}
+
+export async function handleFavorite(place_id: string, userId: string | null) {
+  if (!userId) return;
 
   const res = await axios.request({
     method: "POST",
     url: "/api/favorites",
     data: {
-      place,
-      session,
+      place_id,
+      userId,
     },
   });
 
-  console.log(res);
+  console.log(res.data?.value);
 }
 
 export function Rating({
