@@ -14,16 +14,18 @@ import {
   SORT_OPTIONS,
 } from "./ResultsUtil";
 import { useAtom } from "jotai";
-import { radiusAtom, clickedPlaceAtom } from "../../utils/store";
+import {
+  radiusAtom,
+  clickedPlaceAtom,
+  keywordAtom,
+  queryLatLngAtom,
+  searchTypeAtom,
+} from "../../utils/store";
 
 interface Props {
   refetch: <TPageData>(
     options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
   ) => Promise<QueryObserverResult<InfiniteData<NearbySearchResult>, unknown>>;
-  keyword: string | undefined;
-  setKeyword: Dispatch<SetStateAction<string | undefined>>;
-  queryLatLng: google.maps.LatLngLiteral | undefined;
-  setType: Dispatch<SetStateAction<SearchTypes>>;
   sortBy: SortOptions;
   setSortBy: Dispatch<SetStateAction<SortOptions>>;
   showOptions: boolean;
@@ -33,10 +35,6 @@ interface Props {
 
 export default function ResultsForm({
   refetch,
-  keyword,
-  setKeyword,
-  queryLatLng,
-  setType,
   sortBy,
   setSortBy,
   showOptions,
@@ -45,6 +43,9 @@ export default function ResultsForm({
 }: Props) {
   const [radius, setRadius] = useAtom(radiusAtom);
   const [, setClickedPlace] = useAtom(clickedPlaceAtom);
+  const [keyword, setKeyword] = useAtom(keywordAtom);
+  const [queryLatLng] = useAtom(queryLatLngAtom);
+  const [, setSearchType] = useAtom(searchTypeAtom);
 
   return (
     <form
@@ -106,7 +107,7 @@ export default function ResultsForm({
                 id="search-type"
                 className="mb-3 w-full rounded text-lg outline-none focus:ring-1"
                 defaultValue="tourist_attraction"
-                onChange={(e) => setType(e.target.value as SearchTypes)}
+                onChange={(e) => setSearchType(e.target.value as SearchTypes)}
               >
                 <option>Search all</option>
                 {SEARCH_TYPES.map((type) => (

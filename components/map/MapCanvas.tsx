@@ -20,12 +20,11 @@ import useMapCanvasUtil, {
   handleRightClick,
   useHandleClickMarker,
 } from "./MapCanvasUtil";
-import { useSession } from "next-auth/react";
 import MapCanvasCenter from "./MapCanvasCenter";
 import MapCanvasMarker from "./MapCanvasMarker";
 import MapCanvasPlaceCard from "./MapCanvasPlaceCard";
 import MapCanvasSearchMenu from "./MapCanvasSearchMenu";
-import { useGetFavorites } from "../../utils/useFavoriteQuery";
+import { useGetFavorites } from "../../utils/useQueryHooks";
 
 interface Props {
   isLoaded: boolean;
@@ -42,19 +41,17 @@ export default function MapCanvas({ isLoaded }: Props) {
   const [selectedPlace, setSelectedPlace] = useAtom(selectedPlaceAtom);
   const [, setClickedPlace] = useAtom(clickedPlaceAtom);
   const [showResults] = useAtom(showResultsAtom);
-  const [favoritesId, setFavoritesId] = useAtom(favoritesIdAtom);
+  const [favoritesId] = useAtom(favoritesIdAtom);
   const { handleMouseDown, handleMouseUp, clearOverlay } = useMapCanvasUtil(
     setCenterMenu,
     setSelectedPlace
   );
   const handleClickMarker = useHandleClickMarker();
-  const { data: session } = useSession();
-  const userId = (session?.user as { _id: string | null })?._id;
 
   const state = queryClient.getQueryState(["nearby", queryLatLng]);
 
   const { data: favoritesData, isSuccess: favoritesIsSuccess } =
-    useGetFavorites(setFavoritesId, userId, session);
+    useGetFavorites();
 
   useEffect(() => {
     if (

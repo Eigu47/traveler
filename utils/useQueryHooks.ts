@@ -1,9 +1,78 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import axios from "axios";
-import { SetStateAction } from "jotai";
-import { Session } from "next-auth";
+import { useAtom } from "jotai";
 import { useSession } from "next-auth/react";
-import { FavoritesData, Result } from "../types/NearbySearchResult";
+import { addDistance } from "../components/map/ResultsUtil";
+import {
+  FavoritesData,
+  NearbySearchResult,
+  Result,
+} from "../types/NearbySearchResult";
+import {
+  allResultsAtom,
+  favoritesIdAtom,
+  keywordAtom,
+  queryLatLngAtom,
+  radiusAtom,
+  searchTypeAtom,
+} from "./store";
+
+export async function fetchResults(
+  queryLatLng?: google.maps.LatLngLiteral,
+  pageParam?: string,
+  radius?: number,
+  keyword?: string,
+  type?: string
+) {
+  if (!queryLatLng) throw new Error("LatLng not found");
+
+  const res = await axios.request({
+    method: "GET",
+    url: "/api/nearby",
+    params: {
+      pagetoken: pageParam,
+      lat: queryLatLng.lat,
+      lng: queryLatLng.lng,
+      radius,
+      type,
+      keyword,
+    },
+  });
+
+  return res.data as NearbySearchResult;
+}
+
+export function useGetResults() {
+  const [queryLatLng] = useAtom(queryLatLngAtom);
+  const [radius] = useAtom(radiusAtom);
+  const [, setAllResults] = useAtom(allResultsAtom);
+  const [keyword] = useAtom(keywordAtom);
+  const [searchType] = useAtom(searchTypeAtom);
+
+  return useInfiniteQuery(
+    ["nearby", queryLatLng],
+    ({ pageParam = undefined }) =>
+      fetchResults(queryLatLng, pageParam, radius, keyword, searchType),
+    {
+      enabled: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchOnMount: false,
+      getNextPageParam: (lastPage) => {
+        return lastPage?.next_page_token;
+      },
+      onSuccess: (data) => {
+        const allData = data.pages.flatMap((pages) => pages?.results);
+        setAllResults(addDistance(allData, queryLatLng));
+      },
+    }
+  );
+}
 
 export async function getFavorites(userId: string | null) {
   if (!userId) throw new Error("Not logged");
@@ -17,11 +86,11 @@ export async function getFavorites(userId: string | null) {
   return res.data as FavoritesData;
 }
 
-export function useGetFavorites(
-  setFavoritesId: (update?: SetStateAction<string[] | undefined>) => void,
-  userId: string | null,
-  session: Session | null
-) {
+export function useGetFavorites() {
+  const [, setFavoritesId] = useAtom(favoritesIdAtom);
+  const { data: session } = useSession();
+  const userId = (session?.user as { _id: string | null })?._id;
+
   return useQuery(["favorites", userId], () => getFavorites(userId), {
     enabled: !!session,
     onSuccess: (data) =>

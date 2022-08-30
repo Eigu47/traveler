@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import ResultsCard from "./ResultsCard";
-import { SearchTypes, SortOptions, sortResults } from "./ResultsUtil";
+import { SortOptions, sortResults } from "./ResultsUtil";
 import Image from "next/image";
 import ResultsForm from "./ResultsForm";
 import { FiChevronDown } from "react-icons/fi";
@@ -10,31 +10,24 @@ import {
   clickedPlaceAtom,
   favoritesIdAtom,
   queryLatLngAtom,
-  radiusAtom,
   searchbarOnFocusAtom,
   showHamburgerAtom,
   showResultsAtom,
 } from "../../utils/store";
-import { useSession } from "next-auth/react";
-import { useGetResults } from "../../utils/useResultsQuery";
+import { useGetResults } from "../../utils/useQueryHooks";
 
 interface Props {}
 
 export default function Results({}: Props) {
-  const [keyword, setKeyword] = useState<string>();
-  const [type, setType] = useState<SearchTypes>("tourist_attraction");
   const [sortBy, setSortBy] = useState<SortOptions>("relevance");
   const [showOptions, setShowOptions] = useState(true);
   const [allResults, setAllResults] = useAtom(allResultsAtom);
   const [queryLatLng] = useAtom(queryLatLngAtom);
-  const [radius] = useAtom(radiusAtom);
   const [clickedPlace] = useAtom(clickedPlaceAtom);
   const [searchbarOnFocus] = useAtom(searchbarOnFocusAtom);
   const [showResults, setShowResults] = useAtom(showResultsAtom);
   const [showHamburger] = useAtom(showHamburgerAtom);
   const [favoritesId] = useAtom(favoritesIdAtom);
-  const { data: session } = useSession();
-  const userId = (session?.user as { _id: string | null })?._id;
 
   const {
     data,
@@ -44,7 +37,7 @@ export default function Results({}: Props) {
     fetchNextPage,
     hasNextPage,
     isError,
-  } = useGetResults({ queryLatLng, radius, keyword, type, setAllResults });
+  } = useGetResults();
 
   useEffect(() => {
     if (clickedPlace) {
@@ -82,10 +75,6 @@ export default function Results({}: Props) {
     >
       <ResultsForm
         refetch={refetch}
-        keyword={keyword}
-        setKeyword={setKeyword}
-        queryLatLng={queryLatLng}
-        setType={setType}
         sortBy={sortBy}
         setSortBy={setSortBy}
         showOptions={showOptions}

@@ -5,7 +5,7 @@ import { selectedPlaceAtom } from "../../utils/store";
 import { Result } from "../../types/NearbySearchResult";
 import { getDistance, Rating } from "./ResultsUtil";
 import { BsSuitHeart, BsSuitHeartFill } from "react-icons/bs";
-import { useFavorites } from "../../utils/useFavoriteQuery";
+import { useFavorites } from "../../utils/useQueryHooks";
 
 interface Props {
   place: Result;
