@@ -6,17 +6,17 @@ interface Props {
   places: Result;
   setClickedPlace: (update?: SetStateAction<string | undefined>) => void;
   setSelectedPlace: (update?: SetStateAction<Result | undefined>) => void;
-  favoritesId: string[] | undefined;
+  isFavorited: boolean;
+  handleClickMarker?: (places: Result) => void;
 }
 
-export default function MapCanvasResultMarker({
+export default function MapCanvasMarker({
   places,
   setClickedPlace,
   setSelectedPlace,
-  favoritesId,
+  isFavorited,
+  handleClickMarker,
 }: Props) {
-  const isFav = favoritesId?.includes(places.place_id);
-
   return (
     <MarkerF
       key={places.place_id}
@@ -25,12 +25,16 @@ export default function MapCanvasResultMarker({
         lng: places.geometry.location.lng,
       }}
       icon={{
-        url: isFav ? "/fav-pin.png" : places.icon,
-        scaledSize: new google.maps.Size(isFav ? 40 : 35, isFav ? 40 : 35),
+        url: isFavorited ? "/fav-pin.png" : places.icon,
+        scaledSize: new google.maps.Size(
+          isFavorited ? 40 : 35,
+          isFavorited ? 40 : 35
+        ),
       }}
       onClick={() => {
         setClickedPlace(places.place_id);
         setSelectedPlace(places);
+        if (handleClickMarker) handleClickMarker(places);
       }}
       onMouseOver={() => setSelectedPlace(places)}
       onMouseOut={() => setSelectedPlace(undefined)}

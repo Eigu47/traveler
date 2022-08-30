@@ -1,22 +1,22 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/router";
-import { useState, useMemo, useEffect } from "react";
-import { Result } from "../../types/NearbySearchResult";
-import ResultCard from "./ResultsCard";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
+import ResultsCard from "./ResultsCard";
 import {
   SearchTypes,
   SortOptions,
   fetchResults,
   addDistance,
   sortResults,
-  getFavorites,
 } from "./ResultsUtil";
 import Image from "next/image";
 import ResultsForm from "./ResultsForm";
 import { FiChevronDown } from "react-icons/fi";
 import { useAtom } from "jotai";
 import {
+  allResultsAtom,
   clickedPlaceAtom,
+  favoritesIdAtom,
+  queryLatLngAtom,
   radiusAtom,
   searchbarOnFocusAtom,
   showHamburgerAtom,
@@ -30,27 +30,18 @@ export default function Results({}: Props) {
   const [keyword, setKeyword] = useState<string>();
   const [type, setType] = useState<SearchTypes>("tourist_attraction");
   const [sortBy, setSortBy] = useState<SortOptions>("relevance");
-  const [allResults, setAllResults] = useState<Result[]>([]);
   const [showOptions, setShowOptions] = useState(true);
-  const router = useRouter();
+  const [allResults, setAllResults] = useAtom(allResultsAtom);
+  const [queryLatLng] = useAtom(queryLatLngAtom);
   const [radius] = useAtom(radiusAtom);
   const [clickedPlace] = useAtom(clickedPlaceAtom);
   const [searchbarOnFocus] = useAtom(searchbarOnFocusAtom);
   const [showResults, setShowResults] = useAtom(showResultsAtom);
   const [showHamburger] = useAtom(showHamburgerAtom);
+  const [favoritesId] = useAtom(favoritesIdAtom);
   const { data: session } = useSession();
 
   const userId = (session?.user as { _id: string | null })?._id;
-
-  const queryLatLng = useMemo(() => {
-    if (
-      router.query.lat &&
-      router.query.lng &&
-      !isNaN(+router.query.lat) &&
-      !isNaN(+router.query.lng)
-    )
-      return { lat: +router.query.lat, lng: +router.query.lng };
-  }, [router.query]);
 
   const {
     data,
@@ -79,10 +70,6 @@ export default function Results({}: Props) {
     }
   );
 
-  const { data: favorites } = useQuery(["favorites", userId], getFavorites, {
-    enabled: !!session,
-  });
-
   useEffect(() => {
     if (clickedPlace) {
       setShowOptions(false);
@@ -104,11 +91,12 @@ export default function Results({}: Props) {
   useEffect(() => {
     if (queryLatLng) {
       // refetch();
+      setAllResults([]);
       setShowResults(true);
 
       if (window?.innerWidth < 768) setShowOptions(false);
     }
-  }, [queryLatLng, refetch, setShowResults]);
+  }, [queryLatLng, refetch, setShowResults, setAllResults]);
 
   return (
     <aside
@@ -128,19 +116,21 @@ export default function Results({}: Props) {
         setShowOptions={setShowOptions}
         setShowResults={setShowResults}
       />
-      {data && (
+      {(data || allResults.length > 0) && (
         <div className="mx-1 flex w-full flex-row overflow-x-auto overflow-y-hidden pt-3 md:m-[12px_8px_12px_4px] md:w-auto md:flex-col md:space-y-5 md:overflow-y-auto md:overflow-x-hidden md:py-0">
           {(isFetchingNextPage || !isFetching) &&
             sortResults(allResults, sortBy).map((place) => (
-              <ResultCard
+              <ResultsCard
                 key={place.place_id}
                 place={place}
                 isClicked={clickedPlace === place.place_id}
                 userId={userId}
+                queryLatLng={queryLatLng}
+                isFavorited={!!favoritesId?.includes(place.place_id)}
               />
             ))}
           <div className="flex justify-center whitespace-nowrap py-2 px-2 text-xl md:py-0">
-            {hasNextPage && (
+            {hasNextPage && !isFetching && data && (
               <button
                 className="w-full rounded-xl bg-blue-600 p-3 text-slate-100 shadow ring-1 ring-black/30 duration-100 hover:scale-[102%] hover:bg-blue-700 active:scale-[98%] md:p-6"
                 onClick={() => {
@@ -151,7 +141,7 @@ export default function Results({}: Props) {
                 {!isFetchingNextPage ? "Load more" : "Searching..."}
               </button>
             )}
-            {!hasNextPage && (
+            {!hasNextPage && data && (
               <button
                 className="w-full rounded-xl bg-blue-700/50 p-3 text-slate-100 shadow ring-1 ring-black/30 duration-100 md:p-6"
                 disabled
@@ -178,7 +168,7 @@ export default function Results({}: Props) {
         </button>
       </div>
       {isFetching && !isFetchingNextPage && (
-        <div className="flex h-full w-full justify-center">
+        <div className="flex h-full w-full items-center justify-center">
           <Image src="/loading.svg" alt="Loading..." height={150} width={150} />
         </div>
       )}

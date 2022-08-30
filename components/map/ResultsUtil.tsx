@@ -81,11 +81,7 @@ export function sortResults(results: Result[], sortBy: SortOptions) {
   return results;
 }
 
-export async function getFavorites({
-  queryKey: [, userId],
-}: {
-  queryKey: (string | null)[];
-}) {
+export async function getFavorites(userId: string | null) {
   if (!userId) throw new Error("Not logged");
 
   const res = await axios.request({
@@ -94,24 +90,7 @@ export async function getFavorites({
     params: { userId },
   });
 
-  console.log(res.data);
-
   return res.data as FavoritesData;
-}
-
-export async function handleFavorite(place: Result, userId: string | null) {
-  if (!userId) throw new Error("Not logged");
-
-  const res = await axios.request({
-    method: "POST",
-    url: "/api/favorites",
-    data: {
-      place,
-      userId,
-    },
-  });
-
-  return res;
 }
 
 export function Rating({

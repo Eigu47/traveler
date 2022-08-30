@@ -155,7 +155,7 @@ export default function ResultsForm({
               type="range"
               value={radius}
               onChange={(e) => setRadius(+e.target.value)}
-              max={50000}
+              max={30000}
               min={2000}
               step={100}
             />
