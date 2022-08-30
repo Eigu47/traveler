@@ -1,35 +1,5 @@
-import axios from "axios";
-import {
-  FavoritesData,
-  NearbySearchResult,
-  Result,
-} from "../../types/NearbySearchResult";
+import { Result } from "../../types/NearbySearchResult";
 import { BsStarFill, BsStarHalf, BsStar } from "react-icons/bs";
-
-export async function fetchResults(
-  queryLatLng?: google.maps.LatLngLiteral,
-  pageParam?: string,
-  radius?: number,
-  keyword?: string,
-  type?: string
-) {
-  if (!queryLatLng) throw new Error("LatLng not found");
-
-  const res = await axios.request({
-    method: "GET",
-    url: "/api/nearby",
-    params: {
-      pagetoken: pageParam,
-      lat: queryLatLng.lat,
-      lng: queryLatLng.lng,
-      radius,
-      type,
-      keyword,
-    },
-  });
-
-  return res.data as NearbySearchResult;
-}
 
 export function getDistance(
   pointA: google.maps.LatLngLiteral,
@@ -79,18 +49,6 @@ export function sortResults(results: Result[], sortBy: SortOptions) {
   }
 
   return results;
-}
-
-export async function getFavorites(userId: string | null) {
-  if (!userId) throw new Error("Not logged");
-
-  const res = await axios.request({
-    method: "GET",
-    url: "/api/favorites",
-    params: { userId },
-  });
-
-  return res.data as FavoritesData;
 }
 
 export function Rating({

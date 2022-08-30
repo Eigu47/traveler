@@ -1,8 +1,35 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { SetStateAction } from "jotai";
+import { Session } from "next-auth";
+import { useSession } from "next-auth/react";
 import { FavoritesData, Result } from "../types/NearbySearchResult";
 
-export async function handleFavorite(
+export async function getFavorites(userId: string | null) {
+  if (!userId) throw new Error("Not logged");
+
+  const res = await axios.request({
+    method: "GET",
+    url: "/api/favorites",
+    params: { userId },
+  });
+
+  return res.data as FavoritesData;
+}
+
+export function useGetFavorites(
+  setFavoritesId: (update?: SetStateAction<string[] | undefined>) => void,
+  userId: string | null,
+  session: Session | null
+) {
+  return useQuery(["favorites", userId], () => getFavorites(userId), {
+    enabled: !!session,
+    onSuccess: (data) =>
+      setFavoritesId(data.favorites?.flatMap((fav) => fav.place_id)),
+  });
+}
+
+export async function handleFavorites(
   place: Result,
   isFavorited: boolean,
   userId: string | null
@@ -36,17 +63,19 @@ export async function handleFavorite(
   }
 }
 
-interface MutationProps {
+interface Props {
   place: Result;
   isFavorited: boolean;
 }
 
-export function useAddFavorites(userId: string | null) {
+export function useFavorites() {
   const queryClient = useQueryClient();
+  const { data: session } = useSession();
+  const userId = (session?.user as { _id: string | null })?._id;
 
   return useMutation(
-    ({ place, isFavorited }: MutationProps) =>
-      handleFavorite(place, isFavorited, userId),
+    ({ place, isFavorited }: Props) =>
+      handleFavorites(place, isFavorited, userId),
     {
       // When mutate is called, props from mutate(props):
       onMutate: async ({ place, isFavorited }) => {

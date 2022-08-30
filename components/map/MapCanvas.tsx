@@ -1,11 +1,10 @@
 import { GoogleMap } from "@react-google-maps/api/";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { MdGpsFixed } from "react-icons/md";
 import { useRouter } from "next/router";
 import SearchBar from "./MapCanvasSearchBar";
 import Image from "next/image";
-import { NearbySearchResult, Result } from "../../types/NearbySearchResult";
 import { useAtom } from "jotai";
 import {
   allResultsAtom,
@@ -19,13 +18,14 @@ import useMapCanvasUtil, {
   DEFAULT_CENTER,
   getCurrentPosition,
   handleRightClick,
+  useHandleClickMarker,
 } from "./mapCanvasUtil";
 import { useSession } from "next-auth/react";
 import MapCanvasCenter from "./MapCanvasCenter";
 import MapCanvasMarker from "./MapCanvasMarker";
 import MapCanvasPlaceCard from "./MapCanvasPlaceCard";
 import MapCanvasSearchMenu from "./MapCanvasSearchMenu";
-import { getFavorites } from "./ResultsUtil";
+import { useGetFavorites } from "../../utils/useFavoriteQuery";
 
 interface Props {
   isLoaded: boolean;
@@ -34,6 +34,7 @@ interface Props {
 export default function MapCanvas({ isLoaded }: Props) {
   const router = useRouter();
   const mapRef = useRef<google.maps.Map>();
+  const queryClient = useQueryClient();
   const [centerMenu, setCenterMenu] = useState<google.maps.LatLngLiteral>();
   const [loadFinish, setLoadFinish] = useState(false);
   const [allResults] = useAtom(allResultsAtom);
@@ -46,36 +47,14 @@ export default function MapCanvas({ isLoaded }: Props) {
     setCenterMenu,
     setSelectedPlace
   );
+  const handleClickMarker = useHandleClickMarker();
   const { data: session } = useSession();
-
   const userId = (session?.user as { _id: string | null })?._id;
 
-  function handleClickMarker(places: Result) {
-    if (allResults.some((result) => result.place_id === places.place_id))
-      return;
+  const state = queryClient.getQueryState(["nearby", queryLatLng]);
 
-    allResults.unshift(places);
-  }
-
-  const { isSuccess } = useInfiniteQuery<NearbySearchResult>(
-    ["nearby", queryLatLng],
-    {
-      enabled: false,
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      refetchOnMount: false,
-    }
-  );
-
-  const { data: favoritesData, isSuccess: favoritesIsSuccess } = useQuery(
-    ["favorites", userId],
-    () => getFavorites(userId),
-    {
-      enabled: !!session,
-      onSuccess: (data) =>
-        setFavoritesId(data.favorites?.flatMap((fav) => fav.place_id)),
-    }
-  );
+  const { data: favoritesData, isSuccess: favoritesIsSuccess } =
+    useGetFavorites(setFavoritesId, userId, session);
 
   useEffect(() => {
     if (
@@ -132,7 +111,7 @@ export default function MapCanvas({ isLoaded }: Props) {
             }}
           >
             {queryLatLng && <MapCanvasCenter queryLatLng={queryLatLng} />}
-            {isSuccess &&
+            {state?.status === "success" &&
               allResults
                 .filter((result) => !favoritesId?.includes(result.place_id))
                 .map((place) => (

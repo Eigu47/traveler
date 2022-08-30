@@ -1,7 +1,8 @@
-import { SetStateAction } from "jotai";
+import { SetStateAction, useAtom } from "jotai";
 import { NextRouter } from "next/router";
 import { Dispatch, useRef, useEffect, useCallback } from "react";
 import { Result } from "../../types/NearbySearchResult";
+import { allResultsAtom } from "../../utils/store";
 
 type DispatchCenterMenu = Dispatch<
   SetStateAction<google.maps.LatLngLiteral | undefined>
@@ -96,6 +97,17 @@ export function handleCenterMenu(
     });
   }
   setCenterMenu(undefined);
+}
+
+export function useHandleClickMarker() {
+  const [allResults, setAllResults] = useAtom(allResultsAtom);
+
+  return (places: Result) => {
+    if (allResults.some((result) => result.place_id === places.place_id))
+      return;
+
+    setAllResults([places, ...allResults]);
+  };
 }
 
 export const DEFAULT_CENTER = {

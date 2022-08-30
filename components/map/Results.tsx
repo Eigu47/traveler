@@ -1,13 +1,6 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import ResultsCard from "./ResultsCard";
-import {
-  SearchTypes,
-  SortOptions,
-  fetchResults,
-  addDistance,
-  sortResults,
-} from "./ResultsUtil";
+import { SearchTypes, SortOptions, sortResults } from "./ResultsUtil";
 import Image from "next/image";
 import ResultsForm from "./ResultsForm";
 import { FiChevronDown } from "react-icons/fi";
@@ -23,6 +16,7 @@ import {
   showResultsAtom,
 } from "../../utils/store";
 import { useSession } from "next-auth/react";
+import { useGetResults } from "../../utils/useResultsQuery";
 
 interface Props {}
 
@@ -40,7 +34,6 @@ export default function Results({}: Props) {
   const [showHamburger] = useAtom(showHamburgerAtom);
   const [favoritesId] = useAtom(favoritesIdAtom);
   const { data: session } = useSession();
-
   const userId = (session?.user as { _id: string | null })?._id;
 
   const {
@@ -51,24 +44,7 @@ export default function Results({}: Props) {
     fetchNextPage,
     hasNextPage,
     isError,
-  } = useInfiniteQuery(
-    ["nearby", queryLatLng],
-    ({ pageParam = undefined }) =>
-      fetchResults(queryLatLng, pageParam, radius, keyword, type),
-    {
-      enabled: false,
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      refetchOnMount: false,
-      getNextPageParam: (lastPage) => {
-        return lastPage?.next_page_token;
-      },
-      onSuccess: (data) => {
-        const allData = data.pages.flatMap((pages) => pages?.results);
-        setAllResults(addDistance(allData, queryLatLng));
-      },
-    }
-  );
+  } = useGetResults({ queryLatLng, radius, keyword, type, setAllResults });
 
   useEffect(() => {
     if (clickedPlace) {
@@ -124,7 +100,6 @@ export default function Results({}: Props) {
                 key={place.place_id}
                 place={place}
                 isClicked={clickedPlace === place.place_id}
-                userId={userId}
                 queryLatLng={queryLatLng}
                 isFavorited={!!favoritesId?.includes(place.place_id)}
               />

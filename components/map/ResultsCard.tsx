@@ -5,12 +5,11 @@ import { selectedPlaceAtom } from "../../utils/store";
 import { Result } from "../../types/NearbySearchResult";
 import { getDistance, Rating } from "./ResultsUtil";
 import { BsSuitHeart, BsSuitHeartFill } from "react-icons/bs";
-import { useAddFavorites } from "../../utils/useFavoriteQuery";
+import { useFavorites } from "../../utils/useFavoriteQuery";
 
 interface Props {
   place: Result;
   isClicked: boolean;
-  userId: string | null;
   queryLatLng: google.maps.LatLngLiteral | undefined;
   isFavorited: boolean;
 }
@@ -18,13 +17,12 @@ interface Props {
 export default function ResultsCard({
   place,
   isClicked,
-  userId,
   queryLatLng,
   isFavorited,
 }: Props) {
   const [selectedPlace, setSelectedPlace] = useAtom(selectedPlaceAtom);
   const resultRef = useRef<HTMLElement>(null);
-  const { mutate, isLoading } = useAddFavorites(userId);
+  const { mutate, isLoading } = useFavorites();
 
   const isSelected = selectedPlace?.place_id === place.place_id;
 
