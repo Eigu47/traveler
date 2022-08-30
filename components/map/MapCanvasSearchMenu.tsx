@@ -2,7 +2,7 @@ import { OverlayView } from "@react-google-maps/api";
 import { SetStateAction } from "jotai";
 import { NextRouter } from "next/router";
 import { MdLocationPin } from "react-icons/md";
-import { handleCenterMenu } from "./mapCanvasUtil";
+import { handleCenterMenu } from "./MapCanvasUtil";
 import { Dispatch } from "react";
 
 interface Props {

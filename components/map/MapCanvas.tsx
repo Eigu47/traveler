@@ -19,7 +19,7 @@ import useMapCanvasUtil, {
   getCurrentPosition,
   handleRightClick,
   useHandleClickMarker,
-} from "./mapCanvasUtil";
+} from "./MapCanvasUtil";
 import { useSession } from "next-auth/react";
 import MapCanvasCenter from "./MapCanvasCenter";
 import MapCanvasMarker from "./MapCanvasMarker";
