@@ -1,29 +1,31 @@
-import {
-  CircleF,
-  GoogleMap,
-  MarkerF,
-  OverlayView,
-} from "@react-google-maps/api/";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { GoogleMap } from "@react-google-maps/api/";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { MdGpsFixed, MdLocationPin } from "react-icons/md";
+import { MdGpsFixed } from "react-icons/md";
 import { useRouter } from "next/router";
-import SearchBar from "./SearchBar";
+import SearchBar from "./MapCanvasSearchBar";
 import Image from "next/image";
-import { NearbySearchResult } from "../../types/NearbySearchResult";
+import {
+  FavoritesData,
+  NearbySearchResult,
+} from "../../types/NearbySearchResult";
 import { useAtom } from "jotai";
 import {
   clickedPlaceAtom,
-  radiusAtom,
   selectedPlaceAtom,
   showResultsAtom,
 } from "../../utils/store";
 import useMapCanvasUtil, {
   DEFAULT_CENTER,
   getCurrentPosition,
-  handleCenterMenu,
   handleRightClick,
-} from "./useMapCanvasUtil";
+} from "./mapCanvasUtil";
+import { useSession } from "next-auth/react";
+import MapCanvasCenter from "./MapCanvasCenter";
+import MapCanvasResultMarker from "./MapCanvasResultMarker";
+import MapCanvasFavorites from "./MapCanvasFavorites";
+import MapCanvasPlaceCard from "./MapCanvasPlaceCard";
+import MapCanvasSearchMenu from "./MapCanvasSearchMenu";
 
 interface Props {
   isLoaded: boolean;
@@ -34,7 +36,6 @@ export default function MapCanvas({ isLoaded }: Props) {
   const mapRef = useRef<google.maps.Map>();
   const [centerMenu, setCenterMenu] = useState<google.maps.LatLngLiteral>();
   const [loadFinish, setLoadFinish] = useState(false);
-  const [radius] = useAtom(radiusAtom);
   const [selectedPlace, setSelectedPlace] = useAtom(selectedPlaceAtom);
   const [, setClickedPlace] = useAtom(clickedPlaceAtom);
   const [showResults] = useAtom(showResultsAtom);
@@ -42,6 +43,9 @@ export default function MapCanvas({ isLoaded }: Props) {
     setCenterMenu,
     setSelectedPlace
   );
+  const { data: session } = useSession();
+
+  const userId = (session?.user as { _id: string | null })?._id;
 
   const queryLatLng = useMemo(() => {
     if (
@@ -62,6 +66,13 @@ export default function MapCanvas({ isLoaded }: Props) {
       refetchOnMount: false,
     }
   );
+
+  const { data: favoritesData, isSuccess: favoritesIsSuccess } =
+    useQuery<FavoritesData>(["favorites", userId]);
+
+  const favoritesId = useMemo(() => {
+    return favoritesData?.favorites?.flatMap((fav) => fav.place_id);
+  }, [favoritesData]);
 
   useEffect(() => {
     if (queryLatLng) {
@@ -107,89 +118,36 @@ export default function MapCanvas({ isLoaded }: Props) {
               clearOverlay();
             }}
           >
-            {queryLatLng && (
-              <>
-                <CircleF
-                  options={{
-                    center: queryLatLng,
-                    radius: radius,
-                    clickable: false,
-                    strokeWeight: 0.1,
-                    fillColor: "DodgerBlue",
-                    fillOpacity: 0.1,
-                  }}
-                />
-                <MarkerF position={queryLatLng} clickable={false} />
-              </>
-            )}
+            {queryLatLng && <MapCanvasCenter queryLatLng={queryLatLng} />}
             {isSuccess &&
               data.pages.map((page) =>
                 page.results.map((places) => (
-                  <MarkerF
+                  <MapCanvasResultMarker
                     key={places.place_id}
-                    position={{
-                      lat: places.geometry.location.lat,
-                      lng: places.geometry.location.lng,
-                    }}
-                    icon={{
-                      url: places.icon,
-                      scaledSize: new google.maps.Size(35, 35),
-                    }}
-                    onClick={() => {
-                      setClickedPlace(places.place_id);
-                      setSelectedPlace(() => places);
-                    }}
-                    onMouseOver={() => setSelectedPlace(places)}
-                    onMouseOut={() => setSelectedPlace(undefined)}
+                    places={places}
+                    setClickedPlace={setClickedPlace}
+                    setSelectedPlace={setSelectedPlace}
+                    favoritesId={favoritesId}
                   />
                 ))
               )}
+            {favoritesIsSuccess &&
+              favoritesData.favorites?.map((fav) => (
+                <MapCanvasFavorites
+                  key={fav.place_id}
+                  fav={fav}
+                  setSelectedPlace={setSelectedPlace}
+                />
+              ))}
             {selectedPlace && (
-              <OverlayView
-                position={selectedPlace.geometry.location}
-                mapPaneName="overlayMouseTarget"
-              >
-                <div className="w-24 rounded-lg bg-slate-100 text-center shadow ring-1 ring-black/20 sm:w-48">
-                  <p className="px-1 text-xs sm:p-2 sm:text-lg">
-                    {selectedPlace.name}
-                  </p>
-                  <Image
-                    className="bg-slate-400"
-                    src={`https://maps.googleapis.com/maps/api/place/photo?photo_reference=${selectedPlace.photos[0].photo_reference}&maxheight=200&maxwidth=200&key=${process.env.NEXT_PUBLIC_MAP_API_KEY}`}
-                    alt={selectedPlace.name}
-                    width={250}
-                    height={250}
-                    objectFit="cover"
-                  />
-                  {selectedPlace.types
-                    .filter(
-                      (type) =>
-                        type !== "point_of_interest" && type !== "establishment"
-                    )
-                    .map((type) => (
-                      <p className="hidden text-base sm:block" key={type}>
-                        {type.charAt(0).toUpperCase() +
-                          type.slice(1).replaceAll("_", " ")}
-                      </p>
-                    ))}
-                </div>
-              </OverlayView>
+              <MapCanvasPlaceCard selectedPlace={selectedPlace} />
             )}
             {centerMenu && (
-              <OverlayView
-                position={centerMenu}
-                mapPaneName="overlayMouseTarget"
-              >
-                <button
-                  onClick={() =>
-                    handleCenterMenu(centerMenu, router, setCenterMenu)
-                  }
-                  className="m-1 flex items-center space-x-1 rounded-md bg-slate-50 px-2 py-2 text-sm shadow ring-1 ring-black/20 hover:bg-blue-200 md:space-x-2 md:py-2 md:px-3 md:text-lg"
-                >
-                  <MdLocationPin className="-mx-1 select-none text-2xl text-blue-900" />
-                  <span>Search here</span>
-                </button>
-              </OverlayView>
+              <MapCanvasSearchMenu
+                centerMenu={centerMenu}
+                router={router}
+                setCenterMenu={setCenterMenu}
+              />
             )}
           </GoogleMap>
           <SearchBar />

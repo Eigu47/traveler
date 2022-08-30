@@ -77,3 +77,8 @@ export interface PlusCode {
 export enum Scope {
   Google = "GOOGLE",
 }
+
+export interface FavoritesData {
+  favorites?: Result[];
+  _id: string;
+}

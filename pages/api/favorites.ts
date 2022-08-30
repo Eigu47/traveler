@@ -19,7 +19,6 @@ export default async function handler(
         { projection: { favorites: 1 } }
       );
 
-      console.log(userId);
       res.status(200).json(response);
     } catch (err) {
       res.status(500).json(err);
@@ -27,15 +26,14 @@ export default async function handler(
   }
 
   if (req.method === "POST") {
-    const { place_id, userId } = req.body;
+    const { place, userId } = req.body;
 
     try {
       const data = (await clientPromise).db().collection("users");
 
-      const response = await data.findOneAndUpdate(
+      const response = await data.updateOne(
         { _id: new ObjectId(userId) },
-        { $addToSet: { favorites: place_id } },
-        { returnDocument: "after", projection: { favorites: 1 } }
+        { $addToSet: { favorites: place } }
       );
 
       res.status(200).json(response);
@@ -50,10 +48,9 @@ export default async function handler(
     try {
       const data = (await clientPromise).db().collection("users");
 
-      const response = await data.findOneAndUpdate(
+      const response = await data.updateOne(
         { _id: new ObjectId(userId) },
-        { $pull: { favorites: place_id } },
-        { returnDocument: "after", projection: { favorites: 1 } }
+        { $pull: { favorites: { place_id: place_id } } }
       );
 
       res.status(200).json(response);

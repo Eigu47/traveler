@@ -2,7 +2,7 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useState, useMemo, useEffect } from "react";
 import { Result } from "../../types/NearbySearchResult";
-import ResultCard from "./ResultCard";
+import ResultCard from "./ResultsCard";
 import {
   SearchTypes,
   SortOptions,
@@ -79,7 +79,9 @@ export default function Results({}: Props) {
     }
   );
 
-  const { data: favorites } = useQuery(["favorites", userId], getFavorites);
+  const { data: favorites } = useQuery(["favorites", userId], getFavorites, {
+    enabled: !!session,
+  });
 
   useEffect(() => {
     if (clickedPlace) {

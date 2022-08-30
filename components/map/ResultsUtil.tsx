@@ -1,5 +1,9 @@
 import axios from "axios";
-import { NearbySearchResult, Result } from "../../types/NearbySearchResult";
+import {
+  FavoritesData,
+  NearbySearchResult,
+  Result,
+} from "../../types/NearbySearchResult";
 import { BsStarFill, BsStarHalf, BsStar } from "react-icons/bs";
 
 export async function fetchResults(
@@ -90,22 +94,24 @@ export async function getFavorites({
     params: { userId },
   });
 
-  return res.data as Result[] | null;
+  console.log(res.data);
+
+  return res.data as FavoritesData;
 }
 
-export async function handleFavorite(place_id: string, userId: string | null) {
-  if (!userId) return;
+export async function handleFavorite(place: Result, userId: string | null) {
+  if (!userId) throw new Error("Not logged");
 
   const res = await axios.request({
     method: "POST",
     url: "/api/favorites",
     data: {
-      place_id,
+      place,
       userId,
     },
   });
 
-  console.log(res.data?.value);
+  return res;
 }
 
 export function Rating({

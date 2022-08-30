@@ -50,7 +50,7 @@ export default function ResultCard({ place, isClicked, userId }: Props) {
             className="absolute top-2 left-2 text-2xl duration-200 active:scale-125"
             onClick={() => {
               setFav((prev) => !prev);
-              handleFavorite(place.place_id, userId);
+              handleFavorite(place, userId);
             }}
           >
             {fav ? (
