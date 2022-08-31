@@ -15,7 +15,6 @@ import {
 } from "../types/NearbySearchResult";
 import {
   allResultsAtom,
-  favoritesIdAtom,
   keywordAtom,
   queryLatLngAtom,
   radiusAtom,
@@ -87,14 +86,11 @@ export async function getFavorites(userId: string | null) {
 }
 
 export function useGetFavorites() {
-  const [, setFavoritesId] = useAtom(favoritesIdAtom);
   const { data: session } = useSession();
   const userId = (session?.user as { _id: string | null })?._id;
 
   return useQuery(["favorites", userId], () => getFavorites(userId), {
     enabled: !!session,
-    onSuccess: (data) =>
-      setFavoritesId(data.favorites?.flatMap((fav) => fav.place_id)),
   });
 }
 

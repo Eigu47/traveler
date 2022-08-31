@@ -20,6 +20,8 @@ import {
   keywordAtom,
   queryLatLngAtom,
   searchTypeAtom,
+  showResultsAtom,
+  showSearchOptionsAtom,
 } from "../../utils/store";
 
 interface Props {
@@ -28,36 +30,30 @@ interface Props {
   ) => Promise<QueryObserverResult<InfiniteData<NearbySearchResult>, unknown>>;
   sortBy: SortOptions;
   setSortBy: Dispatch<SetStateAction<SortOptions>>;
-  showOptions: boolean;
-  setShowOptions: Dispatch<SetStateAction<boolean>>;
-  setShowResults: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function ResultsForm({
-  refetch,
-  sortBy,
-  setSortBy,
-  showOptions,
-  setShowOptions,
-  setShowResults,
-}: Props) {
+export default function ResultsForm({ refetch, sortBy, setSortBy }: Props) {
   const [radius, setRadius] = useAtom(radiusAtom);
   const [, setClickedPlace] = useAtom(clickedPlaceAtom);
   const [keyword, setKeyword] = useAtom(keywordAtom);
   const [queryLatLng] = useAtom(queryLatLngAtom);
   const [, setSearchType] = useAtom(searchTypeAtom);
+  const [showSearchOptions, setShowSearchOptions] = useAtom(
+    showSearchOptionsAtom
+  );
+  const [, setShowResults] = useAtom(showResultsAtom);
 
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        setShowOptions(false);
+        setShowSearchOptions(false);
         refetch();
         setShowResults(true);
         setClickedPlace(undefined);
       }}
       className={`fixed top-24 flex w-11/12 flex-col whitespace-nowrap rounded-xl bg-slate-200 px-3 pl-6 shadow-md ring-1 ring-black/10 duration-300 md:static md:block md:w-full md:translate-x-0 md:rounded-none md:px-4 md:transition-none ${
-        showOptions ? "-translate-x-4" : "-translate-x-[calc(100%-8px)]"
+        showSearchOptions ? "-translate-x-4" : "-translate-x-[calc(100%-8px)]"
       }`}
     >
       <div className="flex w-full flex-col items-center justify-center space-x-3 space-y-3 overflow-hidden pt-6 pb-3 md:flex-row md:space-y-0 md:overflow-visible md:py-8">
@@ -75,7 +71,7 @@ export default function ResultsForm({
             placeholder="Optional"
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
-            onFocus={() => setShowOptions(true)}
+            onFocus={() => setShowSearchOptions(true)}
           />
         </div>
         <button
@@ -91,7 +87,7 @@ export default function ResultsForm({
       </div>
       <div
         className={`relative w-full overflow-hidden duration-300 ${
-          showOptions ? "md:max-h-[170px]" : "md:max-h-0"
+          showSearchOptions ? "md:max-h-[170px]" : "md:max-h-0"
         }`}
       >
         <div className="flex flex-col border-t border-t-black/20 py-4">
@@ -166,11 +162,11 @@ export default function ResultsForm({
       <button
         type="button"
         className="absolute -right-8 block h-12 w-12 translate-y-[108px] -rotate-90 rounded-full border border-black/30 bg-slate-200 text-slate-700 shadow md:left-6 md:h-6 md:-translate-y-3 md:rotate-0 md:rounded"
-        onClick={() => setShowOptions((prev) => !prev)}
+        onClick={() => setShowSearchOptions((prev) => !prev)}
       >
         <FiChevronsDown
           className={`mx-auto text-2xl duration-300 md:text-xl ${
-            showOptions && "-rotate-180"
+            showSearchOptions && "-rotate-180"
           }`}
         />
       </button>

@@ -1,6 +1,5 @@
 import { GoogleMap } from "@react-google-maps/api/";
-import { useQueryClient } from "@tanstack/react-query";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { MdGpsFixed } from "react-icons/md";
 import { useRouter } from "next/router";
 import SearchBar from "./MapCanvasSearchBar";
@@ -9,10 +8,10 @@ import { useAtom } from "jotai";
 import {
   allResultsAtom,
   clickedPlaceAtom,
-  favoritesIdAtom,
   queryLatLngAtom,
   selectedPlaceAtom,
   showResultsAtom,
+  showSearchOptionsAtom,
 } from "../../utils/store";
 import useMapCanvasUtil, {
   DEFAULT_CENTER,
@@ -33,45 +32,58 @@ interface Props {
 export default function MapCanvas({ isLoaded }: Props) {
   const router = useRouter();
   const mapRef = useRef<google.maps.Map>();
-  const queryClient = useQueryClient();
   const [centerMenu, setCenterMenu] = useState<google.maps.LatLngLiteral>();
   const [loadFinish, setLoadFinish] = useState(false);
-  const [allResults] = useAtom(allResultsAtom);
+  const [allResults, setAllResults] = useAtom(allResultsAtom);
   const [queryLatLng, setQueryLatLng] = useAtom(queryLatLngAtom);
   const [selectedPlace, setSelectedPlace] = useAtom(selectedPlaceAtom);
   const [, setClickedPlace] = useAtom(clickedPlaceAtom);
-  const [showResults] = useAtom(showResultsAtom);
-  const [favoritesId] = useAtom(favoritesIdAtom);
+  const [showResults, setShowResults] = useAtom(showResultsAtom);
+  const [, setShowSearchOptions] = useAtom(showSearchOptionsAtom);
   const { handleMouseDown, handleMouseUp, clearOverlay } = useMapCanvasUtil(
     setCenterMenu,
     setSelectedPlace
   );
   const handleClickMarker = useHandleClickMarker();
 
-  const state = queryClient.getQueryState(["nearby", queryLatLng]);
-
   const { data: favoritesData, isSuccess: favoritesIsSuccess } =
     useGetFavorites();
 
+  const favoritesId = useMemo(
+    () => favoritesData?.favorites?.flatMap((fav) => fav.place_id),
+    [favoritesData]
+  );
+
   useEffect(() => {
     if (
-      router.query.lat &&
-      router.query.lng &&
-      !isNaN(+router.query.lat) &&
-      !isNaN(+router.query.lng)
+      !(
+        router.query.lat &&
+        router.query.lng &&
+        !isNaN(+router.query.lat) &&
+        !isNaN(+router.query.lng)
+      )
     )
-      setQueryLatLng({ lat: +router.query.lat, lng: +router.query.lng });
-  }, [router.query, setQueryLatLng]);
+      return;
 
-  useEffect(() => {
-    if (queryLatLng) {
-      mapRef.current?.panTo(queryLatLng);
+    const latLng = { lat: +router.query.lat, lng: +router.query.lng };
+    setQueryLatLng(latLng);
 
-      setClickedPlace(undefined);
+    mapRef.current?.panTo(latLng);
+    setClickedPlace(undefined);
+    if (mapRef.current?.getZoom() ?? 12 < 12) mapRef.current?.setZoom(13);
 
-      if (mapRef.current?.getZoom() ?? 12 < 12) mapRef.current?.setZoom(13);
-    }
-  }, [queryLatLng, setClickedPlace]);
+    setAllResults([]);
+    setShowResults(true);
+
+    if (window?.innerWidth < 768) setShowSearchOptions(false);
+  }, [
+    router.query,
+    setQueryLatLng,
+    setClickedPlace,
+    setAllResults,
+    setShowSearchOptions,
+    setShowResults,
+  ]);
 
   return (
     <section className="relative h-full w-full bg-[#e5e3df]">
@@ -108,18 +120,17 @@ export default function MapCanvas({ isLoaded }: Props) {
             }}
           >
             {queryLatLng && <MapCanvasCenter queryLatLng={queryLatLng} />}
-            {state?.status === "success" &&
-              allResults
-                .filter((result) => !favoritesId?.includes(result.place_id))
-                .map((place) => (
-                  <MapCanvasMarker
-                    key={place.place_id}
-                    places={place}
-                    setClickedPlace={setClickedPlace}
-                    setSelectedPlace={setSelectedPlace}
-                    isFavorited={false}
-                  />
-                ))}
+            {allResults
+              .filter((result) => !favoritesId?.includes(result.place_id))
+              .map((place) => (
+                <MapCanvasMarker
+                  key={place.place_id}
+                  places={place}
+                  setClickedPlace={setClickedPlace}
+                  setSelectedPlace={setSelectedPlace}
+                  isFavorited={false}
+                />
+              ))}
             {favoritesIsSuccess &&
               favoritesData.favorites?.map((place) => (
                 <MapCanvasMarker

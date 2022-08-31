@@ -2,10 +2,11 @@ import MapCanvas from "../components/map/MapCanvas";
 import Results from "../components/map/Results";
 import { HiMenu, HiX } from "react-icons/hi";
 import { useAtom } from "jotai";
-import { showHamburgerAtom } from "../utils/store";
+import { showHamburgerAtom, showSearchOptionsAtom } from "../utils/store";
 
 export default function Map({ isLoaded }: { isLoaded: boolean }) {
   const [showHamburger, setShowHamburger] = useAtom(showHamburgerAtom);
+  const [, setShowSearchOptions] = useAtom(showSearchOptionsAtom);
 
   return (
     <>
@@ -14,7 +15,10 @@ export default function Map({ isLoaded }: { isLoaded: boolean }) {
           className={`fixed right-2 top-2 z-20 rounded-full p-3 text-slate-100 duration-100 sm:hidden ${
             showHamburger ? "bg-transparent" : "bg-blue-700"
           }`}
-          onClick={() => setShowHamburger((prev) => !prev)}
+          onClick={() => {
+            if (!showHamburger) setShowSearchOptions(false);
+            setShowHamburger((prev) => !prev);
+          }}
         >
           <HiMenu
             className={`absolute text-4xl duration-300 ${

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import ResultsCard from "./ResultsCard";
 import { SortOptions, sortResults } from "./ResultsUtil";
 import Image from "next/image";
@@ -8,26 +8,23 @@ import { useAtom } from "jotai";
 import {
   allResultsAtom,
   clickedPlaceAtom,
-  favoritesIdAtom,
   queryLatLngAtom,
   searchbarOnFocusAtom,
-  showHamburgerAtom,
   showResultsAtom,
+  showSearchOptionsAtom,
 } from "../../utils/store";
-import { useGetResults } from "../../utils/useQueryHooks";
+import { useGetFavorites, useGetResults } from "../../utils/useQueryHooks";
 
 interface Props {}
 
 export default function Results({}: Props) {
   const [sortBy, setSortBy] = useState<SortOptions>("relevance");
-  const [showOptions, setShowOptions] = useState(true);
-  const [allResults, setAllResults] = useAtom(allResultsAtom);
+  const [, setShowSearchOptions] = useAtom(showSearchOptionsAtom);
+  const [allResults] = useAtom(allResultsAtom);
   const [queryLatLng] = useAtom(queryLatLngAtom);
   const [clickedPlace] = useAtom(clickedPlaceAtom);
   const [searchbarOnFocus] = useAtom(searchbarOnFocusAtom);
   const [showResults, setShowResults] = useAtom(showResultsAtom);
-  const [showHamburger] = useAtom(showHamburgerAtom);
-  const [favoritesId] = useAtom(favoritesIdAtom);
 
   const {
     data,
@@ -39,33 +36,36 @@ export default function Results({}: Props) {
     isError,
   } = useGetResults();
 
+  const { data: favoritesData } = useGetFavorites();
+
+  const favoritesId = useMemo(
+    () => favoritesData?.favorites?.flatMap((fav) => fav.place_id),
+    [favoritesData]
+  );
+
   useEffect(() => {
     if (clickedPlace) {
-      setShowOptions(false);
+      setShowSearchOptions(false);
       setShowResults(true);
     }
 
     if (searchbarOnFocus) {
       setShowResults(false);
-      setShowOptions(false);
+      setShowSearchOptions(false);
     }
 
     if (!data?.pages[0]?.results) setShowResults(false);
-  }, [searchbarOnFocus, clickedPlace, data?.pages, setShowResults]);
+  }, [
+    searchbarOnFocus,
+    clickedPlace,
+    data?.pages,
+    setShowResults,
+    setShowSearchOptions,
+  ]);
 
-  useEffect(() => {
-    if (showHamburger) setShowOptions(false);
-  }, [showHamburger]);
-
-  useEffect(() => {
-    if (queryLatLng) {
-      // refetch();
-      setAllResults([]);
-      setShowResults(true);
-
-      if (window?.innerWidth < 768) setShowOptions(false);
-    }
-  }, [queryLatLng, refetch, setShowResults, setAllResults]);
+  // useEffect(() => {
+  //   if (queryLatLng) refetch();
+  // }, [queryLatLng, refetch]);
 
   return (
     <aside
@@ -73,17 +73,10 @@ export default function Results({}: Props) {
         showResults ? "bottom-0" : "-bottom-60"
       }`}
     >
-      <ResultsForm
-        refetch={refetch}
-        sortBy={sortBy}
-        setSortBy={setSortBy}
-        showOptions={showOptions}
-        setShowOptions={setShowOptions}
-        setShowResults={setShowResults}
-      />
-      {(data || allResults.length > 0) && (
-        <div className="mx-1 flex w-full flex-row overflow-x-auto overflow-y-hidden pt-3 md:m-[12px_8px_12px_4px] md:w-auto md:flex-col md:space-y-5 md:overflow-y-auto md:overflow-x-hidden md:py-0">
-          {(isFetchingNextPage || !isFetching) &&
+      <ResultsForm refetch={refetch} sortBy={sortBy} setSortBy={setSortBy} />
+      {allResults.length > 0 && (
+        <div className="mx-1 flex w-full flex-row overflow-x-auto overflow-y-hidden pt-3 md:m-[12px_8px_12px_4px] md:w-auto md:flex-col md:space-y-5 md:overflow-y-auto md:overflow-x-hidden md:py-2">
+          {(!isFetching || isFetchingNextPage) &&
             sortResults(allResults, sortBy).map((place) => (
               <ResultsCard
                 key={place.place_id}
@@ -93,27 +86,27 @@ export default function Results({}: Props) {
                 isFavorited={!!favoritesId?.includes(place.place_id)}
               />
             ))}
-          <div className="flex justify-center whitespace-nowrap py-2 px-2 text-xl md:py-0">
-            {hasNextPage && !isFetching && data && (
+          {!(isFetching && !isFetchingNextPage) && (
+            <div className="flex justify-center whitespace-nowrap py-2 px-2 text-xl md:py-0">
               <button
-                className="w-full rounded-xl bg-blue-600 p-3 text-slate-100 shadow ring-1 ring-black/30 duration-100 hover:scale-[102%] hover:bg-blue-700 active:scale-[98%] md:p-6"
+                className={`w-full rounded-xl p-3 text-slate-100 shadow ring-1 ring-black/30  md:p-6 ${
+                  hasNextPage
+                    ? "bg-blue-600 duration-100 hover:scale-[102%] hover:bg-blue-700 active:scale-[98%]"
+                    : "bg-blue-700/50"
+                }`}
                 onClick={() => {
                   fetchNextPage();
                 }}
-                disabled={isFetchingNextPage}
+                disabled={isFetchingNextPage || !hasNextPage}
               >
-                {!isFetchingNextPage ? "Load more" : "Searching..."}
+                {hasNextPage
+                  ? !isFetchingNextPage
+                    ? "Load more"
+                    : "Searching..."
+                  : "No more results"}
               </button>
-            )}
-            {!hasNextPage && data && (
-              <button
-                className="w-full rounded-xl bg-blue-700/50 p-3 text-slate-100 shadow ring-1 ring-black/30 duration-100 md:p-6"
-                disabled
-              >
-                No more results
-              </button>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       )}
       <div
@@ -137,10 +130,12 @@ export default function Results({}: Props) {
         </div>
       )}
       {!isFetching && data?.pages[0]?.results.length === 0 && (
-        <p className="my-auto text-center text-2xl">No results found</p>
+        <p className="my-auto w-full text-center text-2xl">No results found</p>
       )}
       {isError && (
-        <p className="my-auto text-center text-2xl">Something went wrong...</p>
+        <p className="my-auto w-full text-center text-2xl">
+          Something went wrong...
+        </p>
       )}
     </aside>
   );

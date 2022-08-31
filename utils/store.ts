@@ -18,10 +18,10 @@ export const keywordAtom = atom<string | undefined>(undefined);
 
 export const searchTypeAtom = atom<SearchTypes>("tourist_attraction");
 
+export const showSearchOptionsAtom = atom(true);
+
 export const allResultsAtom = atom<Result[]>([]);
 
 export const queryLatLngAtom = atom<google.maps.LatLngLiteral | undefined>(
   undefined
 );
-
-export const favoritesIdAtom = atom<string[] | undefined>([]);
