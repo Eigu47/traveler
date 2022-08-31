@@ -63,15 +63,15 @@ export default function Results({}: Props) {
     setShowSearchOptions,
   ]);
 
-  // useEffect(() => {
-  //   if (queryLatLng) refetch();
-  // }, [queryLatLng, refetch]);
+  useEffect(() => {
+    if (queryLatLng) refetch();
+  }, [queryLatLng, refetch]);
 
   return (
     <aside
-      className={`absolute z-10 flex h-64 w-full flex-row bg-slate-300 ring-1 ring-black/50 duration-300 md:static md:h-full md:min-w-[420px] md:max-w-[25vw] md:flex-col md:shadow-[0_10px_10px_5px_rgba(0,0,0,0.15)] md:ring-1 md:ring-black/20 md:transition-none ${
-        showResults ? "bottom-0" : "-bottom-60"
-      }`}
+      className={`absolute bottom-0 z-10 flex h-64 w-full flex-row bg-slate-300 ring-1 ring-black/50 duration-300 md:static md:h-full md:max-h-full md:min-w-[420px] md:max-w-[25vw] md:flex-col md:shadow-[0_10px_10px_5px_rgba(0,0,0,0.15)] md:ring-1 md:ring-black/20 md:transition-none 
+      ${showResults ? "max-h-[256px]" : "max-h-[24px]"}
+      `}
     >
       <ResultsForm refetch={refetch} sortBy={sortBy} setSortBy={setSortBy} />
       {allResults.length > 0 && (
@@ -86,7 +86,7 @@ export default function Results({}: Props) {
                 isFavorited={!!favoritesId?.includes(place.place_id)}
               />
             ))}
-          {!(isFetching && !isFetchingNextPage) && (
+          {!(isFetching && !isFetchingNextPage) && data && (
             <div className="flex justify-center whitespace-nowrap py-2 px-2 text-xl md:py-0">
               <button
                 className={`w-full rounded-xl p-3 text-slate-100 shadow ring-1 ring-black/30  md:p-6 ${
