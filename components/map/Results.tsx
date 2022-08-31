@@ -54,11 +54,11 @@ export default function Results({}: Props) {
       setShowSearchOptions(false);
     }
 
-    if (!data?.pages[0]?.results) setShowResults(false);
+    if (allResults.length < 0 && !clickedPlace) setShowResults(false);
   }, [
     searchbarOnFocus,
     clickedPlace,
-    data?.pages,
+    allResults.length,
     setShowResults,
     setShowSearchOptions,
   ]);

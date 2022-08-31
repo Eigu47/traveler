@@ -3,6 +3,7 @@ import Results from "../components/map/Results";
 import { HiMenu, HiX } from "react-icons/hi";
 import { useAtom } from "jotai";
 import { showHamburgerAtom, showSearchOptionsAtom } from "../utils/store";
+import Image from "next/image";
 
 export default function Map({ isLoaded }: { isLoaded: boolean }) {
   const [showHamburger, setShowHamburger] = useAtom(showHamburgerAtom);
@@ -38,7 +39,18 @@ export default function Map({ isLoaded }: { isLoaded: boolean }) {
       </nav>
       <main className="relative flex h-full max-w-full flex-row sm:top-14 sm:h-[calc(100%-56px)] md:h-[calc(100%-56px)]">
         <Results />
-        <MapCanvas isLoaded={isLoaded} />
+        {isLoaded ? (
+          <MapCanvas />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center bg-[#e5e3df]">
+            <Image
+              src="/loading.svg"
+              alt="Loading..."
+              height={200}
+              width={200}
+            />
+          </div>
+        )}
       </main>
     </>
   );

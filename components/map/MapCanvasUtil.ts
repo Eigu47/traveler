@@ -2,18 +2,14 @@ import { SetStateAction, useAtom } from "jotai";
 import { NextRouter } from "next/router";
 import { Dispatch, useRef, useEffect, useCallback } from "react";
 import { Result } from "../../types/NearbySearchResult";
-import { allResultsAtom } from "../../utils/store";
+import { allResultsAtom, selectedPlaceAtom } from "../../utils/store";
 
 type DispatchCenterMenu = Dispatch<
   SetStateAction<google.maps.LatLngLiteral | undefined>
 >;
 
-type DispatchSelectPlace = Dispatch<SetStateAction<Result | undefined>>;
-
-export default function useMapCanvasUtil(
-  setCenterMenu: DispatchCenterMenu,
-  setSelectedPlace: DispatchSelectPlace
-) {
+export default function useMapCanvasUtil(setCenterMenu: DispatchCenterMenu) {
+  const [, setSelectedPlace] = useAtom(selectedPlaceAtom);
   const timerRef = useRef<NodeJS.Timeout>();
 
   function startPressTimer({ lat, lng }: google.maps.LatLngLiteral) {
