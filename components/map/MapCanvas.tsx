@@ -1,83 +1,48 @@
 import { GoogleMap } from "@react-google-maps/api/";
-import { useEffect, useRef, useState, useMemo } from "react";
 import { MdGpsFixed } from "react-icons/md";
-import { useRouter } from "next/router";
 import SearchBar from "./MapCanvasSearchBar";
-import { useAtom } from "jotai";
 import {
-  allResultsAtom,
-  clickedPlaceAtom,
-  queryLatLngAtom,
-  selectedPlaceAtom,
-  showResultsAtom,
-  showSearchOptionsAtom,
-} from "../../utils/store";
-import useMapCanvasUtil, {
   DEFAULT_CENTER,
   getCurrentPosition,
-  handleRightClick,
-  useHandleClickMarker,
+  useHandleMouseEventsInMap,
+  useHandleQueryChanges,
 } from "./MapCanvasUtil";
 import MapCanvasCenter from "./MapCanvasCenter";
 import MapCanvasMarker from "./MapCanvasMarker";
 import MapCanvasPlaceCard from "./MapCanvasPlaceCard";
-import MapCanvasSearchMenu from "./MapCanvasSearchMenu";
+import MapCanvasSearchMenu from "./MapCanvasSearchButton";
 import { useGetFavorites } from "../../utils/useQueryHooks";
 
-interface Props {}
+interface Props {
+  queryLatLng: google.maps.LatLngLiteral;
+  showFavorites: boolean;
+}
 
-export default function MapCanvas({}: Props) {
-  const router = useRouter();
-  const mapRef = useRef<google.maps.Map>();
-  const [centerMenu, setCenterMenu] = useState<google.maps.LatLngLiteral>();
-  const [allResults, setAllResults] = useAtom(allResultsAtom);
-  const [queryLatLng, setQueryLatLng] = useAtom(queryLatLngAtom);
-  const [selectedPlace, setSelectedPlace] = useAtom(selectedPlaceAtom);
-  const [, setClickedPlace] = useAtom(clickedPlaceAtom);
-  const [showResults, setShowResults] = useAtom(showResultsAtom);
-  const [, setShowSearchOptions] = useAtom(showSearchOptionsAtom);
-  const { handleMouseDown, handleMouseUp, clearOverlay } =
-    useMapCanvasUtil(setCenterMenu);
-  const handleClickMarker = useHandleClickMarker();
-
-  const { data: favoritesData, isSuccess: favoritesIsSuccess } =
-    useGetFavorites();
-
-  const favoritesId = useMemo(
-    () => favoritesData?.favorites?.flatMap((fav) => fav.place_id),
-    [favoritesData]
-  );
-
-  useEffect(() => {
-    if (
-      !(
-        router.query.lat &&
-        router.query.lng &&
-        !isNaN(+router.query.lat) &&
-        !isNaN(+router.query.lng)
-      )
-    )
-      return;
-
-    const latLng = { lat: +router.query.lat, lng: +router.query.lng };
-    setQueryLatLng(latLng);
-
-    mapRef.current?.panTo(latLng);
-    setClickedPlace(undefined);
-    if (mapRef.current?.getZoom() ?? 12 < 12) mapRef.current?.setZoom(13);
-
-    setAllResults([]);
-    setShowResults(true);
-
-    if (window?.innerWidth < 768) setShowSearchOptions(false);
-  }, [
-    router.query,
-    setQueryLatLng,
+export default function MapCanvas({ queryLatLng, showFavorites }: Props) {
+  const {
+    router,
+    mapRef,
+    allResults,
+    selectedPlace,
+    setSelectedPlace,
     setClickedPlace,
-    setAllResults,
-    setShowSearchOptions,
-    setShowResults,
-  ]);
+    showResults,
+  } = useHandleQueryChanges(queryLatLng);
+
+  const {
+    searchButton,
+    handleMouseDown,
+    handleMouseUp,
+    clearOverlay,
+    handleClickOnMarker,
+    handleRightClickOnMap,
+    handleSearchButton,
+  } = useHandleMouseEventsInMap();
+
+  const {
+    response: { data: favoritesData, isSuccess: favoritesIsSuccess },
+    favoritesId,
+  } = useGetFavorites();
 
   return (
     <section className="relative h-full w-full bg-[#e5e3df]">
@@ -93,7 +58,7 @@ export default function MapCanvas({}: Props) {
           disableDefaultUI: true,
           clickableIcons: false,
         }}
-        onRightClick={(e) => handleRightClick(e, setCenterMenu)}
+        onRightClick={(e) => handleRightClickOnMap(e)}
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
         onCenterChanged={() => {
@@ -117,15 +82,15 @@ export default function MapCanvas({}: Props) {
               isFavorited={false}
             />
           ))}
-        {favoritesIsSuccess &&
-          favoritesData.favorites?.map((place) => (
+        {(showFavorites || favoritesIsSuccess) &&
+          favoritesData?.favorites?.map((place) => (
             <MapCanvasMarker
               key={place.place_id}
               places={place}
               setClickedPlace={setClickedPlace}
               setSelectedPlace={setSelectedPlace}
               isFavorited={true}
-              handleClickMarker={handleClickMarker}
+              handleClickOnMarker={handleClickOnMarker}
             />
           ))}
         {selectedPlace && (
@@ -134,11 +99,10 @@ export default function MapCanvas({}: Props) {
             isFavorited={!!favoritesId?.includes(selectedPlace.place_id)}
           />
         )}
-        {centerMenu && (
+        {searchButton && (
           <MapCanvasSearchMenu
-            centerMenu={centerMenu}
-            router={router}
-            setCenterMenu={setCenterMenu}
+            searchButton={searchButton}
+            handleSearchButton={handleSearchButton}
           />
         )}
       </GoogleMap>

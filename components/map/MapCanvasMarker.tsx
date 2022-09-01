@@ -7,7 +7,7 @@ interface Props {
   setClickedPlace: (update?: SetStateAction<string | undefined>) => void;
   setSelectedPlace: (update?: SetStateAction<Result | undefined>) => void;
   isFavorited: boolean;
-  handleClickMarker?: (places: Result) => void;
+  handleClickOnMarker?: (places: Result) => void;
 }
 
 export default function MapCanvasMarker({
@@ -15,7 +15,7 @@ export default function MapCanvasMarker({
   setClickedPlace,
   setSelectedPlace,
   isFavorited,
-  handleClickMarker,
+  handleClickOnMarker,
 }: Props) {
   return (
     <MarkerF
@@ -34,7 +34,7 @@ export default function MapCanvasMarker({
       onClick={() => {
         setClickedPlace(places.place_id);
         setSelectedPlace(places);
-        if (handleClickMarker) handleClickMarker(places);
+        if (handleClickOnMarker) handleClickOnMarker(places);
       }}
       onMouseOver={() => setSelectedPlace(places)}
       onMouseOut={() => setSelectedPlace(undefined)}

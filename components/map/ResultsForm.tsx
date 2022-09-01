@@ -18,7 +18,6 @@ import {
   radiusAtom,
   clickedPlaceAtom,
   keywordAtom,
-  queryLatLngAtom,
   searchTypeAtom,
   showResultsAtom,
   showSearchOptionsAtom,
@@ -30,13 +29,18 @@ interface Props {
   ) => Promise<QueryObserverResult<InfiniteData<NearbySearchResult>, unknown>>;
   sortBy: SortOptions;
   setSortBy: Dispatch<SetStateAction<SortOptions>>;
+  queryLatLng: google.maps.LatLngLiteral;
 }
 
-export default function ResultsForm({ refetch, sortBy, setSortBy }: Props) {
+export default function ResultsForm({
+  refetch,
+  sortBy,
+  setSortBy,
+  queryLatLng,
+}: Props) {
   const [radius, setRadius] = useAtom(radiusAtom);
   const [, setClickedPlace] = useAtom(clickedPlaceAtom);
   const [keyword, setKeyword] = useAtom(keywordAtom);
-  const [queryLatLng] = useAtom(queryLatLngAtom);
   const [, setSearchType] = useAtom(searchTypeAtom);
   const [showSearchOptions, setShowSearchOptions] = useAtom(
     showSearchOptionsAtom

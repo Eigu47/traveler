@@ -21,7 +21,3 @@ export const searchTypeAtom = atom<SearchTypes>("tourist_attraction");
 export const showSearchOptionsAtom = atom(true);
 
 export const allResultsAtom = atom<Result[]>([]);
-
-export const queryLatLngAtom = atom<google.maps.LatLngLiteral | undefined>(
-  undefined
-);

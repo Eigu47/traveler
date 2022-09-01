@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import ResultsCard from "./ResultsCard";
 import { SortOptions, sortResults } from "./ResultsUtil";
 import Image from "next/image";
@@ -8,20 +8,20 @@ import { useAtom } from "jotai";
 import {
   allResultsAtom,
   clickedPlaceAtom,
-  queryLatLngAtom,
   searchbarOnFocusAtom,
   showResultsAtom,
   showSearchOptionsAtom,
 } from "../../utils/store";
 import { useGetFavorites, useGetResults } from "../../utils/useQueryHooks";
 
-interface Props {}
-
-export default function Results({}: Props) {
+interface Props {
+  queryLatLng: google.maps.LatLngLiteral;
+  showFavorites: boolean;
+}
+export default function Results({ queryLatLng, showFavorites }: Props) {
   const [sortBy, setSortBy] = useState<SortOptions>("relevance");
   const [, setShowSearchOptions] = useAtom(showSearchOptionsAtom);
-  const [allResults] = useAtom(allResultsAtom);
-  const [queryLatLng] = useAtom(queryLatLngAtom);
+  const [allResults, setAllResults] = useAtom(allResultsAtom);
   const [clickedPlace] = useAtom(clickedPlaceAtom);
   const [searchbarOnFocus] = useAtom(searchbarOnFocusAtom);
   const [showResults, setShowResults] = useAtom(showResultsAtom);
@@ -34,17 +34,12 @@ export default function Results({}: Props) {
     fetchNextPage,
     hasNextPage,
     isError,
-  } = useGetResults();
+  } = useGetResults(queryLatLng);
 
-  const { data: favoritesData } = useGetFavorites();
-
-  const favoritesId = useMemo(
-    () => favoritesData?.favorites?.flatMap((fav) => fav.place_id),
-    [favoritesData]
-  );
-
+  const { response, favoritesId } = useGetFavorites();
+  // Handles dropdown menus
   useEffect(() => {
-    if (clickedPlace) {
+    if (clickedPlace || showFavorites) {
       setShowSearchOptions(false);
       setShowResults(true);
     }
@@ -53,19 +48,14 @@ export default function Results({}: Props) {
       setShowResults(false);
       setShowSearchOptions(false);
     }
-
-    if (allResults.length < 0 && !clickedPlace) setShowResults(false);
+    // if (allResults.length === 0 && !clickedPlace) setShowResults(false);
   }, [
     searchbarOnFocus,
     clickedPlace,
-    allResults.length,
     setShowResults,
     setShowSearchOptions,
+    showFavorites,
   ]);
-
-  useEffect(() => {
-    if (queryLatLng) refetch();
-  }, [queryLatLng, refetch]);
 
   return (
     <aside
@@ -73,7 +63,12 @@ export default function Results({}: Props) {
       ${showResults ? "max-h-[256px]" : "max-h-[24px]"}
       `}
     >
-      <ResultsForm refetch={refetch} sortBy={sortBy} setSortBy={setSortBy} />
+      <ResultsForm
+        refetch={refetch}
+        sortBy={sortBy}
+        setSortBy={setSortBy}
+        queryLatLng={queryLatLng}
+      />
       {allResults.length > 0 && (
         <div className="mx-1 flex w-full flex-row overflow-x-auto overflow-y-hidden pt-3 md:m-[12px_8px_12px_4px] md:w-auto md:flex-col md:space-y-5 md:overflow-y-auto md:overflow-x-hidden md:py-2">
           {(!isFetching || isFetchingNextPage) &&
@@ -136,6 +131,9 @@ export default function Results({}: Props) {
         <p className="my-auto w-full text-center text-2xl">
           Something went wrong...
         </p>
+      )}
+      {showFavorites && !allResults.length && (
+        <p className="my-auto w-full text-center text-2xl">No favorites yet</p>
       )}
     </aside>
   );

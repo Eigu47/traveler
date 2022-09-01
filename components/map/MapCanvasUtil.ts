@@ -1,20 +1,26 @@
-import { SetStateAction, useAtom } from "jotai";
-import { NextRouter } from "next/router";
-import { Dispatch, useRef, useEffect, useCallback } from "react";
+import { useAtom } from "jotai";
+import { NextRouter, useRouter } from "next/router";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { Result } from "../../types/NearbySearchResult";
-import { allResultsAtom, selectedPlaceAtom } from "../../utils/store";
+import {
+  allResultsAtom,
+  clickedPlaceAtom,
+  selectedPlaceAtom,
+  showResultsAtom,
+  showSearchOptionsAtom,
+} from "../../utils/store";
 
-type DispatchCenterMenu = Dispatch<
-  SetStateAction<google.maps.LatLngLiteral | undefined>
->;
-
-export default function useMapCanvasUtil(setCenterMenu: DispatchCenterMenu) {
+// Handles clicks and long taps in the map
+export function useHandleMouseEventsInMap() {
+  const router = useRouter();
+  const [searchButton, setSearchButton] = useState<google.maps.LatLngLiteral>();
   const [, setSelectedPlace] = useAtom(selectedPlaceAtom);
+  const [allResults, setAllResults] = useAtom(allResultsAtom);
   const timerRef = useRef<NodeJS.Timeout>();
 
   function startPressTimer({ lat, lng }: google.maps.LatLngLiteral) {
     timerRef.current = setTimeout(() => {
-      setCenterMenu({ lat, lng });
+      setSearchButton({ lat, lng });
       timerRef.current = undefined;
     }, 500);
   }
@@ -32,9 +38,9 @@ export default function useMapCanvasUtil(setCenterMenu: DispatchCenterMenu) {
 
   const clearOverlay = useCallback(
     (e?: MouseEvent) => {
-      if (!e) setCenterMenu(undefined);
+      if (!e) setSearchButton(undefined);
 
-      if (e && timerRef.current) setCenterMenu(undefined);
+      if (e && timerRef.current) setSearchButton(undefined);
 
       if (
         (e?.target as HTMLElement)?.nodeName === "IMG" ||
@@ -47,8 +53,35 @@ export default function useMapCanvasUtil(setCenterMenu: DispatchCenterMenu) {
       setSelectedPlace(undefined);
     },
 
-    [setCenterMenu, setSelectedPlace]
+    [setSearchButton, setSelectedPlace]
   );
+
+  function handleClickOnMarker(places: Result) {
+    if (allResults.some((result) => result.place_id === places.place_id))
+      return;
+
+    setAllResults([places, ...allResults]);
+  }
+
+  function handleRightClickOnMap(e: google.maps.MapMouseEvent) {
+    setSearchButton({
+      lat: e.latLng?.lat() ?? 0,
+      lng: e.latLng?.lng() ?? 0,
+    });
+  }
+
+  function handleSearchButton() {
+    if (searchButton) {
+      router.replace({
+        pathname: "map",
+        query: {
+          lat: searchButton?.lat,
+          lng: searchButton?.lng,
+        },
+      });
+    }
+    setSearchButton(undefined);
+  }
 
   useEffect(() => {
     window.addEventListener("click", clearOverlay);
@@ -56,7 +89,57 @@ export default function useMapCanvasUtil(setCenterMenu: DispatchCenterMenu) {
     return () => window.removeEventListener("click", clearOverlay);
   }, [clearOverlay]);
 
-  return { handleMouseDown, handleMouseUp, clearOverlay };
+  return {
+    searchButton,
+    handleMouseDown,
+    handleMouseUp,
+    clearOverlay,
+    handleClickOnMarker,
+    handleRightClickOnMap,
+    handleSearchButton,
+  };
+}
+// Handles url query changes
+export function useHandleQueryChanges(queryLatLng: google.maps.LatLngLiteral) {
+  const router = useRouter();
+  const mapRef = useRef<google.maps.Map>();
+  const [allResults, setAllResults] = useAtom(allResultsAtom);
+  const [selectedPlace, setSelectedPlace] = useAtom(selectedPlaceAtom);
+  const [, setClickedPlace] = useAtom(clickedPlaceAtom);
+  const [showResults, setShowResults] = useAtom(showResultsAtom);
+  const [, setShowSearchOptions] = useAtom(showSearchOptionsAtom);
+
+  // Runs every time url query changes
+  useEffect(() => {
+    if (!queryLatLng) return;
+    // Re center map
+    mapRef.current?.panTo(queryLatLng);
+    setClickedPlace(undefined);
+    if (mapRef.current?.getZoom() ?? 12 < 12) mapRef.current?.setZoom(13);
+    // Reset results
+    setAllResults([]);
+    setShowResults(true);
+    // Close search options in mobile
+    if (window?.innerWidth < 768) setShowSearchOptions(false);
+    //
+  }, [
+    queryLatLng,
+    setClickedPlace,
+    setAllResults,
+    setShowResults,
+    setShowSearchOptions,
+  ]);
+
+  return {
+    router,
+    mapRef,
+    allResults,
+    queryLatLng,
+    selectedPlace,
+    setSelectedPlace,
+    setClickedPlace,
+    showResults,
+  };
 }
 
 export function getCurrentPosition(router: NextRouter) {
@@ -66,44 +149,6 @@ export function getCurrentPosition(router: NextRouter) {
       query: { lat: pos.coords.latitude, lng: pos.coords.longitude },
     });
   });
-}
-
-export function handleRightClick(
-  e: google.maps.MapMouseEvent,
-  setCenterMenu: DispatchCenterMenu
-) {
-  setCenterMenu({
-    lat: e.latLng?.lat() ?? 0,
-    lng: e.latLng?.lng() ?? 0,
-  });
-}
-
-export function handleCenterMenu(
-  centerMenu: google.maps.LatLngLiteral | undefined,
-  router: NextRouter,
-  setCenterMenu: DispatchCenterMenu
-) {
-  if (centerMenu) {
-    router.replace({
-      pathname: "map",
-      query: {
-        lat: centerMenu?.lat,
-        lng: centerMenu?.lng,
-      },
-    });
-  }
-  setCenterMenu(undefined);
-}
-
-export function useHandleClickMarker() {
-  const [allResults, setAllResults] = useAtom(allResultsAtom);
-
-  return (places: Result) => {
-    if (allResults.some((result) => result.place_id === places.place_id))
-      return;
-
-    setAllResults([places, ...allResults]);
-  };
 }
 
 export const DEFAULT_CENTER = {

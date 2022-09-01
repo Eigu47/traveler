@@ -1,57 +1,82 @@
 import MapCanvas from "../components/map/MapCanvas";
 import Results from "../components/map/Results";
-import { HiMenu, HiX } from "react-icons/hi";
-import { useAtom } from "jotai";
-import { showHamburgerAtom, showSearchOptionsAtom } from "../utils/store";
 import Image from "next/image";
+import { QueryClient, dehydrate } from "@tanstack/react-query";
+import { GetServerSideProps } from "next";
+import { fetchResults, getFavorites } from "../utils/useQueryHooks";
+import { unstable_getServerSession } from "next-auth/next";
+import { authOptions } from "../pages/api/auth/[...nextauth]";
 
-export default function Map({ isLoaded }: { isLoaded: boolean }) {
-  const [showHamburger, setShowHamburger] = useAtom(showHamburgerAtom);
-  const [, setShowSearchOptions] = useAtom(showSearchOptionsAtom);
+interface Props {
+  isLoaded: boolean;
+  queryLatLng: google.maps.LatLngLiteral;
+  showFavorites: boolean;
+}
 
+export default function Map({ isLoaded, queryLatLng, showFavorites }: Props) {
   return (
-    <>
-      <nav>
-        <button
-          className={`fixed right-2 top-2 z-20 rounded-full p-3 text-slate-100 duration-100 sm:hidden ${
-            showHamburger ? "bg-transparent" : "bg-blue-700"
-          }`}
-          onClick={() => {
-            if (!showHamburger) setShowSearchOptions(false);
-            setShowHamburger((prev) => !prev);
-          }}
-        >
-          <HiMenu
-            className={`absolute text-4xl duration-300 ${
-              showHamburger
-                ? "-rotate-180 scale-0 opacity-0"
-                : "rotate-180 scale-100 opacity-100"
-            }`}
-          />
-          <HiX
-            className={`text-4xl duration-300 ${
-              showHamburger
-                ? "-rotate-180 scale-100 opacity-100"
-                : "rotate-180 scale-0 opacity-0"
-            }`}
-          />
-        </button>
-      </nav>
-      <main className="relative flex h-full max-w-full flex-row sm:top-14 sm:h-[calc(100%-56px)] md:h-[calc(100%-56px)]">
-        <Results />
-        {isLoaded ? (
-          <MapCanvas />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center bg-[#e5e3df]">
-            <Image
-              src="/loading.svg"
-              alt="Loading..."
-              height={200}
-              width={200}
-            />
-          </div>
-        )}
-      </main>
-    </>
+    <main className="relative flex h-full max-w-full flex-row sm:top-14 sm:h-[calc(100%-56px)] md:h-[calc(100%-56px)]">
+      <Results queryLatLng={queryLatLng} showFavorites={showFavorites} />
+      {isLoaded ? (
+        <MapCanvas queryLatLng={queryLatLng} showFavorites={showFavorites} />
+      ) : (
+        <div className="flex h-full w-full items-center justify-center bg-[#e5e3df]">
+          <Image src="/loading.svg" alt="Loading..." height={200} width={200} />
+        </div>
+      )}
+    </main>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async ({
+  query,
+  req,
+  res,
+}) => {
+  const queryClient = new QueryClient();
+
+  if (query.lat && query.lng && !isNaN(+query.lat) && !isNaN(+query.lng)) {
+    const queryLatLng = { lat: +query.lat, lng: +query.lng };
+
+    await queryClient.prefetchInfiniteQuery(
+      ["nearby", queryLatLng],
+      ({ pageParam = undefined }) => fetchResults(queryLatLng, pageParam),
+      {
+        getNextPageParam: (lastPage) => {
+          return lastPage?.next_page_token;
+        },
+      }
+    );
+    return {
+      props: {
+        dehydratedState: dehydrate(queryClient),
+        queryLatLng,
+        showFavorites: null,
+      },
+    };
+  }
+
+  const session = await unstable_getServerSession(req, res, authOptions);
+
+  if (query.favs) {
+    const userId = (session?.user as { _id: string | null })?._id;
+
+    await queryClient.prefetchQuery(["favorites", userId], () =>
+      getFavorites(userId)
+    );
+    return {
+      props: {
+        dehydratedState: dehydrate(queryClient),
+        queryLatLng: null,
+        showFavorites: true,
+      },
+    };
+  }
+
+  return {
+    props: {
+      queryLatLng: null,
+      showFavorites: null,
+    },
+  };
+};

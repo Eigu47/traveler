@@ -4,6 +4,7 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
+import { useMemo } from "react";
 import axios from "axios";
 import { useAtom } from "jotai";
 import { useSession } from "next-auth/react";
@@ -16,7 +17,6 @@ import {
 import {
   allResultsAtom,
   keywordAtom,
-  queryLatLngAtom,
   radiusAtom,
   searchTypeAtom,
 } from "./store";
@@ -46,8 +46,7 @@ export async function fetchResults(
   return res.data as NearbySearchResult;
 }
 
-export function useGetResults() {
-  const [queryLatLng] = useAtom(queryLatLngAtom);
+export function useGetResults(queryLatLng: google.maps.LatLngLiteral) {
   const [radius] = useAtom(radiusAtom);
   const [, setAllResults] = useAtom(allResultsAtom);
   const [keyword] = useAtom(keywordAtom);
@@ -86,12 +85,25 @@ export async function getFavorites(userId: string | null) {
 }
 
 export function useGetFavorites() {
+  const [, setAllResults] = useAtom(allResultsAtom);
   const { data: session } = useSession();
   const userId = (session?.user as { _id: string | null })?._id;
 
-  return useQuery(["favorites", userId], () => getFavorites(userId), {
-    enabled: !!session,
+  const response = useQuery(["favorites", userId], () => getFavorites(userId), {
+    // onSuccess: (data) => {
+    //   setAllResults(data.favorites ?? []);
+    // },
   });
+
+  const favoritesId = useMemo(
+    () => response?.data?.favorites?.flatMap((fav) => fav.place_id),
+    [response?.data?.favorites]
+  );
+
+  return {
+    response,
+    favoritesId,
+  };
 }
 
 export async function handleFavorites(
@@ -137,7 +149,7 @@ export function useFavorites() {
   const queryClient = useQueryClient();
   const { data: session } = useSession();
   const userId = (session?.user as { _id: string | null })?._id;
-
+  // Optimistic update
   return useMutation(
     ({ place, isFavorited }: Props) =>
       handleFavorites(place, isFavorited, userId),
@@ -153,14 +165,14 @@ export function useFavorites() {
         ]);
         // Optimistically update to the new value
         if (prevData?.favorites) {
-          // Adding to fav case:
+          // Adding case:
           if (!isFavorited) {
             queryClient.setQueryData<FavoritesData>(["favorites", userId], {
               ...prevData,
               favorites: [...prevData.favorites, place],
             });
           }
-          // Removing from fav case:
+          // Removing case:
           if (isFavorited) {
             queryClient.setQueryData<FavoritesData>(["favorites", userId], {
               ...prevData,
