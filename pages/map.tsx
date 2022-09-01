@@ -1,11 +1,7 @@
 import MapCanvas from "../components/map/MapCanvas";
 import Results from "../components/map/Results";
 import Image from "next/image";
-import { QueryClient, dehydrate } from "@tanstack/react-query";
 import { GetServerSideProps } from "next";
-import { fetchResults, getFavorites } from "../utils/useQueryHooks";
-import { unstable_getServerSession } from "next-auth/next";
-import { authOptions } from "../pages/api/auth/[...nextauth]";
 
 interface Props {
   isLoaded: boolean;
@@ -28,50 +24,25 @@ export default function Map({ isLoaded, queryLatLng, showFavorites }: Props) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async ({
-  query,
-  req,
-  res,
-}) => {
-  const queryClient = new QueryClient();
-
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   if (query.lat && query.lng && !isNaN(+query.lat) && !isNaN(+query.lng)) {
     const queryLatLng = { lat: +query.lat, lng: +query.lng };
 
-    await queryClient.prefetchInfiniteQuery(
-      ["nearby", queryLatLng],
-      ({ pageParam = undefined }) => fetchResults(queryLatLng, pageParam),
-      {
-        getNextPageParam: (lastPage) => {
-          return lastPage?.next_page_token;
-        },
-      }
-    );
     return {
       props: {
-        dehydratedState: dehydrate(queryClient),
         queryLatLng,
         showFavorites: null,
       },
     };
   }
 
-  const session = await unstable_getServerSession(req, res, authOptions);
-
-  if (query.favs) {
-    const userId = (session?.user as { _id: string | null })?._id;
-
-    await queryClient.prefetchQuery(["favorites", userId], () =>
-      getFavorites(userId)
-    );
+  if (query.favs)
     return {
       props: {
-        dehydratedState: dehydrate(queryClient),
         queryLatLng: null,
         showFavorites: true,
       },
     };
-  }
 
   return {
     props: {

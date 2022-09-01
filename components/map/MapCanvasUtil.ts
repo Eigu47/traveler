@@ -5,6 +5,7 @@ import { Result } from "../../types/NearbySearchResult";
 import {
   allResultsAtom,
   clickedPlaceAtom,
+  searchbarOnFocusAtom,
   selectedPlaceAtom,
   showResultsAtom,
   showSearchOptionsAtom,
@@ -14,7 +15,7 @@ import {
 export function useHandleMouseEventsInMap() {
   const router = useRouter();
   const [searchButton, setSearchButton] = useState<google.maps.LatLngLiteral>();
-  const [, setSelectedPlace] = useAtom(selectedPlaceAtom);
+  const [selectedPlace, setSelectedPlace] = useAtom(selectedPlaceAtom);
   const [allResults, setAllResults] = useAtom(allResultsAtom);
   const timerRef = useRef<NodeJS.Timeout>();
 
@@ -97,20 +98,29 @@ export function useHandleMouseEventsInMap() {
     handleClickOnMarker,
     handleRightClickOnMap,
     handleSearchButton,
+    selectedPlace,
+    setSelectedPlace,
   };
 }
 // Handles url query changes
-export function useHandleQueryChanges(queryLatLng: google.maps.LatLngLiteral) {
-  const router = useRouter();
+export function useHandleQueryChanges(
+  queryLatLng: google.maps.LatLngLiteral,
+  showFavorites: boolean
+) {
   const mapRef = useRef<google.maps.Map>();
   const [allResults, setAllResults] = useAtom(allResultsAtom);
-  const [selectedPlace, setSelectedPlace] = useAtom(selectedPlaceAtom);
-  const [, setClickedPlace] = useAtom(clickedPlaceAtom);
+  const [clickedPlace, setClickedPlace] = useAtom(clickedPlaceAtom);
   const [showResults, setShowResults] = useAtom(showResultsAtom);
   const [, setShowSearchOptions] = useAtom(showSearchOptionsAtom);
+  const [searchbarOnFocus] = useAtom(searchbarOnFocusAtom);
 
   // Runs every time url query changes
   useEffect(() => {
+    if (showFavorites) {
+      setShowSearchOptions(false);
+      setShowResults(true);
+      return;
+    }
     if (!queryLatLng) return;
     // Re center map
     mapRef.current?.panTo(queryLatLng);
@@ -121,22 +131,33 @@ export function useHandleQueryChanges(queryLatLng: google.maps.LatLngLiteral) {
     setShowResults(true);
     // Close search options in mobile
     if (window?.innerWidth < 768) setShowSearchOptions(false);
-    //
   }, [
     queryLatLng,
     setClickedPlace,
     setAllResults,
     setShowResults,
     setShowSearchOptions,
+    showFavorites,
   ]);
+  // Handles dropdown menus interaction
+  useEffect(() => {
+    if (searchbarOnFocus) {
+      setShowResults(false);
+      setShowSearchOptions(false);
+      return;
+    }
+    if (clickedPlace) {
+      setShowSearchOptions(false);
+      setShowResults(true);
+      return;
+    }
+    // if (allResults.length === 0 && !clickedPlace) setShowResults(false);
+  }, [searchbarOnFocus, clickedPlace, setShowResults, setShowSearchOptions]);
 
   return {
-    router,
     mapRef,
     allResults,
     queryLatLng,
-    selectedPlace,
-    setSelectedPlace,
     setClickedPlace,
     showResults,
   };

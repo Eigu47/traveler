@@ -1,16 +1,21 @@
 import { useAtom } from "jotai";
 import Link from "next/link";
-import { showHamburgerAtom } from "../../utils/store";
+import { allResultsAtom, showHamburgerAtom } from "../../utils/store";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
 import { NavbarLink } from "./NavbarLink";
 import NavbarMenuButton from "./NavbarMenuButton";
 import { useRouter } from "next/router";
+import { useGetFavorites } from "../../utils/useQueryHooks";
 
 export default function Navbar() {
   const [showHamburger, setShowHamburger] = useAtom(showHamburgerAtom);
+  const [, setAllResults] = useAtom(allResultsAtom);
   const router = useRouter();
   const { data: session } = useSession();
+  const {
+    response: { data: favoritesData },
+  } = useGetFavorites();
 
   return (
     <>
@@ -34,6 +39,7 @@ export default function Navbar() {
                 pathname: "/map",
                 query: { favs: true },
               }}
+              onClick={() => setAllResults(favoritesData?.favorites ?? [])}
             />
           )}
           <NavbarLink name="About" href="/" />

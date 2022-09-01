@@ -46,7 +46,9 @@ export async function fetchResults(
   return res.data as NearbySearchResult;
 }
 
-export function useGetResults(queryLatLng: google.maps.LatLngLiteral) {
+export function useGetResults(
+  queryLatLng: google.maps.LatLngLiteral | undefined
+) {
   const [radius] = useAtom(radiusAtom);
   const [, setAllResults] = useAtom(allResultsAtom);
   const [keyword] = useAtom(keywordAtom);
@@ -57,7 +59,7 @@ export function useGetResults(queryLatLng: google.maps.LatLngLiteral) {
     ({ pageParam = undefined }) =>
       fetchResults(queryLatLng, pageParam, radius, keyword, searchType),
     {
-      enabled: false,
+      enabled: !!queryLatLng,
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
       refetchOnMount: false,
@@ -85,14 +87,11 @@ export async function getFavorites(userId: string | null) {
 }
 
 export function useGetFavorites() {
-  const [, setAllResults] = useAtom(allResultsAtom);
   const { data: session } = useSession();
   const userId = (session?.user as { _id: string | null })?._id;
 
   const response = useQuery(["favorites", userId], () => getFavorites(userId), {
-    // onSuccess: (data) => {
-    //   setAllResults(data.favorites ?? []);
-    // },
+    enabled: !!userId,
   });
 
   const favoritesId = useMemo(

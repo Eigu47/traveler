@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import ResultsCard from "./ResultsCard";
 import { SortOptions, sortResults } from "./ResultsUtil";
 import Image from "next/image";
@@ -8,9 +8,7 @@ import { useAtom } from "jotai";
 import {
   allResultsAtom,
   clickedPlaceAtom,
-  searchbarOnFocusAtom,
   showResultsAtom,
-  showSearchOptionsAtom,
 } from "../../utils/store";
 import { useGetFavorites, useGetResults } from "../../utils/useQueryHooks";
 
@@ -20,11 +18,10 @@ interface Props {
 }
 export default function Results({ queryLatLng, showFavorites }: Props) {
   const [sortBy, setSortBy] = useState<SortOptions>("relevance");
-  const [, setShowSearchOptions] = useAtom(showSearchOptionsAtom);
-  const [allResults, setAllResults] = useAtom(allResultsAtom);
+  const [allResults] = useAtom(allResultsAtom);
   const [clickedPlace] = useAtom(clickedPlaceAtom);
-  const [searchbarOnFocus] = useAtom(searchbarOnFocusAtom);
   const [showResults, setShowResults] = useAtom(showResultsAtom);
+  const { favoritesId } = useGetFavorites();
 
   const {
     data,
@@ -35,27 +32,6 @@ export default function Results({ queryLatLng, showFavorites }: Props) {
     hasNextPage,
     isError,
   } = useGetResults(queryLatLng);
-
-  const { response, favoritesId } = useGetFavorites();
-  // Handles dropdown menus
-  useEffect(() => {
-    if (clickedPlace || showFavorites) {
-      setShowSearchOptions(false);
-      setShowResults(true);
-    }
-
-    if (searchbarOnFocus) {
-      setShowResults(false);
-      setShowSearchOptions(false);
-    }
-    // if (allResults.length === 0 && !clickedPlace) setShowResults(false);
-  }, [
-    searchbarOnFocus,
-    clickedPlace,
-    setShowResults,
-    setShowSearchOptions,
-    showFavorites,
-  ]);
 
   return (
     <aside
