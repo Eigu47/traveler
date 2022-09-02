@@ -91,6 +91,15 @@ export function useHandleMouseEventsInMap() {
     return () => window.removeEventListener("click", clearOverlay);
   }, [clearOverlay]);
 
+  function getCurrentPosition() {
+    navigator?.geolocation?.getCurrentPosition((pos) => {
+      router.replace({
+        pathname: "/map",
+        query: { lat: pos.coords.latitude, lng: pos.coords.longitude },
+      });
+    });
+  }
+
   return {
     searchButton,
     handleMouseDown,
@@ -101,6 +110,7 @@ export function useHandleMouseEventsInMap() {
     handleSearchButton,
     selectedPlace,
     setSelectedPlace,
+    getCurrentPosition,
   };
 }
 // Handles url query changes
@@ -116,11 +126,23 @@ export function useHandleQueryChanges(
   const [searchbarOnFocus] = useAtom(searchbarOnFocusAtom);
   const { response } = useGetFavorites();
   const wasPreviousFavorite = useRef(false);
+  const [currentPosition, setCurrentPosition] =
+    useState<google.maps.LatLngLiteral>();
 
   // Runs every time url query changes
   useEffect(() => {
-    if (!queryLatLng) return;
+    // Triggers only on /map
+    if (!showFavorites && !queryLatLng) {
+      navigator?.geolocation?.getCurrentPosition((pos) => {
+        setCurrentPosition({
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
+        });
+      });
+      return;
+    }
     // Re center map
+    if (!queryLatLng) return;
     mapRef.current?.panTo(queryLatLng);
     setClickedPlace(undefined);
     if (mapRef.current?.getZoom() ?? 12 < 12) mapRef.current?.setZoom(13);
@@ -131,15 +153,15 @@ export function useHandleQueryChanges(
     if (window?.innerWidth < 768) setShowSearchOptions(false);
   }, [
     queryLatLng,
-    setClickedPlace,
     setAllResults,
     setShowResults,
     setShowSearchOptions,
+    setClickedPlace,
     showFavorites,
   ]);
-  // Only runs and sets favorites as result once per run
+  // Only runs once when query changes to favorites
   useEffect(() => {
-    if (showFavorites) {
+    if (showFavorites && !queryLatLng) {
       setShowSearchOptions(false);
       setShowResults(true);
 
@@ -152,11 +174,12 @@ export function useHandleQueryChanges(
     }
     wasPreviousFavorite.current = false;
   }, [
-    showFavorites,
-    setShowSearchOptions,
-    setShowResults,
     response?.data?.favorites,
     setAllResults,
+    setShowResults,
+    setShowSearchOptions,
+    showFavorites,
+    queryLatLng,
   ]);
   // Handles dropdown menus interaction
   useEffect(() => {
@@ -171,7 +194,7 @@ export function useHandleQueryChanges(
       return;
     }
     // if (allResults.length === 0 && !clickedPlace) setShowResults(false);
-  }, [searchbarOnFocus, clickedPlace, setShowResults, setShowSearchOptions]);
+  }, [setShowSearchOptions, setShowResults, searchbarOnFocus, clickedPlace]);
 
   return {
     mapRef,
@@ -179,16 +202,8 @@ export function useHandleQueryChanges(
     queryLatLng,
     setClickedPlace,
     showResults,
+    currentPosition,
   };
-}
-
-export function getCurrentPosition(router: NextRouter) {
-  navigator?.geolocation?.getCurrentPosition((pos) => {
-    router.replace({
-      pathname: "/map",
-      query: { lat: pos.coords.latitude, lng: pos.coords.longitude },
-    });
-  });
 }
 
 export const DEFAULT_CENTER = {
