@@ -3,7 +3,6 @@ import { MdGpsFixed } from "react-icons/md";
 import SearchBar from "./MapCanvasSearchBar";
 import {
   DEFAULT_CENTER,
-  getCurrentPosition,
   useHandleMouseEventsInMap,
   useHandleQueryChanges,
 } from "./MapCanvasUtil";
@@ -20,9 +19,7 @@ interface Props {
 }
 
 export default function MapCanvas({ queryLatLng, showFavorites }: Props) {
-  const router = useRouter();
-
-  const { mapRef, allResults, setClickedPlace, showResults } =
+  const { mapRef, allResults, setClickedPlace, showResults, currentPosition } =
     useHandleQueryChanges(queryLatLng, showFavorites);
 
   const {
@@ -35,6 +32,7 @@ export default function MapCanvas({ queryLatLng, showFavorites }: Props) {
     handleSearchButton,
     selectedPlace,
     setSelectedPlace,
+    getCurrentPosition,
   } = useHandleMouseEventsInMap();
 
   const {
@@ -46,7 +44,7 @@ export default function MapCanvas({ queryLatLng, showFavorites }: Props) {
     <section className="relative h-full w-full bg-[#e5e3df]">
       <GoogleMap
         zoom={queryLatLng ? 13 : 10}
-        center={queryLatLng ?? DEFAULT_CENTER}
+        center={queryLatLng ?? currentPosition ?? DEFAULT_CENTER}
         mapContainerClassName="h-full w-full"
         onLoad={(map) => {
           mapRef.current = map;
@@ -56,7 +54,7 @@ export default function MapCanvas({ queryLatLng, showFavorites }: Props) {
           disableDefaultUI: true,
           clickableIcons: false,
         }}
-        onRightClick={(e) => handleRightClickOnMap(e)}
+        onRightClick={handleRightClickOnMap}
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
         onCenterChanged={() => {
@@ -106,7 +104,7 @@ export default function MapCanvas({ queryLatLng, showFavorites }: Props) {
       </GoogleMap>
       <SearchBar />
       <button
-        onClick={() => getCurrentPosition(router)}
+        onClick={getCurrentPosition}
         className={`fixed right-4 rounded-lg bg-white p-1 text-4xl text-gray-600 shadow-md ring-1 ring-black/20 duration-300 hover:text-black sm:bottom-6 md:transition-none ${
           showResults ? "bottom-72" : "bottom-12"
         }`}
