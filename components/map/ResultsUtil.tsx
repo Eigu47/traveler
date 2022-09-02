@@ -19,24 +19,6 @@ export function getDistance(
   return d;
 }
 
-export function addDistance(
-  results: Result[],
-  queryLatLng?: google.maps.LatLngLiteral
-) {
-  if (!queryLatLng) return results;
-
-  const distanceAdded = results.map((res) => {
-    const distance = getDistance(res.geometry.location, queryLatLng);
-
-    return {
-      ...res,
-      distance,
-    };
-  });
-
-  return distanceAdded;
-}
-
 export function sortResults(results: Result[], sortBy: SortOptions) {
   if (sortBy === "rating") {
     return [...results]

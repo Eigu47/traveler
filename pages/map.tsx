@@ -2,7 +2,6 @@ import MapCanvas from "../components/map/MapCanvas";
 import Results from "../components/map/Results";
 import Image from "next/image";
 import { GetServerSideProps } from "next";
-
 interface Props {
   isLoaded: boolean;
   queryLatLng: google.maps.LatLngLiteral;
@@ -25,29 +24,16 @@ export default function Map({ isLoaded, queryLatLng, showFavorites }: Props) {
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  let queryLatLng: google.maps.LatLngLiteral | null = null;
+
   if (query.lat && query.lng && !isNaN(+query.lat) && !isNaN(+query.lng)) {
-    const queryLatLng = { lat: +query.lat, lng: +query.lng };
-
-    return {
-      props: {
-        queryLatLng,
-        showFavorites: null,
-      },
-    };
+    queryLatLng = { lat: +query.lat, lng: +query.lng };
   }
-
-  if (query.favs)
-    return {
-      props: {
-        queryLatLng: null,
-        showFavorites: true,
-      },
-    };
 
   return {
     props: {
-      queryLatLng: null,
-      showFavorites: null,
+      showFavorites: !!query.favs,
+      queryLatLng,
     },
   };
 };

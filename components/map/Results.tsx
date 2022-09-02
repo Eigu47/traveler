@@ -100,7 +100,7 @@ export default function Results({ queryLatLng, showFavorites }: Props) {
           <Image src="/loading.svg" alt="Loading..." height={150} width={150} />
         </div>
       )}
-      {!isFetching && data?.pages[0]?.results.length === 0 && (
+      {!isFetching && data?.pages[0]?.results?.length === 0 && (
         <p className="my-auto w-full text-center text-2xl">No results found</p>
       )}
       {isError && (

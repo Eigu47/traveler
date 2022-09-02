@@ -8,7 +8,6 @@ import { useMemo } from "react";
 import axios from "axios";
 import { useAtom } from "jotai";
 import { useSession } from "next-auth/react";
-import { addDistance } from "../components/map/ResultsUtil";
 import {
   FavoritesData,
   NearbySearchResult,
@@ -67,8 +66,7 @@ export function useGetResults(
         return lastPage?.next_page_token;
       },
       onSuccess: (data) => {
-        const allData = data.pages.flatMap((pages) => pages?.results);
-        setAllResults(addDistance(allData, queryLatLng));
+        setAllResults(data.pages.flatMap((pages) => pages?.results));
       },
     }
   );

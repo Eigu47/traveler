@@ -10,6 +10,7 @@ import {
   showResultsAtom,
   showSearchOptionsAtom,
 } from "../../utils/store";
+import { useGetFavorites } from "../../utils/useQueryHooks";
 
 // Handles clicks and long taps in the map
 export function useHandleMouseEventsInMap() {
@@ -113,14 +114,11 @@ export function useHandleQueryChanges(
   const [showResults, setShowResults] = useAtom(showResultsAtom);
   const [, setShowSearchOptions] = useAtom(showSearchOptionsAtom);
   const [searchbarOnFocus] = useAtom(searchbarOnFocusAtom);
+  const { response } = useGetFavorites();
+  const wasPreviousFavorite = useRef(false);
 
   // Runs every time url query changes
   useEffect(() => {
-    if (showFavorites) {
-      setShowSearchOptions(false);
-      setShowResults(true);
-      return;
-    }
     if (!queryLatLng) return;
     // Re center map
     mapRef.current?.panTo(queryLatLng);
@@ -138,6 +136,27 @@ export function useHandleQueryChanges(
     setShowResults,
     setShowSearchOptions,
     showFavorites,
+  ]);
+  // Only runs and sets favorites as result once per run
+  useEffect(() => {
+    if (showFavorites) {
+      setShowSearchOptions(false);
+      setShowResults(true);
+
+      if (!wasPreviousFavorite.current) {
+        setAllResults(response?.data?.favorites ?? []);
+        wasPreviousFavorite.current = true;
+        return;
+      }
+      return;
+    }
+    wasPreviousFavorite.current = false;
+  }, [
+    showFavorites,
+    setShowSearchOptions,
+    setShowResults,
+    response?.data?.favorites,
+    setAllResults,
   ]);
   // Handles dropdown menus interaction
   useEffect(() => {
