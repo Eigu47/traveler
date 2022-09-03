@@ -6,8 +6,8 @@ import ResultsForm from "./ResultsForm";
 import { FiChevronDown } from "react-icons/fi";
 import { useAtom } from "jotai";
 import {
-  allResultsAtom,
   clickedPlaceAtom,
+  favoritesListAtom,
   showResultsAtom,
 } from "../../utils/store";
 import { useGetFavorites, useGetResults } from "../../utils/useQueryHooks";
@@ -18,19 +18,25 @@ interface Props {
 }
 export default function Results({ queryLatLng, showFavorites }: Props) {
   const [sortBy, setSortBy] = useState<SortOptions>("relevance");
-  const [allResults] = useAtom(allResultsAtom);
   const [clickedPlace] = useAtom(clickedPlaceAtom);
   const [showResults, setShowResults] = useAtom(showResultsAtom);
-  const { favoritesId } = useGetFavorites();
+  const [favoritesList] = useAtom(favoritesListAtom);
+  const {
+    response: { data: favoritesData },
+    favoritesId,
+  } = useGetFavorites();
 
   const {
-    data,
-    refetch,
-    isFetching,
-    isFetchingNextPage,
-    fetchNextPage,
-    hasNextPage,
-    isError,
+    response: {
+      data,
+      refetch,
+      isFetching,
+      isFetchingNextPage,
+      fetchNextPage,
+      hasNextPage,
+      isError,
+    },
+    flatResults,
   } = useGetResults(queryLatLng);
 
   return (
@@ -45,10 +51,19 @@ export default function Results({ queryLatLng, showFavorites }: Props) {
         setSortBy={setSortBy}
         queryLatLng={queryLatLng}
       />
-      {allResults.length > 0 && (
+      {(data || favoritesList) && (
         <div className="mx-1 flex w-full flex-row overflow-x-auto overflow-y-hidden pt-3 md:m-[12px_8px_12px_4px] md:w-auto md:flex-col md:space-y-5 md:overflow-y-auto md:overflow-x-hidden md:py-2">
+          {favoritesList.map((place) => (
+            <ResultsCard
+              key={place.place_id}
+              place={place}
+              isClicked={clickedPlace === place.place_id}
+              queryLatLng={queryLatLng}
+              isFavorited={!!favoritesId?.includes(place.place_id)}
+            />
+          ))}
           {(!isFetching || isFetchingNextPage) &&
-            sortResults(allResults, sortBy).map((place) => (
+            sortResults(flatResults, sortBy).map((place) => (
               <ResultsCard
                 key={place.place_id}
                 place={place}
@@ -108,9 +123,9 @@ export default function Results({ queryLatLng, showFavorites }: Props) {
           Something went wrong...
         </p>
       )}
-      {showFavorites && !allResults.length && (
+      {/* {showFavorites && !allResults.length && (
         <p className="my-auto w-full text-center text-2xl">No favorites yet</p>
-      )}
+      )} */}
     </aside>
   );
 }
