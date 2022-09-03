@@ -11,7 +11,6 @@ import MapCanvasMarker from "./MapCanvasMarker";
 import MapCanvasPlaceCard from "./MapCanvasPlaceCard";
 import MapCanvasSearchMenu from "./MapCanvasSearchButton";
 import { useGetFavorites } from "../../utils/useQueryHooks";
-import { useRouter } from "next/router";
 
 interface Props {
   queryLatLng: google.maps.LatLngLiteral;

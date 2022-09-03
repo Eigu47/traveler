@@ -7,14 +7,15 @@ import { Combobox, Transition } from "@headlessui/react";
 import { FiSearch } from "react-icons/fi";
 import { useRouter } from "next/router";
 import { useAtom } from "jotai";
-import { searchbarOnFocusAtom } from "../../utils/store";
+import { showResultsAtom, showSearchOptionsAtom } from "../../utils/store";
 
 interface Props {}
 
 export default function SearchBar({}: Props) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
-  const [, setSearchbarOnFocus] = useAtom(searchbarOnFocusAtom);
+  const [, setShowResults] = useAtom(showResultsAtom);
+  const [, setShowSearchOptions] = useAtom(showSearchOptionsAtom);
 
   const {
     ready,
@@ -58,8 +59,10 @@ export default function SearchBar({}: Props) {
             onChange={(e) => setValue(e.target.value)}
             placeholder={ready ? "Search city..." : "Loading..."}
             ref={inputRef}
-            onFocus={() => setSearchbarOnFocus(true)}
-            onBlur={() => setSearchbarOnFocus(false)}
+            onFocus={() => {
+              setShowResults(false);
+              setShowSearchOptions(false);
+            }}
           />
           <FiSearch className="text-2xl" />
         </div>

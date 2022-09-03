@@ -1,11 +1,10 @@
 import { useAtom } from "jotai";
-import { NextRouter, useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Result } from "../../types/NearbySearchResult";
 import {
   allResultsAtom,
   clickedPlaceAtom,
-  searchbarOnFocusAtom,
   selectedPlaceAtom,
   showResultsAtom,
   showSearchOptionsAtom,
@@ -120,10 +119,9 @@ export function useHandleQueryChanges(
 ) {
   const mapRef = useRef<google.maps.Map>();
   const [allResults, setAllResults] = useAtom(allResultsAtom);
-  const [clickedPlace, setClickedPlace] = useAtom(clickedPlaceAtom);
+  const [, setClickedPlace] = useAtom(clickedPlaceAtom);
   const [showResults, setShowResults] = useAtom(showResultsAtom);
   const [, setShowSearchOptions] = useAtom(showSearchOptionsAtom);
-  const [searchbarOnFocus] = useAtom(searchbarOnFocusAtom);
   const { response } = useGetFavorites();
   const wasPreviousFavorite = useRef(false);
   const [currentPosition, setCurrentPosition] =
@@ -161,7 +159,7 @@ export function useHandleQueryChanges(
   ]);
   // Only runs once when query changes to favorites
   useEffect(() => {
-    if (showFavorites && !queryLatLng) {
+    if (showFavorites) {
       setShowSearchOptions(false);
       setShowResults(true);
 
@@ -181,20 +179,6 @@ export function useHandleQueryChanges(
     showFavorites,
     queryLatLng,
   ]);
-  // Handles dropdown menus interaction
-  useEffect(() => {
-    if (searchbarOnFocus) {
-      setShowResults(false);
-      setShowSearchOptions(false);
-      return;
-    }
-    if (clickedPlace) {
-      setShowSearchOptions(false);
-      setShowResults(true);
-      return;
-    }
-    // if (allResults.length === 0 && !clickedPlace) setShowResults(false);
-  }, [setShowSearchOptions, setShowResults, searchbarOnFocus, clickedPlace]);
 
   return {
     mapRef,

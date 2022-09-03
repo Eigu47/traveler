@@ -1,6 +1,7 @@
 import { MarkerF } from "@react-google-maps/api";
-import { SetStateAction } from "jotai";
+import { SetStateAction, useAtom } from "jotai";
 import { Result } from "../../types/NearbySearchResult";
+import { showResultsAtom, showSearchOptionsAtom } from "../../utils/store";
 
 interface Props {
   places: Result;
@@ -17,6 +18,9 @@ export default function MapCanvasMarker({
   isFavorited,
   handleClickOnMarker,
 }: Props) {
+  const [, setShowResults] = useAtom(showResultsAtom);
+  const [, setShowSearchOptions] = useAtom(showSearchOptionsAtom);
+
   return (
     <MarkerF
       key={places.place_id}
@@ -34,6 +38,8 @@ export default function MapCanvasMarker({
       onClick={() => {
         setClickedPlace(places.place_id);
         setSelectedPlace(places);
+        setShowSearchOptions(false);
+        setShowResults(true);
         if (handleClickOnMarker) handleClickOnMarker(places);
       }}
       onMouseOver={() => setSelectedPlace(places)}
