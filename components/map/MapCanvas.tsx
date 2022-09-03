@@ -43,7 +43,7 @@ export default function MapCanvas({ queryLatLng, showFavorites }: Props) {
     <section className="relative h-full w-full bg-[#e5e3df]">
       <GoogleMap
         zoom={queryLatLng ? 13 : 10}
-        center={queryLatLng ?? currentPosition ?? DEFAULT_CENTER}
+        center={currentPosition ?? DEFAULT_CENTER}
         mapContainerClassName="h-full w-full"
         onLoad={(map) => {
           mapRef.current = map;

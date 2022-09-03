@@ -123,22 +123,13 @@ export function useHandleQueryChanges(
   const [showResults, setShowResults] = useAtom(showResultsAtom);
   const [, setShowSearchOptions] = useAtom(showSearchOptionsAtom);
   const { response } = useGetFavorites();
-  const wasPreviousFavorite = useRef(false);
+  const [wasPrevFavorite, setWasPrevFavorite] = useState(false);
+  const [didMount, setDidMount] = useState(false);
   const [currentPosition, setCurrentPosition] =
     useState<google.maps.LatLngLiteral>();
 
   // Runs every time url query changes
   useEffect(() => {
-    // Triggers only on /map
-    if (!showFavorites && !queryLatLng) {
-      navigator?.geolocation?.getCurrentPosition((pos) => {
-        setCurrentPosition({
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude,
-        });
-      });
-      return;
-    }
     // Re center map
     if (!queryLatLng) return;
     mapRef.current?.panTo(queryLatLng);
@@ -155,30 +146,39 @@ export function useHandleQueryChanges(
     setShowResults,
     setShowSearchOptions,
     setClickedPlace,
-    showFavorites,
   ]);
-  // Only runs once when query changes to favorites
+  // Runs when changes LatLng to Favorites
   useEffect(() => {
-    if (showFavorites) {
-      setShowSearchOptions(false);
-      setShowResults(true);
+    if (showFavorites !== wasPrevFavorite) {
+      setWasPrevFavorite(showFavorites);
 
-      if (!wasPreviousFavorite.current) {
+      if (showFavorites) {
+        setShowSearchOptions(false);
+        setShowResults(true);
         setAllResults(response?.data?.favorites ?? []);
-        wasPreviousFavorite.current = true;
-        return;
       }
-      return;
     }
-    wasPreviousFavorite.current = false;
   }, [
     response?.data?.favorites,
     setAllResults,
     setShowResults,
     setShowSearchOptions,
     showFavorites,
-    queryLatLng,
+    wasPrevFavorite,
   ]);
+  // Only runs once when component mounts
+  useEffect(() => {
+    if (!didMount) {
+      navigator?.geolocation?.getCurrentPosition((pos) => {
+        setCurrentPosition({
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
+        });
+      });
+      setAllResults([]);
+      setDidMount(true);
+    }
+  }, [didMount, setAllResults]);
 
   return {
     mapRef,
