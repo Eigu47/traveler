@@ -3,21 +3,31 @@ import { useRouter } from "next/router";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Result } from "../../types/NearbySearchResult";
 import {
-  allResultsAtom,
   clickedPlaceAtom,
   selectedPlaceAtom,
   showResultsAtom,
   showSearchOptionsAtom,
+  favoritesListAtom,
+  radiusAtom,
+  searchTypeAtom,
+  keywordAtom,
 } from "../../utils/store";
-import { useGetFavorites } from "../../utils/useQueryHooks";
+import { useGetFavorites, useGetResults } from "../../utils/useQueryHooks";
 
 // Handles clicks and long taps in the map
-export function useHandleMouseEventsInMap() {
+export function useHandleMouseEventsInMap(
+  queryLatLng: google.maps.LatLngLiteral
+) {
   const router = useRouter();
   const [searchButton, setSearchButton] = useState<google.maps.LatLngLiteral>();
   const [selectedPlace, setSelectedPlace] = useAtom(selectedPlaceAtom);
-  const [allResults, setAllResults] = useAtom(allResultsAtom);
+  const [, setFavoritesList] = useAtom(favoritesListAtom);
+  const [radius] = useAtom(radiusAtom);
+  const [searchType] = useAtom(searchTypeAtom);
+  const [keyword] = useAtom(keywordAtom);
   const timerRef = useRef<NodeJS.Timeout>();
+
+  const { flatResults } = useGetResults(queryLatLng);
 
   function startPressTimer({ lat, lng }: google.maps.LatLngLiteral) {
     timerRef.current = setTimeout(() => {
@@ -58,10 +68,14 @@ export function useHandleMouseEventsInMap() {
   );
 
   function handleClickOnMarker(places: Result) {
-    if (allResults.some((result) => result.place_id === places.place_id))
+    if (flatResults.some((result) => result.place_id === places.place_id))
       return;
 
-    setAllResults([places, ...allResults]);
+    setFavoritesList((prev) => {
+      if (prev.some((result) => result.place_id === places.place_id))
+        return prev;
+      return [places, ...prev];
+    });
   }
 
   function handleRightClickOnMap(e: google.maps.MapMouseEvent) {
@@ -78,6 +92,9 @@ export function useHandleMouseEventsInMap() {
         query: {
           lat: searchButton?.lat,
           lng: searchButton?.lng,
+          radius,
+          type: searchType,
+          keyword,
         },
       });
     }
@@ -118,10 +135,10 @@ export function useHandleQueryChanges(
   showFavorites: boolean
 ) {
   const mapRef = useRef<google.maps.Map>();
-  const [allResults, setAllResults] = useAtom(allResultsAtom);
   const [, setClickedPlace] = useAtom(clickedPlaceAtom);
   const [showResults, setShowResults] = useAtom(showResultsAtom);
   const [, setShowSearchOptions] = useAtom(showSearchOptionsAtom);
+  const [favoritesList, setFavoritesList] = useAtom(favoritesListAtom);
   const { response } = useGetFavorites();
   const [wasPrevFavorite, setWasPrevFavorite] = useState(false);
   const [didMount, setDidMount] = useState(false);
@@ -136,16 +153,16 @@ export function useHandleQueryChanges(
     setClickedPlace(undefined);
     if (mapRef.current?.getZoom() ?? 12 < 12) mapRef.current?.setZoom(13);
     // Reset results
-    setAllResults([]);
+    setFavoritesList([]);
     setShowResults(true);
     // Close search options in mobile
     if (window?.innerWidth < 768) setShowSearchOptions(false);
   }, [
     queryLatLng,
-    setAllResults,
     setShowResults,
     setShowSearchOptions,
     setClickedPlace,
+    setFavoritesList,
   ]);
   // Runs when changes LatLng to Favorites
   useEffect(() => {
@@ -153,18 +170,18 @@ export function useHandleQueryChanges(
       setWasPrevFavorite(showFavorites);
 
       if (showFavorites) {
+        setFavoritesList(response?.data?.favorites ?? []);
         setShowSearchOptions(false);
         setShowResults(true);
-        setAllResults(response?.data?.favorites ?? []);
       }
     }
   }, [
     response?.data?.favorites,
-    setAllResults,
     setShowResults,
     setShowSearchOptions,
     showFavorites,
     wasPrevFavorite,
+    setFavoritesList,
   ]);
   // Only runs once when component mounts
   useEffect(() => {
@@ -175,18 +192,18 @@ export function useHandleQueryChanges(
           lng: pos.coords.longitude,
         });
       });
-      setAllResults([]);
+      setFavoritesList([]);
       setDidMount(true);
     }
-  }, [didMount, setAllResults]);
+  }, [didMount, setFavoritesList]);
 
   return {
     mapRef,
-    allResults,
     queryLatLng,
     setClickedPlace,
     showResults,
     currentPosition,
+    favoritesList,
   };
 }
 

@@ -13,12 +13,7 @@ import {
   NearbySearchResult,
   Result,
 } from "../types/NearbySearchResult";
-import {
-  allResultsAtom,
-  keywordAtom,
-  radiusAtom,
-  searchTypeAtom,
-} from "./store";
+import { keywordAtom, radiusAtom, searchTypeAtom } from "./store";
 
 export async function fetchResults(
   queryLatLng?: google.maps.LatLngLiteral,
@@ -49,27 +44,29 @@ export function useGetResults(
   queryLatLng: google.maps.LatLngLiteral | undefined
 ) {
   const [radius] = useAtom(radiusAtom);
-  const [, setAllResults] = useAtom(allResultsAtom);
   const [keyword] = useAtom(keywordAtom);
   const [searchType] = useAtom(searchTypeAtom);
 
-  return useInfiniteQuery(
+  const response = useInfiniteQuery(
     ["nearby", queryLatLng],
     ({ pageParam = undefined }) =>
       fetchResults(queryLatLng, pageParam, radius, keyword, searchType),
     {
-      enabled: !!queryLatLng,
+      enabled: false,
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
       refetchOnMount: false,
       getNextPageParam: (lastPage) => {
         return lastPage?.next_page_token;
       },
-      onSuccess: (data) => {
-        setAllResults(data.pages.flatMap((pages) => pages?.results));
-      },
     }
   );
+
+  const flatResults = useMemo(() => {
+    return response?.data?.pages.flatMap((pages) => pages?.results) ?? [];
+  }, [response?.data?.pages]);
+
+  return { response, flatResults };
 }
 
 export async function getFavorites(userId: string | null) {
@@ -89,7 +86,7 @@ export function useGetFavorites() {
   const userId = (session?.user as { _id: string | null })?._id;
 
   const response = useQuery(["favorites", userId], () => getFavorites(userId), {
-    enabled: !!userId,
+    enabled: false,
   });
 
   const favoritesId = useMemo(

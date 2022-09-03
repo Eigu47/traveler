@@ -18,4 +18,4 @@ export const searchTypeAtom = atom<SearchTypes>("tourist_attraction");
 
 export const showSearchOptionsAtom = atom(true);
 
-export const allResultsAtom = atom<Result[]>([]);
+export const favoritesListAtom = atom<Result[]>([]);

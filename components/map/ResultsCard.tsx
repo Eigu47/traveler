@@ -69,10 +69,10 @@ export default function ResultsCard({
           <div className="w-full grow space-y-3">
             <p className="">{place.vicinity}</p>
             {queryLatLng && (
-              <p className="">{`${
-                place.distance ??
-                getDistance(place.geometry.location, queryLatLng)
-              } km from the center`}</p>
+              <p className="">{`${getDistance(
+                place.geometry.location,
+                queryLatLng
+              )} km from the center`}</p>
             )}
           </div>
           {place.opening_hours && (

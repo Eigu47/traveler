@@ -27,32 +27,30 @@ export default async function handler(
       (res) => !res.types.includes("locality") && res.photos
     );
 
-    const withDistanceRes = addDistance(filteredRes, lat, lng);
-
-    res.status(200).json({ ...fetchRes.data, results: withDistanceRes });
+    res.status(200).json({ ...fetchRes.data, results: filteredRes });
   } catch (error) {
     res.status(500).json(error);
   }
 }
 
-export function addDistance(
-  results: Result[],
-  lat: string | string[] | undefined,
-  lng: string | string[] | undefined
-) {
-  if (!(lat && lng && !isNaN(+lat) && !isNaN(+lng))) return results;
+// export function addDistance(
+//   results: Result[],
+//   lat: string | string[] | undefined | number,
+//   lng: string | string[] | undefined | number
+// ) {
+//   if (!(lat && lng && !isNaN(+lat) && !isNaN(+lng))) return results;
 
-  const distanceAdded = results.map((res) => {
-    const distance = getDistance(res.geometry.location, {
-      lat: +lat,
-      lng: +lng,
-    });
+//   const distanceAdded = results.map((res) => {
+//     const distance = getDistance(res.geometry.location, {
+//       lat: +lat,
+//       lng: +lng,
+//     });
 
-    return {
-      ...res,
-      distance,
-    };
-  });
+//     return {
+//       ...res,
+//       distance,
+//     };
+//   });
 
-  return distanceAdded;
-}
+//   return distanceAdded;
+// }

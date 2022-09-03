@@ -10,7 +10,7 @@ import MapCanvasCenter from "./MapCanvasCenter";
 import MapCanvasMarker from "./MapCanvasMarker";
 import MapCanvasPlaceCard from "./MapCanvasPlaceCard";
 import MapCanvasSearchMenu from "./MapCanvasSearchButton";
-import { useGetFavorites } from "../../utils/useQueryHooks";
+import { useGetFavorites, useGetResults } from "../../utils/useQueryHooks";
 
 interface Props {
   queryLatLng: google.maps.LatLngLiteral;
@@ -18,8 +18,13 @@ interface Props {
 }
 
 export default function MapCanvas({ queryLatLng, showFavorites }: Props) {
-  const { mapRef, allResults, setClickedPlace, showResults, currentPosition } =
-    useHandleQueryChanges(queryLatLng, showFavorites);
+  const {
+    mapRef,
+    setClickedPlace,
+    showResults,
+    currentPosition,
+    favoritesList,
+  } = useHandleQueryChanges(queryLatLng, showFavorites);
 
   const {
     searchButton,
@@ -32,12 +37,14 @@ export default function MapCanvas({ queryLatLng, showFavorites }: Props) {
     selectedPlace,
     setSelectedPlace,
     getCurrentPosition,
-  } = useHandleMouseEventsInMap();
+  } = useHandleMouseEventsInMap(queryLatLng);
 
   const {
     response: { data: favoritesData, isSuccess: favoritesIsSuccess },
     favoritesId,
   } = useGetFavorites();
+
+  const { flatResults } = useGetResults(queryLatLng);
 
   return (
     <section className="relative h-full w-full bg-[#e5e3df]">
@@ -66,7 +73,8 @@ export default function MapCanvas({ queryLatLng, showFavorites }: Props) {
         }}
       >
         {queryLatLng && <MapCanvasCenter queryLatLng={queryLatLng} />}
-        {allResults
+        {flatResults
+          .concat(favoritesList)
           .filter((result) => !favoritesId?.includes(result.place_id))
           .map((place) => (
             <MapCanvasMarker
