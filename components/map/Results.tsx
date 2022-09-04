@@ -1,24 +1,19 @@
 import { useState, useMemo } from "react";
-import ResultsCard from "./ResultsCard";
-import { SortOptions, sortResults } from "./ResultsUtil";
-import Image from "next/image";
+import { SortOptions } from "./ResultsUtil";
 import ResultsForm from "./ResultsForm";
-import { FiChevronDown } from "react-icons/fi";
 import { useAtom } from "jotai";
-import {
-  clickedPlaceAtom,
-  favoritesListAtom,
-  showResultsAtom,
-} from "../../utils/store";
-import { useGetFavorites, useGetResults } from "../../utils/useQueryHooks";
+import { favoritesListAtom, showResultsAtom } from "../../utils/store";
+import { useGetResults } from "../../utils/useQueryHooks";
 import { useRouter } from "next/router";
+import ResultsList from "./ResultsList";
+import ResultsChevronButton from "./ResultsChevronButton";
+import ResultsText from "./ResultsText";
 
 interface Props {}
 export default function Results({}: Props) {
   const router = useRouter();
   const [sortBy, setSortBy] = useState<SortOptions>("relevance");
-  const [clickedPlace] = useAtom(clickedPlaceAtom);
-  const [showResults, setShowResults] = useAtom(showResultsAtom);
+  const [showResults] = useAtom(showResultsAtom);
   const [favoritesList] = useAtom(favoritesListAtom);
 
   const queryLatLng: google.maps.LatLngLiteral | undefined = useMemo(() => {
@@ -32,13 +27,8 @@ export default function Results({}: Props) {
     }
   }, [router.query]);
 
-  const isFavorites = !!router.query.favs;
-
-  const { favoritesId } = useGetFavorites();
-
   const {
     response: {
-      data,
       refetch,
       isFetching,
       isFetchingNextPage,
@@ -61,81 +51,26 @@ export default function Results({}: Props) {
         setSortBy={setSortBy}
         queryLatLng={queryLatLng}
       />
-      {(data || favoritesList) && (
-        <div className="mx-1 flex w-full flex-row overflow-x-auto overflow-y-hidden pt-3 md:m-[12px_8px_12px_4px] md:w-auto md:flex-col md:space-y-5 md:overflow-y-auto md:overflow-x-hidden md:py-2">
-          {favoritesList.map((place) => (
-            <ResultsCard
-              key={place.place_id}
-              place={place}
-              isClicked={clickedPlace === place.place_id}
-              queryLatLng={queryLatLng}
-              isFavorited={!!favoritesId?.includes(place.place_id)}
-            />
-          ))}
-          {(!isFetching || isFetchingNextPage) &&
-            sortResults(flatResults, sortBy).map((place) => (
-              <ResultsCard
-                key={place.place_id}
-                place={place}
-                isClicked={clickedPlace === place.place_id}
-                queryLatLng={queryLatLng}
-                isFavorited={!!favoritesId?.includes(place.place_id)}
-              />
-            ))}
-          {!(isFetching && !isFetchingNextPage) && data && (
-            <div className="flex justify-center whitespace-nowrap py-2 px-2 text-xl md:py-0">
-              <button
-                className={`w-full rounded-xl p-3 text-slate-100 shadow ring-1 ring-black/30  md:p-6 ${
-                  hasNextPage
-                    ? "bg-blue-600 duration-100 hover:scale-[102%] hover:bg-blue-700 active:scale-[98%]"
-                    : "bg-blue-700/50"
-                }`}
-                onClick={() => {
-                  fetchNextPage();
-                }}
-                disabled={isFetchingNextPage || !hasNextPage}
-              >
-                {hasNextPage
-                  ? !isFetchingNextPage
-                    ? "Load more"
-                    : "Searching..."
-                  : "No more results"}
-              </button>
-            </div>
-          )}
-        </div>
+      {(!!flatResults.length || !!favoritesList.length) && (
+        <ResultsList
+          favoritesList={favoritesList}
+          queryLatLng={queryLatLng}
+          isFetching={isFetching}
+          isFetchingNextPage={isFetchingNextPage}
+          flatResults={flatResults}
+          sortBy={sortBy}
+          fetchNextPage={fetchNextPage}
+          hasNextPage={hasNextPage}
+        />
       )}
-      <div
-        className="absolute -top-2 w-screen duration-200 md:hidden"
-        onClick={() => setShowResults((prev) => !prev)}
-      >
-        <button
-          type="button"
-          className="mx-auto block w-2/6 rounded-md bg-gray-300 text-slate-700 shadow ring-1 ring-black/20"
-        >
-          <FiChevronDown
-            className={`mx-auto text-2xl duration-300 md:text-xl ${
-              showResults ? "rotate-0" : "rotate-180"
-            }`}
-          />
-        </button>
-      </div>
-      {isFetching && !isFetchingNextPage && (
-        <div className="flex h-full w-full items-center justify-center">
-          <Image src="/loading.svg" alt="Loading..." height={150} width={150} />
-        </div>
-      )}
-      {!isFetching && data?.pages[0]?.results?.length === 0 && (
-        <p className="my-auto w-full text-center text-2xl">No results found</p>
-      )}
-      {isError && (
-        <p className="my-auto w-full text-center text-2xl">
-          Something went wrong...
-        </p>
-      )}
-      {isFavorites && !favoritesList.length && (
-        <p className="my-auto w-full text-center text-2xl">No favorites yet</p>
-      )}
+      <ResultsChevronButton />
+      <ResultsText
+        isFetching={isFetching}
+        isFetchingNextPage={isFetchingNextPage}
+        flatResults={flatResults}
+        favoritesList={favoritesList}
+        isError={isError}
+      />
     </aside>
   );
 }
