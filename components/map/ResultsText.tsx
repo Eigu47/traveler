@@ -8,6 +8,8 @@ interface Props {
   flatResults: Result[];
   favoritesList: Result[];
   isError: boolean;
+  queryLatLng: google.maps.LatLngLiteral | undefined;
+  showResults: boolean;
 }
 
 export default function ResultsText({
@@ -16,6 +18,8 @@ export default function ResultsText({
   flatResults,
   favoritesList,
   isError,
+  queryLatLng,
+  showResults,
 }: Props) {
   const router = useRouter();
   const isFavorites = !!router.query.favs;
@@ -28,6 +32,18 @@ export default function ResultsText({
     );
   }
 
+  if (!isFetching && !flatResults.length && queryLatLng) {
+    return (
+      <span
+        className={`my-auto w-full text-center text-2xl transition-none duration-300 md:translate-y-0 ${
+          showResults ? "translate-y-0" : "translate-y-full"
+        }`}
+      >
+        No results found
+      </span>
+    );
+  }
+
   if (
     !flatResults.length &&
     !favoritesList.length &&
@@ -36,7 +52,11 @@ export default function ResultsText({
     !isError
   ) {
     return (
-      <span className="my-auto w-full text-center text-2xl">
+      <span
+        className={`my-auto w-full text-center text-2xl transition-none duration-300 md:translate-y-0 ${
+          showResults ? "translate-y-0" : "translate-y-full"
+        }`}
+      >
         <span className="md:hidden">Hold tap </span>
         <span className="hidden md:block">Right click </span>
         in the map to start searching
@@ -44,17 +64,13 @@ export default function ResultsText({
     );
   }
 
-  if (!isFetching && !flatResults.length) {
-    return (
-      <span className="my-auto w-full text-center text-2xl">
-        No results found
-      </span>
-    );
-  }
-
   if (isFavorites && !favoritesList.length) {
     return (
-      <span className="my-auto w-full text-center text-2xl">
+      <span
+        className={`my-auto w-full text-center text-2xl transition-none duration-300 md:translate-y-0 ${
+          showResults ? "translate-y-0" : "translate-y-full"
+        }`}
+      >
         No favorites yet
       </span>
     );
@@ -62,7 +78,11 @@ export default function ResultsText({
 
   if (isError) {
     return (
-      <span className="my-auto w-full text-center text-2xl">
+      <span
+        className={`my-auto w-full text-center text-2xl transition-none duration-300 md:translate-y-0 ${
+          showResults ? "translate-y-0" : "translate-y-full"
+        }`}
+      >
         Something went wrong...
       </span>
     );

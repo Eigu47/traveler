@@ -24,7 +24,7 @@ export default function MapCanvas({}: Props) {
     selectedPlace,
     setSelectedPlace,
     getCurrentPosition,
-    mapRef,
+    setMapRef,
     setClickedPlace,
     showResults,
     currentPosition,
@@ -44,9 +44,7 @@ export default function MapCanvas({}: Props) {
         zoom={queryLatLng ? 13 : 10}
         center={currentPosition ?? DEFAULT_CENTER}
         mapContainerClassName="h-full w-full"
-        onLoad={(map) => {
-          mapRef.current = map;
-        }}
+        onLoad={(map) => setMapRef(map)}
         options={{
           mapId: "a73e177530bb64aa",
           disableDefaultUI: true,

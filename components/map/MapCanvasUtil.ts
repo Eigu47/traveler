@@ -9,6 +9,7 @@ import {
   showResultsAtom,
   showSearchOptionsAtom,
   favoritesListAtom,
+  mapRefAtom,
 } from "../../utils/store";
 import { useGetFavorites, useGetResults } from "../../utils/useQueryHooks";
 
@@ -19,7 +20,8 @@ export function useMapCanvas() {
   const [selectedPlace, setSelectedPlace] = useAtom(selectedPlaceAtom);
   const [favoritesList, setFavoritesList] = useAtom(favoritesListAtom);
   const timerRef = useRef<NodeJS.Timeout>();
-  const mapRef = useRef<google.maps.Map>();
+  // const mapRef = useRef<google.maps.Map>();
+  const [mapRef, setMapRef] = useAtom(mapRefAtom);
   const [, setClickedPlace] = useAtom(clickedPlaceAtom);
   const [showResults, setShowResults] = useAtom(showResultsAtom);
   const [, setShowSearchOptions] = useAtom(showSearchOptionsAtom);
@@ -119,7 +121,7 @@ export function useMapCanvas() {
       });
     });
   }
-  // Only runs once when component mounts
+  // Runs once when component mounts
   useEffect(() => {
     if (!didMount) {
       navigator?.geolocation?.getCurrentPosition((pos) => {
@@ -129,16 +131,18 @@ export function useMapCanvas() {
         });
       });
       setFavoritesList([]);
+      setShowResults(true);
+      if (window?.innerWidth < 768) setShowSearchOptions(false);
+      if (window?.innerWidth > 768) setShowSearchOptions(true);
       setDidMount(true);
     }
-  }, [didMount, setFavoritesList]);
+  }, [didMount, setFavoritesList, setShowResults, setShowSearchOptions]);
   // Runs every time url query changes
   useEffect(() => {
-    // Re center map
     if (!queryLatLng) return;
-    mapRef.current?.panTo(queryLatLng);
+    mapRef?.panTo(queryLatLng);
     setClickedPlace(undefined);
-    if (mapRef.current?.getZoom() ?? 12 < 12) mapRef.current?.setZoom(13);
+    if (mapRef?.getZoom() ?? 12 < 12) mapRef?.setZoom(13);
     // Reset results
     setFavoritesList([]);
     setShowResults(true);
@@ -151,6 +155,7 @@ export function useMapCanvas() {
     setShowSearchOptions,
     setClickedPlace,
     setFavoritesList,
+    mapRef,
   ]);
 
   useEffect(() => {
@@ -185,7 +190,7 @@ export function useMapCanvas() {
     selectedPlace,
     setSelectedPlace,
     getCurrentPosition,
-    mapRef,
+    setMapRef,
     setClickedPlace,
     showResults,
     currentPosition,

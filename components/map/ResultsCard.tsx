@@ -1,7 +1,7 @@
 import { useAtom } from "jotai";
 import Image from "next/image";
 import { useRef, useEffect } from "react";
-import { selectedPlaceAtom } from "../../utils/store";
+import { mapRefAtom, selectedPlaceAtom } from "../../utils/store";
 import { Result } from "../../types/NearbySearchResult";
 import { getDistance, Rating } from "./ResultsUtil";
 import { BsSuitHeart, BsSuitHeartFill } from "react-icons/bs";
@@ -23,6 +23,7 @@ export default function ResultsCard({
   const [selectedPlace, setSelectedPlace] = useAtom(selectedPlaceAtom);
   const resultRef = useRef<HTMLElement>(null);
   const { mutate, isLoading } = useFavorites();
+  const [mapRef] = useAtom(mapRefAtom);
 
   const isSelected = selectedPlace?.place_id === place.place_id;
 
@@ -34,6 +35,12 @@ export default function ResultsCard({
       });
   }, [isClicked]);
 
+  function handleClickOnCard() {
+    if (!mapRef?.getBounds()?.contains(place.geometry.location)) {
+      mapRef?.panTo(place.geometry.location);
+    }
+  }
+
   return (
     <article
       className={`m-2 flex cursor-default select-none flex-col rounded-xl bg-slate-100 text-center text-sm shadow ring-1 ring-black/20 duration-75 ease-out md:select-auto md:text-base ${
@@ -41,6 +48,7 @@ export default function ResultsCard({
       }`}
       onMouseOver={() => setSelectedPlace(place)}
       onMouseOut={() => setSelectedPlace(undefined)}
+      onClick={handleClickOnCard}
       ref={resultRef}
     >
       <div className="flex h-36 rounded-xl border-b border-black/10 bg-slate-200 md:h-44">

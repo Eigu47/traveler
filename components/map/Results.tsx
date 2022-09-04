@@ -63,14 +63,17 @@ export default function Results({}: Props) {
           hasNextPage={hasNextPage}
         />
       )}
-      <ResultsChevronButton />
+
       <ResultsText
         isFetching={isFetching}
         isFetchingNextPage={isFetchingNextPage}
         flatResults={flatResults}
         favoritesList={favoritesList}
         isError={isError}
+        queryLatLng={queryLatLng}
+        showResults={showResults}
       />
+      <ResultsChevronButton />
     </aside>
   );
 }
