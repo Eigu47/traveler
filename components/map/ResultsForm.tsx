@@ -21,6 +21,7 @@ import {
   searchTypeAtom,
   showResultsAtom,
   showSearchOptionsAtom,
+  favoritesListAtom,
 } from "../../utils/store";
 
 interface Props {
@@ -46,6 +47,7 @@ export default function ResultsForm({
     showSearchOptionsAtom
   );
   const [, setShowResults] = useAtom(showResultsAtom);
+  const [, setFavoritesList] = useAtom(favoritesListAtom);
 
   return (
     <form
@@ -53,6 +55,7 @@ export default function ResultsForm({
         e.preventDefault();
         setShowSearchOptions(false);
         refetch();
+        setFavoritesList([]);
         setShowResults(true);
         setClickedPlace(undefined);
       }}

@@ -50,7 +50,7 @@ export default function ResultsList({
             isFavorited={!!favoritesId?.includes(place.place_id)}
           />
         ))}
-      {!(isFetching && !isFetchingNextPage) && (
+      {!(isFetching && !isFetchingNextPage) && queryLatLng && (
         <div className="flex justify-center whitespace-nowrap py-2 px-2 text-xl md:py-0">
           <button
             className={`w-full rounded-xl p-3 text-slate-100 shadow ring-1 ring-black/30  md:p-6 ${

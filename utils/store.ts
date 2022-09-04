@@ -12,7 +12,7 @@ export const showResultsAtom = atom(true);
 
 export const showHamburgerAtom = atom(false);
 
-export const keywordAtom = atom<string | undefined>(undefined);
+export const keywordAtom = atom<string>("");
 
 export const searchTypeAtom = atom<SearchTypes>("tourist_attraction");
 
