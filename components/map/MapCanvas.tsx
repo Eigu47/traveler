@@ -1,32 +1,19 @@
 import { GoogleMap } from "@react-google-maps/api/";
 import { MdGpsFixed } from "react-icons/md";
 import SearchBar from "./MapCanvasSearchBar";
-import {
-  DEFAULT_CENTER,
-  useHandleMouseEventsInMap,
-  useHandleQueryChanges,
-} from "./MapCanvasUtil";
+import { DEFAULT_CENTER, useMapCanvas } from "./MapCanvasUtil";
 import MapCanvasCenter from "./MapCanvasCenter";
 import MapCanvasMarker from "./MapCanvasMarker";
 import MapCanvasPlaceCard from "./MapCanvasPlaceCard";
 import MapCanvasSearchMenu from "./MapCanvasSearchButton";
 import { useGetFavorites, useGetResults } from "../../utils/useQueryHooks";
 
-interface Props {
-  queryLatLng: google.maps.LatLngLiteral;
-  showFavorites: boolean;
-}
+interface Props {}
 
-export default function MapCanvas({ queryLatLng, showFavorites }: Props) {
+export default function MapCanvas({}: Props) {
   const {
-    mapRef,
-    setClickedPlace,
-    showResults,
-    currentPosition,
-    favoritesList,
-  } = useHandleQueryChanges(queryLatLng, showFavorites);
-
-  const {
+    queryLatLng,
+    showFavorites,
     searchButton,
     handleMouseDown,
     handleMouseUp,
@@ -37,7 +24,12 @@ export default function MapCanvas({ queryLatLng, showFavorites }: Props) {
     selectedPlace,
     setSelectedPlace,
     getCurrentPosition,
-  } = useHandleMouseEventsInMap(queryLatLng);
+    mapRef,
+    setClickedPlace,
+    showResults,
+    currentPosition,
+    favoritesList,
+  } = useMapCanvas();
 
   const {
     response: { data: favoritesData, isSuccess: favoritesIsSuccess },

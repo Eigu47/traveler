@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import ResultsCard from "./ResultsCard";
 import { SortOptions, sortResults } from "./ResultsUtil";
 import Image from "next/image";
@@ -11,20 +11,30 @@ import {
   showResultsAtom,
 } from "../../utils/store";
 import { useGetFavorites, useGetResults } from "../../utils/useQueryHooks";
+import { useRouter } from "next/router";
 
-interface Props {
-  queryLatLng: google.maps.LatLngLiteral;
-  showFavorites: boolean;
-}
-export default function Results({ queryLatLng, showFavorites }: Props) {
+interface Props {}
+export default function Results({}: Props) {
+  const router = useRouter();
   const [sortBy, setSortBy] = useState<SortOptions>("relevance");
   const [clickedPlace] = useAtom(clickedPlaceAtom);
   const [showResults, setShowResults] = useAtom(showResultsAtom);
   const [favoritesList] = useAtom(favoritesListAtom);
-  const {
-    response: { data: favoritesData },
-    favoritesId,
-  } = useGetFavorites();
+
+  const queryLatLng: google.maps.LatLngLiteral | undefined = useMemo(() => {
+    if (
+      router.query.lat &&
+      router.query.lng &&
+      !isNaN(+router.query.lat) &&
+      !isNaN(+router.query.lng)
+    ) {
+      return { lat: +router.query.lat, lng: +router.query.lng };
+    }
+  }, [router.query]);
+
+  const isFavorites = !!router.query.favs;
+
+  const { favoritesId } = useGetFavorites();
 
   const {
     response: {
@@ -123,9 +133,9 @@ export default function Results({ queryLatLng, showFavorites }: Props) {
           Something went wrong...
         </p>
       )}
-      {/* {showFavorites && !allResults.length && (
+      {isFavorites && !favoritesList.length && (
         <p className="my-auto w-full text-center text-2xl">No favorites yet</p>
-      )} */}
+      )}
     </aside>
   );
 }

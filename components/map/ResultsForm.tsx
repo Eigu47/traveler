@@ -29,7 +29,7 @@ interface Props {
   ) => Promise<QueryObserverResult<InfiniteData<NearbySearchResult>, unknown>>;
   sortBy: SortOptions;
   setSortBy: Dispatch<SetStateAction<SortOptions>>;
-  queryLatLng: google.maps.LatLngLiteral;
+  queryLatLng: google.maps.LatLngLiteral | undefined;
 }
 
 export default function ResultsForm({

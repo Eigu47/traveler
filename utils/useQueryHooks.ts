@@ -52,7 +52,7 @@ export function useGetResults(
     ({ pageParam = undefined }) =>
       fetchResults(queryLatLng, pageParam, radius, keyword, searchType),
     {
-      enabled: false,
+      enabled: !!queryLatLng,
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
       refetchOnMount: false,
@@ -86,7 +86,7 @@ export function useGetFavorites() {
   const userId = (session?.user as { _id: string | null })?._id;
 
   const response = useQuery(["favorites", userId], () => getFavorites(userId), {
-    enabled: false,
+    enabled: !!userId,
   });
 
   const favoritesId = useMemo(

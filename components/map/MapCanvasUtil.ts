@@ -2,45 +2,52 @@ import { useAtom } from "jotai";
 import { useRouter } from "next/router";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Result } from "../../types/NearbySearchResult";
+import { useMemo } from "react";
 import {
   clickedPlaceAtom,
   selectedPlaceAtom,
   showResultsAtom,
   showSearchOptionsAtom,
   favoritesListAtom,
-  radiusAtom,
-  searchTypeAtom,
-  keywordAtom,
 } from "../../utils/store";
 import { useGetFavorites, useGetResults } from "../../utils/useQueryHooks";
 
 // Handles clicks and long taps in the map
-export function useHandleMouseEventsInMap(
-  queryLatLng: google.maps.LatLngLiteral
-) {
+export function useMapCanvas() {
   const router = useRouter();
   const [searchButton, setSearchButton] = useState<google.maps.LatLngLiteral>();
   const [selectedPlace, setSelectedPlace] = useAtom(selectedPlaceAtom);
-  const [, setFavoritesList] = useAtom(favoritesListAtom);
-  const [radius] = useAtom(radiusAtom);
-  const [searchType] = useAtom(searchTypeAtom);
-  const [keyword] = useAtom(keywordAtom);
+  const [favoritesList, setFavoritesList] = useAtom(favoritesListAtom);
   const timerRef = useRef<NodeJS.Timeout>();
+  const mapRef = useRef<google.maps.Map>();
+  const [, setClickedPlace] = useAtom(clickedPlaceAtom);
+  const [showResults, setShowResults] = useAtom(showResultsAtom);
+  const [, setShowSearchOptions] = useAtom(showSearchOptionsAtom);
+  const [wasPrevFavorite, setWasPrevFavorite] = useState(false);
+  const [didMount, setDidMount] = useState(false);
+  const [currentPosition, setCurrentPosition] =
+    useState<google.maps.LatLngLiteral>();
+  const queryLatLng: google.maps.LatLngLiteral | undefined = useMemo(() => {
+    if (
+      router.query.lat &&
+      router.query.lng &&
+      !isNaN(+router.query.lat) &&
+      !isNaN(+router.query.lng)
+    ) {
+      return { lat: +router.query.lat, lng: +router.query.lng };
+    }
+  }, [router.query]);
+
+  const showFavorites = !!router.query.favs;
 
   const { flatResults } = useGetResults(queryLatLng);
-
-  function startPressTimer({ lat, lng }: google.maps.LatLngLiteral) {
-    timerRef.current = setTimeout(() => {
-      setSearchButton({ lat, lng });
-      timerRef.current = undefined;
-    }, 500);
-  }
+  const { response: favoriteRespose } = useGetFavorites();
 
   function handleMouseDown(e: google.maps.MapMouseEvent) {
-    startPressTimer({
-      lat: e.latLng?.lat() ?? 0,
-      lng: e.latLng?.lng() ?? 0,
-    });
+    timerRef.current = setTimeout(() => {
+      setSearchButton({ lat: e.latLng?.lat() ?? 0, lng: e.latLng?.lng() ?? 0 });
+      timerRef.current = undefined;
+    }, 500);
   }
 
   function handleMouseUp() {
@@ -92,9 +99,6 @@ export function useHandleMouseEventsInMap(
         query: {
           lat: searchButton?.lat,
           lng: searchButton?.lng,
-          radius,
-          type: searchType,
-          keyword,
         },
       });
     }
@@ -115,36 +119,19 @@ export function useHandleMouseEventsInMap(
       });
     });
   }
-
-  return {
-    searchButton,
-    handleMouseDown,
-    handleMouseUp,
-    clearOverlay,
-    handleClickOnMarker,
-    handleRightClickOnMap,
-    handleSearchButton,
-    selectedPlace,
-    setSelectedPlace,
-    getCurrentPosition,
-  };
-}
-// Handles url query changes
-export function useHandleQueryChanges(
-  queryLatLng: google.maps.LatLngLiteral,
-  showFavorites: boolean
-) {
-  const mapRef = useRef<google.maps.Map>();
-  const [, setClickedPlace] = useAtom(clickedPlaceAtom);
-  const [showResults, setShowResults] = useAtom(showResultsAtom);
-  const [, setShowSearchOptions] = useAtom(showSearchOptionsAtom);
-  const [favoritesList, setFavoritesList] = useAtom(favoritesListAtom);
-  const { response } = useGetFavorites();
-  const [wasPrevFavorite, setWasPrevFavorite] = useState(false);
-  const [didMount, setDidMount] = useState(false);
-  const [currentPosition, setCurrentPosition] =
-    useState<google.maps.LatLngLiteral>();
-
+  // Only runs once when component mounts
+  useEffect(() => {
+    if (!didMount) {
+      navigator?.geolocation?.getCurrentPosition((pos) => {
+        setCurrentPosition({
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
+        });
+      });
+      setFavoritesList([]);
+      setDidMount(true);
+    }
+  }, [didMount, setFavoritesList]);
   // Runs every time url query changes
   useEffect(() => {
     // Re center map
@@ -159,47 +146,46 @@ export function useHandleQueryChanges(
     if (window?.innerWidth < 768) setShowSearchOptions(false);
   }, [
     queryLatLng,
+    showFavorites,
     setShowResults,
     setShowSearchOptions,
     setClickedPlace,
     setFavoritesList,
   ]);
-  // Runs when changes LatLng to Favorites
+
   useEffect(() => {
     if (showFavorites !== wasPrevFavorite) {
       setWasPrevFavorite(showFavorites);
 
       if (showFavorites) {
-        setFavoritesList(response?.data?.favorites ?? []);
+        setFavoritesList(favoriteRespose?.data?.favorites ?? []);
         setShowSearchOptions(false);
         setShowResults(true);
       }
     }
   }, [
-    response?.data?.favorites,
+    favoriteRespose?.data?.favorites,
     setShowResults,
     setShowSearchOptions,
     showFavorites,
     wasPrevFavorite,
     setFavoritesList,
   ]);
-  // Only runs once when component mounts
-  useEffect(() => {
-    if (!didMount) {
-      navigator?.geolocation?.getCurrentPosition((pos) => {
-        setCurrentPosition({
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude,
-        });
-      });
-      setFavoritesList([]);
-      setDidMount(true);
-    }
-  }, [didMount, setFavoritesList]);
 
   return {
-    mapRef,
     queryLatLng,
+    showFavorites,
+    searchButton,
+    handleMouseDown,
+    handleMouseUp,
+    clearOverlay,
+    handleClickOnMarker,
+    handleRightClickOnMap,
+    handleSearchButton,
+    selectedPlace,
+    setSelectedPlace,
+    getCurrentPosition,
+    mapRef,
     setClickedPlace,
     showResults,
     currentPosition,
