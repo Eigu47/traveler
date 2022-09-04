@@ -1,17 +1,20 @@
 import { useAtom } from "jotai";
 import Image from "next/image";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, Fragment } from "react";
 import { mapRefAtom, selectedPlaceAtom } from "../../utils/store";
 import { Result } from "../../types/NearbySearchResult";
 import { getDistance, Rating } from "./ResultsUtil";
 import { BsSuitHeart, BsSuitHeartFill } from "react-icons/bs";
 import { useFavorites } from "../../utils/useQueryHooks";
+import { Popover, Transition } from "@headlessui/react";
+import useTimeout from "../../utils/useTimeout";
 
 interface Props {
   place: Result;
   isClicked: boolean;
   queryLatLng: google.maps.LatLngLiteral | undefined;
   isFavorited: boolean;
+  session: boolean;
 }
 
 export default function ResultsCard({
@@ -19,11 +22,14 @@ export default function ResultsCard({
   isClicked,
   queryLatLng,
   isFavorited,
+  session,
 }: Props) {
   const [selectedPlace, setSelectedPlace] = useAtom(selectedPlaceAtom);
   const resultRef = useRef<HTMLElement>(null);
   const { mutate, isLoading } = useFavorites();
   const [mapRef] = useAtom(mapRefAtom);
+  const delayRef = useRef<number | null>(null);
+  const popOverRef = useRef<HTMLDivElement>(null);
 
   const isSelected = selectedPlace?.place_id === place.place_id;
 
@@ -40,6 +46,11 @@ export default function ResultsCard({
       mapRef?.panTo(place.geometry.location);
     }
   }
+
+  useTimeout(() => {
+    popOverRef.current?.close();
+    delayRef.current = null;
+  }, delayRef.current);
 
   return (
     <article
@@ -61,17 +72,51 @@ export default function ResultsCard({
             height={250}
             objectFit="cover"
           />
-          <button
-            className="absolute top-2 left-2 text-2xl"
-            onClick={() => mutate({ place, isFavorited })}
-            disabled={isLoading}
-          >
-            {isFavorited ? (
-              <BsSuitHeartFill className="animate-favorited text-red-500" />
-            ) : (
-              <BsSuitHeart className="text-white" />
-            )}
-          </button>
+          {!session && (
+            <Popover className="absolute top-2 left-2 text-2xl">
+              {({ open }) => (
+                <>
+                  <Popover.Button
+                    onClick={() => {
+                      delayRef.current = 5000;
+                    }}
+                  >
+                    <BsSuitHeart className="text-white" />
+                  </Popover.Button>
+                  <Transition
+                    as={Fragment}
+                    show={open && !session}
+                    enter="transition ease-out duration-200"
+                    enterFrom="opacity-0 translate-y-1"
+                    enterTo="opacity-100 translate-y-0"
+                    leave="transition ease-in duration-150"
+                    leaveFrom="opacity-100 translate-y-0"
+                    leaveTo="opacity-0 translate-y-1"
+                  >
+                    <Popover.Panel
+                      ref={popOverRef}
+                      className="absolute left-2 z-10 w-48 rounded-md bg-black/80 p-2 text-sm text-white shadow-lg"
+                    >
+                      Sign in to add to favorites
+                    </Popover.Panel>
+                  </Transition>
+                </>
+              )}
+            </Popover>
+          )}
+          {session && (
+            <button
+              className="absolute top-2 left-2 text-2xl"
+              onClick={() => mutate({ place, isFavorited })}
+              disabled={isLoading}
+            >
+              {isFavorited ? (
+                <BsSuitHeartFill className="animate-favorited text-red-500" />
+              ) : (
+                <BsSuitHeart className="text-white" />
+              )}
+            </button>
+          )}
         </div>
         <div className="flex w-full flex-col px-3 md:pt-2">
           <div className="w-full grow space-y-3">

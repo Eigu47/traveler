@@ -1,4 +1,5 @@
 import { useAtom } from "jotai";
+import { useSession } from "next-auth/react";
 import { Result } from "../../types/NearbySearchResult";
 import { clickedPlaceAtom } from "../../utils/store";
 import { useGetFavorites } from "../../utils/useQueryHooks";
@@ -28,6 +29,7 @@ export default function ResultsList({
 }: Props) {
   const [clickedPlace] = useAtom(clickedPlaceAtom);
   const { favoritesId } = useGetFavorites();
+  const { data: session } = useSession();
 
   return (
     <div className="mx-1 flex w-full flex-row overflow-x-auto overflow-y-hidden pt-3 md:m-[12px_8px_12px_4px] md:w-auto md:flex-col md:space-y-5 md:overflow-y-auto md:overflow-x-hidden md:py-2">
@@ -38,6 +40,7 @@ export default function ResultsList({
           isClicked={clickedPlace === place.place_id}
           queryLatLng={queryLatLng}
           isFavorited={!!favoritesId?.includes(place.place_id)}
+          session={!!session}
         />
       ))}
       {(!isFetching || isFetchingNextPage) &&
@@ -48,6 +51,7 @@ export default function ResultsList({
             isClicked={clickedPlace === place.place_id}
             queryLatLng={queryLatLng}
             isFavorited={!!favoritesId?.includes(place.place_id)}
+            session={!!session}
           />
         ))}
       {!(isFetching && !isFetchingNextPage) && queryLatLng && (
