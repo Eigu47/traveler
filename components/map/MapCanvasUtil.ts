@@ -20,7 +20,6 @@ export function useMapCanvas() {
   const [selectedPlace, setSelectedPlace] = useAtom(selectedPlaceAtom);
   const [favoritesList, setFavoritesList] = useAtom(favoritesListAtom);
   const timerRef = useRef<NodeJS.Timeout>();
-  // const mapRef = useRef<google.maps.Map>();
   const [mapRef, setMapRef] = useAtom(mapRefAtom);
   const [, setClickedPlace] = useAtom(clickedPlaceAtom);
   const [showResults, setShowResults] = useAtom(showResultsAtom);

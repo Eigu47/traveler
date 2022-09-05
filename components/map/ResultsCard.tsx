@@ -1,12 +1,11 @@
 import { useAtom } from "jotai";
 import Image from "next/image";
-import { useRef, useEffect, Fragment, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import { mapRefAtom, selectedPlaceAtom } from "../../utils/store";
 import { Result } from "../../types/NearbySearchResult";
 import { getDistance, Rating } from "./ResultsUtil";
 import { BsSuitHeart, BsSuitHeartFill } from "react-icons/bs";
 import { useFavorites } from "../../utils/useQueryHooks";
-import { Popover, Transition } from "@headlessui/react";
 import useTimeout from "../../utils/useTimeout";
 
 interface Props {
@@ -29,7 +28,7 @@ export default function ResultsCard({
   const { mutate, isLoading } = useFavorites();
   const [mapRef] = useAtom(mapRefAtom);
   const [delay, setDelay] = useState<number | null>(null);
-  const closeRef = useRef<() => void>();
+  const [showPopover, setShowPopover] = useState(false);
 
   const isSelected = selectedPlace?.place_id === place.place_id;
 
@@ -49,7 +48,7 @@ export default function ResultsCard({
 
   useTimeout(() => {
     setDelay(null);
-    closeRef.current?.();
+    setShowPopover(false);
   }, delay);
 
   return (
@@ -72,45 +71,32 @@ export default function ResultsCard({
             height={250}
             objectFit="cover"
           />
-          <Popover className="absolute top-2 left-2 text-2xl">
-            {({ open, close }) => (
-              <>
-                <Popover.Button
-                  onClick={() => {
-                    if (session) {
-                      mutate({ place, isFavorited });
-                      return;
-                    }
 
-                    setDelay(1500);
-                    closeRef.current = close;
-                  }}
-                  disabled={isLoading}
-                  className="outline-none"
-                >
-                  {isFavorited ? (
-                    <BsSuitHeartFill className="animate-favorited text-red-500" />
-                  ) : (
-                    <BsSuitHeart className="text-white" />
-                  )}
-                </Popover.Button>
-                <Transition
-                  as={Fragment}
-                  show={open && !session}
-                  enter="transition ease-out duration-200"
-                  enterFrom="opacity-0 translate-y-1"
-                  enterTo="opacity-100 translate-y-0"
-                  leave="transition ease-in duration-150"
-                  leaveFrom="opacity-100 translate-y-0"
-                  leaveTo="opacity-0 translate-y-1"
-                >
-                  <Popover.Panel className="absolute left-2 z-10 w-48 rounded-md bg-black/80 p-2 text-sm text-white shadow-lg">
-                    Sign in to add to favorites
-                  </Popover.Panel>
-                </Transition>
-              </>
+          <div className="absolute top-2 left-2 text-2xl">
+            <button
+              onClick={() => {
+                if (session) {
+                  mutate({ place, isFavorited });
+                  return;
+                }
+                setDelay(1500);
+                setShowPopover(true);
+              }}
+              disabled={isLoading}
+              className="outline-none"
+            >
+              {isFavorited ? (
+                <BsSuitHeartFill className="animate-favorited text-red-500" />
+              ) : (
+                <BsSuitHeart className="text-white" />
+              )}
+            </button>
+            {showPopover && (
+              <div className="absolute left-2 z-10 w-48 animate-popover rounded-md bg-black/80 p-2 text-sm text-white shadow-lg">
+                Sign in to add to favorites
+              </div>
             )}
-          </Popover>
+          </div>
         </div>
         <div className="flex w-full flex-col px-3 md:pt-2">
           <div className="w-full grow space-y-3">

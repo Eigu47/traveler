@@ -63,7 +63,6 @@ export default function Results({}: Props) {
           hasNextPage={hasNextPage}
         />
       )}
-
       <ResultsText
         isFetching={isFetching}
         isFetchingNextPage={isFetchingNextPage}
