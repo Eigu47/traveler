@@ -1,6 +1,6 @@
 import { useAtom } from "jotai";
 import Image from "next/image";
-import { useRef, useEffect, Fragment } from "react";
+import { useRef, useEffect, Fragment, useState } from "react";
 import { mapRefAtom, selectedPlaceAtom } from "../../utils/store";
 import { Result } from "../../types/NearbySearchResult";
 import { getDistance, Rating } from "./ResultsUtil";
@@ -28,8 +28,8 @@ export default function ResultsCard({
   const resultRef = useRef<HTMLElement>(null);
   const { mutate, isLoading } = useFavorites();
   const [mapRef] = useAtom(mapRefAtom);
-  const delayRef = useRef<number | null>(null);
-  const popOverRef = useRef<HTMLDivElement>(null);
+  const [delay, setDelay] = useState<number | null>(null);
+  const closeRef = useRef<() => void>();
 
   const isSelected = selectedPlace?.place_id === place.place_id;
 
@@ -48,9 +48,9 @@ export default function ResultsCard({
   }
 
   useTimeout(() => {
-    popOverRef.current?.close();
-    delayRef.current = null;
-  }, delayRef.current);
+    setDelay(null);
+    closeRef.current?.();
+  }, delay);
 
   return (
     <article
@@ -72,51 +72,45 @@ export default function ResultsCard({
             height={250}
             objectFit="cover"
           />
-          {!session && (
-            <Popover className="absolute top-2 left-2 text-2xl">
-              {({ open }) => (
-                <>
-                  <Popover.Button
-                    onClick={() => {
-                      delayRef.current = 5000;
-                    }}
-                  >
+          <Popover className="absolute top-2 left-2 text-2xl">
+            {({ open, close }) => (
+              <>
+                <Popover.Button
+                  onClick={() => {
+                    if (session) {
+                      mutate({ place, isFavorited });
+                      return;
+                    }
+
+                    setDelay(1500);
+                    closeRef.current = close;
+                  }}
+                  disabled={isLoading}
+                  className="outline-none"
+                >
+                  {isFavorited ? (
+                    <BsSuitHeartFill className="animate-favorited text-red-500" />
+                  ) : (
                     <BsSuitHeart className="text-white" />
-                  </Popover.Button>
-                  <Transition
-                    as={Fragment}
-                    show={open && !session}
-                    enter="transition ease-out duration-200"
-                    enterFrom="opacity-0 translate-y-1"
-                    enterTo="opacity-100 translate-y-0"
-                    leave="transition ease-in duration-150"
-                    leaveFrom="opacity-100 translate-y-0"
-                    leaveTo="opacity-0 translate-y-1"
-                  >
-                    <Popover.Panel
-                      ref={popOverRef}
-                      className="absolute left-2 z-10 w-48 rounded-md bg-black/80 p-2 text-sm text-white shadow-lg"
-                    >
-                      Sign in to add to favorites
-                    </Popover.Panel>
-                  </Transition>
-                </>
-              )}
-            </Popover>
-          )}
-          {session && (
-            <button
-              className="absolute top-2 left-2 text-2xl"
-              onClick={() => mutate({ place, isFavorited })}
-              disabled={isLoading}
-            >
-              {isFavorited ? (
-                <BsSuitHeartFill className="animate-favorited text-red-500" />
-              ) : (
-                <BsSuitHeart className="text-white" />
-              )}
-            </button>
-          )}
+                  )}
+                </Popover.Button>
+                <Transition
+                  as={Fragment}
+                  show={open && !session}
+                  enter="transition ease-out duration-200"
+                  enterFrom="opacity-0 translate-y-1"
+                  enterTo="opacity-100 translate-y-0"
+                  leave="transition ease-in duration-150"
+                  leaveFrom="opacity-100 translate-y-0"
+                  leaveTo="opacity-0 translate-y-1"
+                >
+                  <Popover.Panel className="absolute left-2 z-10 w-48 rounded-md bg-black/80 p-2 text-sm text-white shadow-lg">
+                    Sign in to add to favorites
+                  </Popover.Panel>
+                </Transition>
+              </>
+            )}
+          </Popover>
         </div>
         <div className="flex w-full flex-col px-3 md:pt-2">
           <div className="w-full grow space-y-3">

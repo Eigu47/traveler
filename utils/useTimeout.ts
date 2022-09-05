@@ -10,10 +10,7 @@ export default function useTimeout(callback: () => void, delay: number | null) {
   useEffect(() => {
     if (delay === null) return;
 
-    function tick() {
-      savedCallback.current();
-    }
-    let id = setTimeout(tick, delay);
+    const id = setTimeout(savedCallback.current, delay);
     return () => clearTimeout(id);
   }, [delay]);
 }
