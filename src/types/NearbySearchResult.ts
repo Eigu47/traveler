@@ -30,6 +30,7 @@ export interface Result {
   user_ratings_total?: number;
   price_level?: number;
   distance?: number;
+  favorited_at: Date;
 }
 
 export enum BusinessStatus {
@@ -81,4 +82,10 @@ export enum Scope {
 export interface FavoritesData {
   favorites?: Result[];
   _id: string;
+}
+
+export interface MostFavoritesData {
+  _id: string;
+  favs: number;
+  place: Result;
 }

@@ -5,7 +5,7 @@ import { mapRefAtom, selectedPlaceAtom } from "@/utils/store";
 import { Result } from "@/types/NearbySearchResult";
 import { getDistance, Rating } from "./ResultsUtil";
 import { BsSuitHeart, BsSuitHeartFill } from "react-icons/bs";
-import { useFavorites } from "@/utils/useQueryFavorites";
+import { useMutateFavorites } from "@/utils/useQueryFavorites";
 import useTimeout from "@/utils/useTimeout";
 
 interface Props {
@@ -25,7 +25,7 @@ export default function ResultsCard({
 }: Props) {
   const [selectedPlace, setSelectedPlace] = useAtom(selectedPlaceAtom);
   const resultRef = useRef<HTMLElement>(null);
-  const { mutate, isLoading } = useFavorites();
+  const { mutate, isLoading } = useMutateFavorites();
   const [mapRef] = useAtom(mapRefAtom);
   const [delay, setDelay] = useState<number | null>(null);
   const [showPopover, setShowPopover] = useState(false);

@@ -176,7 +176,7 @@ export default function MapCanvas({}: Props) {
             />
           ))}
         {(showFavorites || favoritesIsSuccess) &&
-          favoritesData?.favorites?.map((place) => (
+          favoritesData?.map((place) => (
             <MapCanvasMarker
               key={place.place_id}
               places={place}

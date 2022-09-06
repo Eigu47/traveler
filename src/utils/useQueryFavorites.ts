@@ -4,7 +4,7 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { FavoritesData, Result } from "@/types/NearbySearchResult";
 
-export async function getFavorites(userId: string | null) {
+async function fetchFavorites(userId: string | null) {
   if (!userId) throw new Error("Not logged");
 
   const res = await axios.request({
@@ -20,13 +20,28 @@ export function useGetFavorites() {
   const { data: session } = useSession();
   const userId = (session?.user as { _id: string | null })?._id;
 
-  const response = useQuery(["favorites", userId], () => getFavorites(userId), {
-    enabled: !!userId,
-  });
+  const response = useQuery(
+    ["favorites", userId],
+    () => fetchFavorites(userId),
+    {
+      enabled: !!userId,
+      refetchOnWindowFocus: false,
+      select: (data) => {
+        return (
+          data.favorites?.sort((a, b) => {
+            return (
+              new Date(b.favorited_at).getTime() -
+              new Date(a.favorited_at).getTime()
+            );
+          }) ?? []
+        );
+      },
+    }
+  );
 
   const favoritesId = useMemo(
-    () => response?.data?.favorites?.flatMap((fav) => fav.place_id),
-    [response?.data?.favorites]
+    () => response?.data?.flatMap((fav) => fav.place_id),
+    [response?.data]
   );
 
   return {
@@ -35,7 +50,7 @@ export function useGetFavorites() {
   };
 }
 
-export async function handleFavorites(
+async function handleMutateFavorite(
   place: Result,
   isFavorited: boolean,
   userId: string | null
@@ -74,14 +89,14 @@ interface Props {
   isFavorited: boolean;
 }
 
-export function useFavorites() {
+export function useMutateFavorites() {
   const queryClient = useQueryClient();
   const { data: session } = useSession();
   const userId = (session?.user as { _id: string | null })?._id;
   // Optimistic update
   return useMutation(
     ({ place, isFavorited }: Props) =>
-      handleFavorites(place, isFavorited, userId),
+      handleMutateFavorite(place, isFavorited, userId),
     {
       // When mutate is called, props from mutate(props):
       onMutate: async ({ place, isFavorited }) => {

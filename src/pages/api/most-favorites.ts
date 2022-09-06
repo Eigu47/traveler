@@ -43,6 +43,7 @@ const PIPELINE = [
   {
     $sort: {
       favs: -1,
+      "place.favorited_at": -1,
     },
   },
   {

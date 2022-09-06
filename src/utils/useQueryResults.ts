@@ -5,7 +5,7 @@ import { useAtom } from "jotai";
 import { NearbySearchResult } from "../types/NearbySearchResult";
 import { keywordAtom, radiusAtom, searchTypeAtom } from "./store";
 
-export async function fetchResults(
+async function fetchResults(
   queryLatLng?: google.maps.LatLngLiteral,
   pageParam?: string,
   radius?: number,

@@ -1,8 +1,13 @@
 import Hero from "@/components/index/Hero";
-import { useMostFavorites } from "@/utils/useQueryMostFavorites";
+import { useGetFavorites } from "@/utils/useQueryFavorites";
+import { useGetMostFavorites } from "@/utils/useQueryMostFavorites";
 
 const Home = ({ isLoaded }: { isLoaded: boolean }) => {
-  const { data } = useMostFavorites();
+  const { data: mostFavData } = useGetMostFavorites();
+
+  const {
+    response: { data: favData },
+  } = useGetFavorites();
 
   return (
     <>

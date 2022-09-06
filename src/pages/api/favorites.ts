@@ -61,23 +61,3 @@ export default async function handler(
     }
   }
 }
-
-function GET_PIPELINE(userId: string) {
-  return [
-    {
-      $match: {
-        _id: new ObjectId(userId),
-      },
-    },
-    {
-      $project: {
-        favorites: 1,
-      },
-    },
-    {
-      $sort: {
-        favorited_at: -1,
-      },
-    },
-  ];
-}

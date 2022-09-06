@@ -47,14 +47,20 @@ export default function Results({}: Props) {
   useEffect(() => {
     if (showFavorites !== wasPrevFavorite) {
       setWasPrevFavorite(showFavorites);
-    }
-    if (showFavorites) {
-      setFavoritesList(favoriteRespose?.data?.favorites ?? []);
       setShowResults(true);
     }
+
+    if (
+      showFavorites &&
+      !favoritesList.length &&
+      favoriteRespose?.data?.length
+    ) {
+      setFavoritesList(favoriteRespose?.data ?? []);
+    }
   }, [
-    favoriteRespose,
+    favoriteRespose?.data,
     setShowResults,
+    favoritesList,
     showFavorites,
     wasPrevFavorite,
     setFavoritesList,
