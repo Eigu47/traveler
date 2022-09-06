@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #__next {
+    height: 100%;
+    background-color: rgb(241 245 249);
+  }
+}
+
+@layer components {
+  button {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .hero-clip {
+    clip-path: polygon(100% 0, 100% 92%, 50% 99%, 0 92%, 0 0);
+  }
+}
