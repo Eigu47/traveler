@@ -4,6 +4,7 @@ import axios from "axios";
 import { useAtom } from "jotai";
 import { NearbySearchResult } from "../types/NearbySearchResult";
 import { keywordAtom, radiusAtom, searchTypeAtom } from "./store";
+import { useGetParams } from "@/components/map/MapCanvasUtil";
 
 async function fetchResults(
   queryLatLng?: google.maps.LatLngLiteral,
@@ -30,14 +31,13 @@ async function fetchResults(
   return res.data as NearbySearchResult;
 }
 
-export function useGetResults(
-  queryLatLng: google.maps.LatLngLiteral | undefined
-) {
+export function useGetResults() {
   const [radius] = useAtom(radiusAtom);
   const [keyword] = useAtom(keywordAtom);
   const [searchType] = useAtom(searchTypeAtom);
+  const { queryLatLng } = useGetParams();
 
-  const response = useInfiniteQuery(
+  return useInfiniteQuery(
     ["nearby", queryLatLng],
     ({ pageParam = undefined }) =>
       fetchResults(queryLatLng, pageParam, radius, keyword, searchType),
@@ -51,10 +51,12 @@ export function useGetResults(
       },
     }
   );
+}
 
-  const flatResults = useMemo(() => {
-    return response?.data?.pages.flatMap((pages) => pages?.results) ?? [];
-  }, [response?.data?.pages]);
+export function useGetFlatResults() {
+  const { data } = useGetResults();
 
-  return { response, flatResults };
+  return useMemo(() => {
+    return data?.pages.flatMap((pages) => pages?.results) ?? [];
+  }, [data?.pages]);
 }

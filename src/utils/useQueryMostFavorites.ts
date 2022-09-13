@@ -3,7 +3,7 @@ import axios from "axios";
 import { MostFavoritesData } from "@/types/NearbySearchResult";
 
 export function useGetMostFavorites() {
-  const response = useQuery(
+  return useQuery(
     ["most-favorites"],
     async () => {
       const res = await axios.get("/api/most-favorites");
@@ -15,6 +15,4 @@ export function useGetMostFavorites() {
       refetchOnMount: false,
     }
   );
-
-  return response;
 }

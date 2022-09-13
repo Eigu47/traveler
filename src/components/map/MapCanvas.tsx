@@ -1,22 +1,22 @@
 import { GoogleMap } from "@react-google-maps/api/";
-import { useCallback, useRef, useState, useMemo, useEffect } from "react";
+import { useCallback, useRef, useState, useEffect } from "react";
 import { useAtom } from "jotai";
 import { MdGpsFixed } from "react-icons/md";
 import SearchBar from "./MapCanvasSearchBar";
 import {
   DEFAULT_CENTER,
-  handleClickOnMarker,
+  getCurrentPosition,
   handleMouseDown,
   handleMouseUp,
   handleRightClickOnMap,
-  handleSearchButton,
+  useGetParams,
 } from "./MapCanvasUtil";
 import MapCanvasCenter from "./MapCanvasCenter";
 import MapCanvasMarker from "./MapCanvasMarker";
 import MapCanvasPlaceCard from "./MapCanvasPlaceCard";
-import MapCanvasSearchMenu from "./MapCanvasSearchButton";
-import { useGetFavorites } from "@/utils/useQueryFavorites";
-import { useGetResults } from "@/utils/useQueryResults";
+import MapCanvasSearchButton from "./MapCanvasSearchButton";
+import { useGetFavorites, useGetFavoritesId } from "@/utils/useQueryFavorites";
+import { useGetFlatResults } from "@/utils/useQueryResults";
 import { useRouter } from "next/router";
 import {
   clickedPlaceAtom,
@@ -43,30 +43,19 @@ export default function MapCanvas({}: Props) {
   const [currentPosition, setCurrentPosition] =
     useState<google.maps.LatLngLiteral>();
 
-  const queryLatLng: google.maps.LatLngLiteral | undefined = useMemo(() => {
-    if (
-      router.query.lat &&
-      router.query.lng &&
-      !isNaN(+router.query.lat) &&
-      !isNaN(+router.query.lng)
-    ) {
-      return { lat: +router.query.lat, lng: +router.query.lng };
-    }
-  }, [router.query]);
-  const showFavorites = !!router.query.favs;
+  const { queryLatLng, showFavorites } = useGetParams();
 
-  const { flatResults } = useGetResults(queryLatLng);
-  const {
-    response: { data: favoritesData, isSuccess: favoritesIsSuccess },
-    favoritesId,
-  } = useGetFavorites();
+  const flatResults = useGetFlatResults();
+
+  const { data: favoritesData, isSuccess: favoritesIsSuccess } =
+    useGetFavorites();
+
+  const favoritesId = useGetFavoritesId();
 
   const clearOverlay = useCallback(
     (e?: MouseEvent) => {
       if (!e) setSearchButton(undefined);
-
       if (e && timerRef.current) setSearchButton(undefined);
-
       if (
         (e?.target as HTMLElement)?.nodeName === "IMG" ||
         e
@@ -74,7 +63,6 @@ export default function MapCanvas({}: Props) {
           .some((path) => (path as HTMLElement).nodeName === "ARTICLE")
       )
         return;
-
       setSelectedPlace(undefined);
     },
 
@@ -86,15 +74,6 @@ export default function MapCanvas({}: Props) {
 
     return () => window.removeEventListener("click", clearOverlay);
   }, [clearOverlay]);
-
-  function getCurrentPosition() {
-    navigator?.geolocation?.getCurrentPosition((pos) => {
-      router.replace({
-        pathname: "/map",
-        query: { lat: pos.coords.latitude, lng: pos.coords.longitude },
-      });
-    });
-  }
   // Runs once when component mounts
   useEffect(() => {
     if (!didMount) {
@@ -183,9 +162,6 @@ export default function MapCanvas({}: Props) {
               setClickedPlace={setClickedPlace}
               setSelectedPlace={setSelectedPlace}
               isFavorited={true}
-              handleClickOnMarker={() =>
-                handleClickOnMarker(place, flatResults, setFavoritesList)
-              }
             />
           ))}
         {selectedPlace && (
@@ -195,17 +171,15 @@ export default function MapCanvas({}: Props) {
           />
         )}
         {searchButton && (
-          <MapCanvasSearchMenu
+          <MapCanvasSearchButton
             searchButton={searchButton}
-            handleSearchButton={() =>
-              handleSearchButton(searchButton, router, setSearchButton)
-            }
+            setSearchButton={setSearchButton}
           />
         )}
       </GoogleMap>
       <SearchBar />
       <button
-        onClick={getCurrentPosition}
+        onClick={() => getCurrentPosition(router)}
         className={`fixed right-4 rounded-lg bg-white p-1 text-4xl text-gray-600 shadow-md ring-1 ring-black/20 duration-300 hover:text-black sm:bottom-6 md:transition-none ${
           showResults ? "bottom-72" : "bottom-12"
         }`}

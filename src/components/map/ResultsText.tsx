@@ -1,28 +1,22 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { Result } from "@/types/NearbySearchResult";
+import { useGetFlatResults, useGetResults } from "@/utils/useQueryResults";
+import { useAtom } from "jotai";
+import { favoritesListAtom, showResultsAtom } from "@/utils/store";
+import { useGetParams } from "./MapCanvasUtil";
 
-interface Props {
-  isFetching: boolean;
-  isFetchingNextPage: boolean;
-  flatResults: Result[];
-  favoritesList: Result[];
-  isError: boolean;
-  queryLatLng: google.maps.LatLngLiteral | undefined;
-  showResults: boolean;
-}
+interface Props {}
 
-export default function ResultsText({
-  isFetching,
-  isFetchingNextPage,
-  flatResults,
-  favoritesList,
-  isError,
-  queryLatLng,
-  showResults,
-}: Props) {
+export default function ResultsText({}: Props) {
   const router = useRouter();
   const isFavorites = !!router.query.favs;
+  const [favoritesList] = useAtom(favoritesListAtom);
+  const [showResults] = useAtom(showResultsAtom);
+
+  const { queryLatLng } = useGetParams();
+  const flatResults = useGetFlatResults();
+
+  const { isFetching, isFetchingNextPage, isError } = useGetResults();
 
   if (isFetching && !isFetchingNextPage) {
     return (

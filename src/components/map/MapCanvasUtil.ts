@@ -1,6 +1,6 @@
 import { Result } from "@/types/NearbySearchResult";
-import { Dispatch, SetStateAction } from "react";
-import { NextRouter } from "next/router";
+import { Dispatch, SetStateAction, useMemo } from "react";
+import { NextRouter, useRouter } from "next/router";
 
 export function handleMouseUp(
   timerRef: React.MutableRefObject<NodeJS.Timeout | undefined>
@@ -63,6 +63,34 @@ export function handleSearchButton(
     });
   }
   setSearchButton(undefined);
+}
+
+export function getCurrentPosition(router: NextRouter) {
+  navigator?.geolocation?.getCurrentPosition((pos) => {
+    router.replace({
+      pathname: "/map",
+      query: { lat: pos.coords.latitude, lng: pos.coords.longitude },
+    });
+  });
+}
+
+export function useGetParams() {
+  const router = useRouter();
+
+  const queryLatLng = useMemo(() => {
+    if (
+      router.query.lat &&
+      router.query.lng &&
+      !isNaN(+router.query.lat) &&
+      !isNaN(+router.query.lng)
+    ) {
+      return { lat: +router.query.lat, lng: +router.query.lng };
+    }
+  }, [router.query]);
+
+  const showFavorites = !!router.query.favs;
+
+  return { queryLatLng, showFavorites };
 }
 
 export const DEFAULT_CENTER = {

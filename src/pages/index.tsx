@@ -5,9 +5,7 @@ import { useGetMostFavorites } from "@/utils/useQueryMostFavorites";
 const Home = ({ isLoaded }: { isLoaded: boolean }) => {
   const { data: mostFavData } = useGetMostFavorites();
 
-  const {
-    response: { data: favData },
-  } = useGetFavorites();
+  const { data: favData } = useGetFavorites();
 
   return (
     <>
