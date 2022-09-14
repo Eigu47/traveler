@@ -1,28 +1,19 @@
 import Image from "next/image";
-import { useRouter } from "next/router";
-import { Result } from "@/types/NearbySearchResult";
+import { useGetIsShowFavorites, useGetQueryLatLng } from "./MapCanvasUtil";
+import { useGetFlatResults, useGetResults } from "@/utils/useQueryResults";
+import { favoritesListAtom, showResultsAtom } from "@/utils/store";
+import { useAtom } from "jotai";
 
-interface Props {
-  isFetching: boolean;
-  isFetchingNextPage: boolean;
-  flatResults: Result[];
-  favoritesList: Result[];
-  isError: boolean;
-  queryLatLng: google.maps.LatLngLiteral | undefined;
-  showResults: boolean;
-}
+interface Props {}
 
-export default function ResultsText({
-  isFetching,
-  isFetchingNextPage,
-  flatResults,
-  favoritesList,
-  isError,
-  queryLatLng,
-  showResults,
-}: Props) {
-  const router = useRouter();
-  const isFavorites = !!router.query.favs;
+export default function ResultsText({}: Props) {
+  const [showResults] = useAtom(showResultsAtom);
+  const isShowFavorites = useGetIsShowFavorites();
+  const queryLatLng = useGetQueryLatLng();
+  const flatResults = useGetFlatResults();
+  const [favoritesList] = useAtom(favoritesListAtom);
+
+  const { isFetching, isFetchingNextPage, isError } = useGetResults();
 
   if (isFetching && !isFetchingNextPage) {
     return (
@@ -48,7 +39,7 @@ export default function ResultsText({
     !flatResults.length &&
     !favoritesList.length &&
     !isFetching &&
-    !isFavorites &&
+    !isShowFavorites &&
     !isError
   ) {
     return (
@@ -64,7 +55,7 @@ export default function ResultsText({
     );
   }
 
-  if (isFavorites && !favoritesList.length) {
+  if (isShowFavorites && !favoritesList.length) {
     return (
       <span
         className={`my-auto w-full text-center text-2xl transition-none duration-300 md:translate-y-0 ${

@@ -20,4 +20,8 @@ export const showSearchOptionsAtom = atom(true);
 
 export const favoritesListAtom = atom<Result[]>([]);
 
+export const searchButtonAtom = atom<google.maps.LatLngLiteral | undefined>(
+  undefined
+);
+
 export const mapRefAtom = atom<google.maps.Map | null>(null);

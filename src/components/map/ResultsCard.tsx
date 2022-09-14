@@ -3,7 +3,8 @@ import Image from "next/image";
 import { useRef, useEffect, useState } from "react";
 import { mapRefAtom, selectedPlaceAtom } from "@/utils/store";
 import { Result } from "@/types/NearbySearchResult";
-import { getDistance, Rating } from "./ResultsUtil";
+import { getDistance } from "./ResultsUtil";
+import { Rating } from "./ResultsCardRating";
 import { BsSuitHeart, BsSuitHeartFill } from "react-icons/bs";
 import { useMutateFavorites } from "@/utils/useQueryFavorites";
 import useTimeout from "@/utils/useTimeout";
@@ -119,10 +120,7 @@ export default function ResultsCard({
           {place.rating && (
             <div className="flex items-center justify-center space-x-1.5 md:py-1.5">
               <span>{place.rating}</span>
-              <Rating
-                rating={place.rating}
-                className="justify-center text-base md:text-xl"
-              />
+              <Rating rating={place.rating} />
               <span className="whitespace-nowrap md:whitespace-normal">{`${place.user_ratings_total} rewiews`}</span>
             </div>
           )}

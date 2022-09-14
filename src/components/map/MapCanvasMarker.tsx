@@ -1,25 +1,29 @@
 import { MarkerF } from "@react-google-maps/api";
-import { SetStateAction, useAtom } from "jotai";
+import { useAtom } from "jotai";
 import { Result } from "@/types/NearbySearchResult";
-import { showResultsAtom, showSearchOptionsAtom } from "@/utils/store";
+import {
+  clickedPlaceAtom,
+  favoritesListAtom,
+  selectedPlaceAtom,
+  showResultsAtom,
+  showSearchOptionsAtom,
+} from "@/utils/store";
+import { useGetFlatResults } from "@/utils/useQueryResults";
+import { handleClickOnMarker } from "./MapCanvasUtil";
 
 interface Props {
   places: Result;
-  setClickedPlace: (update?: SetStateAction<string | undefined>) => void;
-  setSelectedPlace: (update?: SetStateAction<Result | undefined>) => void;
   isFavorited: boolean;
-  handleClickOnMarker?: (places: Result) => void;
 }
 
-export default function MapCanvasMarker({
-  places,
-  setClickedPlace,
-  setSelectedPlace,
-  isFavorited,
-  handleClickOnMarker,
-}: Props) {
+export default function MapCanvasMarker({ places, isFavorited }: Props) {
   const [, setShowResults] = useAtom(showResultsAtom);
   const [, setShowSearchOptions] = useAtom(showSearchOptionsAtom);
+  const [, setClickedPlace] = useAtom(clickedPlaceAtom);
+  const [, setSelectedPlace] = useAtom(selectedPlaceAtom);
+  const [, setFavoritesList] = useAtom(favoritesListAtom);
+
+  const flatResults = useGetFlatResults();
 
   return (
     <MarkerF
@@ -40,7 +44,8 @@ export default function MapCanvasMarker({
         setSelectedPlace(places);
         setShowSearchOptions(false);
         setShowResults(true);
-        if (handleClickOnMarker) handleClickOnMarker(places);
+        if (isFavorited)
+          handleClickOnMarker(places, flatResults, setFavoritesList);
       }}
       onMouseOver={() => setSelectedPlace(places)}
       onMouseOut={() => setSelectedPlace(undefined)}

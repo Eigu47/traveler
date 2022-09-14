@@ -1,70 +1,16 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState } from "react";
 import { SortOptions } from "./ResultsUtil";
 import ResultsForm from "./ResultsForm";
 import { useAtom } from "jotai";
-import { favoritesListAtom, showResultsAtom } from "@/utils/store";
-import { useRouter } from "next/router";
+import { showResultsAtom } from "@/utils/store";
 import ResultsList from "./ResultsList";
 import ResultsChevronButton from "./ResultsChevronButton";
 import ResultsText from "./ResultsText";
-import { useGetResults } from "@/utils/useQueryResults";
-import { useGetFavorites } from "@/utils/useQueryFavorites";
 
 interface Props {}
 export default function Results({}: Props) {
-  const router = useRouter();
   const [sortBy, setSortBy] = useState<SortOptions>("relevance");
-  const [showResults, setShowResults] = useAtom(showResultsAtom);
-  const [favoritesList, setFavoritesList] = useAtom(favoritesListAtom);
-  const [wasPrevFavorite, setWasPrevFavorite] = useState(false);
-
-  const showFavorites = !!router.query.favs;
-  const { response: favoriteRespose } = useGetFavorites();
-
-  const queryLatLng: google.maps.LatLngLiteral | undefined = useMemo(() => {
-    if (
-      router.query.lat &&
-      router.query.lng &&
-      !isNaN(+router.query.lat) &&
-      !isNaN(+router.query.lng)
-    ) {
-      return { lat: +router.query.lat, lng: +router.query.lng };
-    }
-  }, [router.query]);
-
-  const {
-    response: {
-      refetch,
-      isFetching,
-      isFetchingNextPage,
-      fetchNextPage,
-      hasNextPage,
-      isError,
-    },
-    flatResults,
-  } = useGetResults(queryLatLng);
-
-  useEffect(() => {
-    if (showFavorites !== wasPrevFavorite) {
-      setWasPrevFavorite(showFavorites);
-      setShowResults(true);
-    }
-
-    if (
-      showFavorites &&
-      !favoritesList.length &&
-      favoriteRespose?.data?.length
-    ) {
-      setFavoritesList(favoriteRespose?.data ?? []);
-    }
-  }, [
-    favoriteRespose?.data,
-    setShowResults,
-    favoritesList,
-    showFavorites,
-    wasPrevFavorite,
-    setFavoritesList,
-  ]);
+  const [showResults] = useAtom(showResultsAtom);
 
   return (
     <aside
@@ -72,33 +18,9 @@ export default function Results({}: Props) {
       ${showResults ? "max-h-[256px]" : "max-h-[24px]"}
       `}
     >
-      <ResultsForm
-        refetch={refetch}
-        sortBy={sortBy}
-        setSortBy={setSortBy}
-        queryLatLng={queryLatLng}
-      />
-      {(!!flatResults.length || !!favoritesList.length) && (
-        <ResultsList
-          favoritesList={favoritesList}
-          queryLatLng={queryLatLng}
-          isFetching={isFetching}
-          isFetchingNextPage={isFetchingNextPage}
-          flatResults={flatResults}
-          sortBy={sortBy}
-          fetchNextPage={fetchNextPage}
-          hasNextPage={hasNextPage}
-        />
-      )}
-      <ResultsText
-        isFetching={isFetching}
-        isFetchingNextPage={isFetchingNextPage}
-        flatResults={flatResults}
-        favoritesList={favoritesList}
-        isError={isError}
-        queryLatLng={queryLatLng}
-        showResults={showResults}
-      />
+      <ResultsForm sortBy={sortBy} setSortBy={setSortBy} />
+      <ResultsList sortBy={sortBy} />
+      <ResultsText />
       <ResultsChevronButton />
     </aside>
   );

@@ -1,12 +1,5 @@
-import {
-  InfiniteData,
-  QueryObserverResult,
-  RefetchOptions,
-  RefetchQueryFilters,
-} from "@tanstack/react-query";
 import { Dispatch, SetStateAction } from "react";
 import { FiChevronsDown } from "react-icons/fi";
-import { NearbySearchResult } from "@/types/NearbySearchResult";
 import {
   SearchTypes,
   SEARCH_TYPES,
@@ -23,22 +16,15 @@ import {
   showSearchOptionsAtom,
   favoritesListAtom,
 } from "@/utils/store";
+import { useGetResults } from "@/utils/useQueryResults";
+import { useGetQueryLatLng } from "./MapCanvasUtil";
 
 interface Props {
-  refetch: <TPageData>(
-    options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
-  ) => Promise<QueryObserverResult<InfiniteData<NearbySearchResult>, unknown>>;
   sortBy: SortOptions;
   setSortBy: Dispatch<SetStateAction<SortOptions>>;
-  queryLatLng: google.maps.LatLngLiteral | undefined;
 }
 
-export default function ResultsForm({
-  refetch,
-  sortBy,
-  setSortBy,
-  queryLatLng,
-}: Props) {
+export default function ResultsForm({ sortBy, setSortBy }: Props) {
   const [radius, setRadius] = useAtom(radiusAtom);
   const [, setClickedPlace] = useAtom(clickedPlaceAtom);
   const [keyword, setKeyword] = useAtom(keywordAtom);
@@ -48,6 +34,10 @@ export default function ResultsForm({
   );
   const [, setShowResults] = useAtom(showResultsAtom);
   const [, setFavoritesList] = useAtom(favoritesListAtom);
+
+  const queryLatLng = useGetQueryLatLng();
+
+  const { refetch } = useGetResults();
 
   return (
     <form

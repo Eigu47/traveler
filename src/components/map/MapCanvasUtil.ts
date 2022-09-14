@@ -1,6 +1,6 @@
 import { Result } from "@/types/NearbySearchResult";
-import { Dispatch, SetStateAction } from "react";
-import { NextRouter } from "next/router";
+import { Dispatch, SetStateAction, useMemo } from "react";
+import { NextRouter, useRouter } from "next/router";
 
 export function handleMouseUp(
   timerRef: React.MutableRefObject<NodeJS.Timeout | undefined>
@@ -65,7 +65,37 @@ export function handleSearchButton(
   setSearchButton(undefined);
 }
 
+export function getCurrentPosition(router: NextRouter) {
+  navigator?.geolocation?.getCurrentPosition((pos) => {
+    router.replace({
+      pathname: "/map",
+      query: { lat: pos.coords.latitude, lng: pos.coords.longitude },
+    });
+  });
+}
+
+export function useGetQueryLatLng() {
+  const router = useRouter();
+
+  return useMemo(() => {
+    if (
+      router.query.lat &&
+      router.query.lng &&
+      !isNaN(+router.query.lat) &&
+      !isNaN(+router.query.lng)
+    ) {
+      return { lat: +router.query.lat, lng: +router.query.lng };
+    }
+  }, [router.query.lat, router.query.lng]);
+}
+
+export function useGetIsShowFavorites() {
+  const router = useRouter();
+
+  return !!router.query.favs;
+}
+
 export const DEFAULT_CENTER = {
   lat: 35.6762,
   lng: 139.6503,
-};
+} as const;

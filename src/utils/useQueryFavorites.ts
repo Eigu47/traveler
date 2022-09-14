@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useMemo } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { FavoritesData, Result } from "@/types/NearbySearchResult";
+import { useMemo } from "react";
 
 async function fetchFavorites(userId: string | null) {
   if (!userId) throw new Error("Not logged");
@@ -20,34 +20,28 @@ export function useGetFavorites() {
   const { data: session } = useSession();
   const userId = (session?.user as { _id: string | null })?._id;
 
-  const response = useQuery(
-    ["favorites", userId],
-    () => fetchFavorites(userId),
-    {
-      enabled: !!userId,
-      refetchOnWindowFocus: false,
-      select: (data) => {
-        return (
-          data.favorites?.sort((a, b) => {
-            return (
-              new Date(b.favorited_at).getTime() -
-              new Date(a.favorited_at).getTime()
-            );
-          }) ?? []
-        );
-      },
-    }
-  );
+  return useQuery(["favorites", userId], () => fetchFavorites(userId), {
+    enabled: !!userId,
+    refetchOnWindowFocus: false,
+    select: (data) => {
+      return (
+        data.favorites?.sort((a, b) => {
+          return (
+            new Date(b.favorited_at).getTime() -
+            new Date(a.favorited_at).getTime()
+          );
+        }) ?? []
+      );
+    },
+  });
+}
 
-  const favoritesId = useMemo(
-    () => response?.data?.flatMap((fav) => fav.place_id),
-    [response?.data]
-  );
+export function useGetFavoritesId() {
+  const { data } = useGetFavorites();
 
-  return {
-    response,
-    favoritesId,
-  };
+  return useMemo(() => {
+    return data?.flatMap((fav) => fav.place_id);
+  }, [data]);
 }
 
 async function handleMutateFavorite(
