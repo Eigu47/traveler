@@ -39,9 +39,13 @@ export function useGetFavorites() {
 export function useGetFavoritesId() {
   const { data } = useGetFavorites();
 
+<<<<<<< HEAD
   return useMemo(() => {
     return data?.flatMap((fav) => fav.place_id);
   }, [data]);
+=======
+  return useMemo(() => data?.flatMap((fav) => fav.place_id), [data]);
+>>>>>>> 791dae1ab2780ca51afd303d552049f6194e495b
 }
 
 async function handleMutateFavorite(

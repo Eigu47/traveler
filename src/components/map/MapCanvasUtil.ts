@@ -74,10 +74,17 @@ export function getCurrentPosition(router: NextRouter) {
   });
 }
 
+<<<<<<< HEAD
 export function useGetQueryLatLng() {
   const router = useRouter();
 
   return useMemo(() => {
+=======
+export function useGetParams() {
+  const router = useRouter();
+
+  const queryLatLng = useMemo(() => {
+>>>>>>> 791dae1ab2780ca51afd303d552049f6194e495b
     if (
       router.query.lat &&
       router.query.lng &&
@@ -86,6 +93,7 @@ export function useGetQueryLatLng() {
     ) {
       return { lat: +router.query.lat, lng: +router.query.lng };
     }
+<<<<<<< HEAD
   }, [router.query.lat, router.query.lng]);
 }
 
@@ -93,6 +101,13 @@ export function useGetIsShowFavorites() {
   const router = useRouter();
 
   return !!router.query.favs;
+=======
+  }, [router.query]);
+
+  const showFavorites = !!router.query.favs;
+
+  return { queryLatLng, showFavorites };
+>>>>>>> 791dae1ab2780ca51afd303d552049f6194e495b
 }
 
 export const DEFAULT_CENTER = {

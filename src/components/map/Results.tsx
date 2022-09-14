@@ -8,6 +8,7 @@ import ResultsChevronButton from "./ResultsChevronButton";
 import ResultsText from "./ResultsText";
 
 interface Props {}
+
 export default function Results({}: Props) {
   const [sortBy, setSortBy] = useState<SortOptions>("relevance");
   const [showResults] = useAtom(showResultsAtom);

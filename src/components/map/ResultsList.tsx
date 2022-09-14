@@ -1,11 +1,25 @@
 import { useAtom } from "jotai";
+import { useEffect } from "react";
 import { useSession } from "next-auth/react";
+<<<<<<< HEAD
 import { clickedPlaceAtom, favoritesListAtom } from "@/utils/store";
 import { useGetFavoritesId } from "@/utils/useQueryFavorites";
 import ResultsCard from "./ResultsCard";
 import { SortOptions, sortResults } from "./ResultsUtil";
 import { useGetQueryLatLng } from "./MapCanvasUtil";
 import { useGetFlatResults, useGetResults } from "@/utils/useQueryResults";
+=======
+import {
+  clickedPlaceAtom,
+  favoritesListAtom,
+  showResultsAtom,
+} from "@/utils/store";
+import { useGetFavorites, useGetFavoritesId } from "@/utils/useQueryFavorites";
+import ResultsCard from "./ResultsCard";
+import { SortOptions, sortResults } from "./ResultsUtil";
+import { useGetFlatResults, useGetResults } from "@/utils/useQueryResults";
+import { useGetParams } from "./MapCanvasUtil";
+>>>>>>> 791dae1ab2780ca51afd303d552049f6194e495b
 
 interface Props {
   sortBy: SortOptions;
@@ -13,6 +27,7 @@ interface Props {
 
 export default function ResultsList({ sortBy }: Props) {
   const [clickedPlace] = useAtom(clickedPlaceAtom);
+<<<<<<< HEAD
   const favoritesId = useGetFavoritesId();
   const [favoritesList] = useAtom(favoritesListAtom);
   const { data: session } = useSession();
@@ -23,6 +38,34 @@ export default function ResultsList({ sortBy }: Props) {
   const { isFetching, isFetchingNextPage, fetchNextPage, hasNextPage } =
     useGetResults();
 
+=======
+  const [favoritesList, setFavoritesList] = useAtom(favoritesListAtom);
+  const [, setShowResults] = useAtom(showResultsAtom);
+  const favoritesId = useGetFavoritesId();
+  const { data: session } = useSession();
+
+  const { isFetching, isFetchingNextPage, fetchNextPage, hasNextPage } =
+    useGetResults();
+
+  const { queryLatLng, showFavorites } = useGetParams();
+  const flatResults = useGetFlatResults();
+
+  const { data: favoritesData } = useGetFavorites();
+
+  useEffect(() => {
+    if (showFavorites && !favoritesList.length && favoritesData?.length) {
+      setShowResults(true);
+      setFavoritesList(favoritesData ?? []);
+    }
+  }, [
+    favoritesData,
+    setShowResults,
+    favoritesList,
+    showFavorites,
+    setFavoritesList,
+  ]);
+
+>>>>>>> 791dae1ab2780ca51afd303d552049f6194e495b
   if (!!flatResults.length || !!favoritesList.length) {
     return (
       <div className="mx-1 flex w-full flex-row overflow-x-auto overflow-y-hidden pt-3 md:m-[12px_8px_12px_4px] md:w-auto md:flex-col md:space-y-5 md:overflow-y-auto md:overflow-x-hidden md:py-2">

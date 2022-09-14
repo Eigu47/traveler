@@ -17,7 +17,11 @@ import {
   favoritesListAtom,
 } from "@/utils/store";
 import { useGetResults } from "@/utils/useQueryResults";
+<<<<<<< HEAD
 import { useGetQueryLatLng } from "./MapCanvasUtil";
+=======
+import { useGetParams } from "./MapCanvasUtil";
+>>>>>>> 791dae1ab2780ca51afd303d552049f6194e495b
 
 interface Props {
   sortBy: SortOptions;
@@ -35,9 +39,14 @@ export default function ResultsForm({ sortBy, setSortBy }: Props) {
   const [, setShowResults] = useAtom(showResultsAtom);
   const [, setFavoritesList] = useAtom(favoritesListAtom);
 
+<<<<<<< HEAD
   const queryLatLng = useGetQueryLatLng();
 
   const { refetch } = useGetResults();
+=======
+  const { refetch } = useGetResults();
+  const { queryLatLng } = useGetParams();
+>>>>>>> 791dae1ab2780ca51afd303d552049f6194e495b
 
   return (
     <form
