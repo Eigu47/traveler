@@ -1,5 +1,4 @@
 import Image from "next/image";
-<<<<<<< HEAD
 import { useGetIsShowFavorites, useGetQueryLatLng } from "./MapCanvasUtil";
 import { useGetFlatResults, useGetResults } from "@/utils/useQueryResults";
 import { favoritesListAtom, showResultsAtom } from "@/utils/store";
@@ -14,25 +13,6 @@ export default function ResultsText({}: Props) {
   const flatResults = useGetFlatResults();
   const [favoritesList] = useAtom(favoritesListAtom);
 
-=======
-import { useRouter } from "next/router";
-import { useGetFlatResults, useGetResults } from "@/utils/useQueryResults";
-import { useAtom } from "jotai";
-import { favoritesListAtom, showResultsAtom } from "@/utils/store";
-import { useGetParams } from "./MapCanvasUtil";
-
-interface Props {}
-
-export default function ResultsText({}: Props) {
-  const router = useRouter();
-  const isFavorites = !!router.query.favs;
-  const [favoritesList] = useAtom(favoritesListAtom);
-  const [showResults] = useAtom(showResultsAtom);
-
-  const { queryLatLng } = useGetParams();
-  const flatResults = useGetFlatResults();
-
->>>>>>> 791dae1ab2780ca51afd303d552049f6194e495b
   const { isFetching, isFetchingNextPage, isError } = useGetResults();
 
   if (isFetching && !isFetchingNextPage) {

@@ -2,7 +2,6 @@ import { MarkerF } from "@react-google-maps/api";
 import { useAtom } from "jotai";
 import { Result } from "@/types/NearbySearchResult";
 import {
-<<<<<<< HEAD
   clickedPlaceAtom,
   favoritesListAtom,
   selectedPlaceAtom,
@@ -11,21 +10,12 @@ import {
 } from "@/utils/store";
 import { useGetFlatResults } from "@/utils/useQueryResults";
 import { handleClickOnMarker } from "./MapCanvasUtil";
-=======
-  favoritesListAtom,
-  showResultsAtom,
-  showSearchOptionsAtom,
-} from "@/utils/store";
-import { handleClickOnMarker } from "./MapCanvasUtil";
-import { useGetFlatResults } from "@/utils/useQueryResults";
->>>>>>> 791dae1ab2780ca51afd303d552049f6194e495b
 
 interface Props {
   places: Result;
   isFavorited: boolean;
 }
 
-<<<<<<< HEAD
 export default function MapCanvasMarker({ places, isFavorited }: Props) {
   const [, setShowResults] = useAtom(showResultsAtom);
   const [, setShowSearchOptions] = useAtom(showSearchOptionsAtom);
@@ -34,18 +24,6 @@ export default function MapCanvasMarker({ places, isFavorited }: Props) {
   const [, setFavoritesList] = useAtom(favoritesListAtom);
 
   const flatResults = useGetFlatResults();
-=======
-export default function MapCanvasMarker({
-  places,
-  setClickedPlace,
-  setSelectedPlace,
-  isFavorited,
-}: Props) {
-  const [, setShowResults] = useAtom(showResultsAtom);
-  const [, setShowSearchOptions] = useAtom(showSearchOptionsAtom);
-  const flatResults = useGetFlatResults();
-  const [, setFavoritesList] = useAtom(favoritesListAtom);
->>>>>>> 791dae1ab2780ca51afd303d552049f6194e495b
 
   return (
     <MarkerF
