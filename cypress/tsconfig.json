@@ -6,10 +6,8 @@
 
     "baseUrl": "../", // This must be specified if "paths" is.
     "paths": {
-      "@/*": ["./src/*"],
-      "@/components/*": ["./src/components/*"],
-      "@/pages/*": ["./src/pages/*"]
+      "@/*": ["./src/*"]
     }
   },
-  "include": ["**/*.cy.ts"]
+  "include": ["**/*.ts"]
 }

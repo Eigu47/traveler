@@ -73,7 +73,7 @@ describe("map page with mocked results", () => {
     cy.findByTestId("center-marker").should("exist");
 
     cy.wait("@nearby").then((interception) => {
-      const { results } = interception.response.body as NearbySearchResult;
+      const { results } = interception.response?.body as NearbySearchResult;
 
       cy.findAllByTestId("result-marker").should("have.length", results.length);
     });
