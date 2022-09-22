@@ -101,16 +101,6 @@ describe("map page with mocked results", () => {
       );
     });
   });
-
-  it.only("rigth click on map should work", () => {
-    cy.wait("@nearby");
-
-    cy.findByTestId("map-canvas")
-      .rightclick("center")
-      .within(() => {
-        cy.findByRole("button", { name: /search here/i }).should("exist");
-      });
-  });
 });
 
 describe("map page with real results", () => {
