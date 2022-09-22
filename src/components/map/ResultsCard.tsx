@@ -61,6 +61,7 @@ export default function ResultsCard({
       onMouseOut={() => setSelectedPlace(undefined)}
       onClick={handleClickOnCard}
       ref={resultRef}
+      data-test-id="result-card"
     >
       <div className="flex h-36 rounded-xl border-b border-black/10 bg-slate-200 md:h-44">
         <div className="relative w-36 flex-none md:w-44">
@@ -121,7 +122,7 @@ export default function ResultsCard({
             <div className="flex items-center justify-center space-x-1.5 md:py-1.5">
               <span>{place.rating}</span>
               <Rating rating={place.rating} />
-              <span className="whitespace-nowrap md:whitespace-normal">{`${place.user_ratings_total} rewiews`}</span>
+              <span className="whitespace-nowrap md:whitespace-normal">{`${place.user_ratings_total} reviews`}</span>
             </div>
           )}
         </div>
@@ -135,21 +136,21 @@ export default function ResultsCard({
         >
           {place.name}
         </a>
-        <div className="flex justify-center space-x-2 md:flex-wrap">
+        <ul className="flex justify-center space-x-2 md:flex-wrap">
           {place.types
             .filter(
               (type) => type !== "point_of_interest" && type !== "establishment"
             )
             .map((type) => (
-              <p
+              <li
                 className="whitespace-nowrap rounded-lg bg-gray-300/30  px-1 py-0.5 text-sm shadow-sm ring-1 ring-black/10 md:px-2"
                 key={type}
               >
                 {type.charAt(0).toUpperCase() +
                   type.slice(1).replaceAll("_", " ")}
-              </p>
+              </li>
             ))}
-        </div>
+        </ul>
       </div>
     </article>
   );

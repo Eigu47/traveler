@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "types": ["cypress", "@testing-library/cypress", "node"],
+
+    "baseUrl": "../", // This must be specified if "paths" is.
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/pages/*": ["./src/pages/*"]
+    }
+  },
+  "include": ["**/*.cy.ts"]
+}

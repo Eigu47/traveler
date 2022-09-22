@@ -26,29 +26,30 @@ export default function MapCanvasMarker({ places, isFavorited }: Props) {
   const flatResults = useGetFlatResults();
 
   return (
-    <MarkerF
-      key={places.place_id}
-      position={{
-        lat: places.geometry.location.lat,
-        lng: places.geometry.location.lng,
-      }}
-      icon={{
-        url: isFavorited ? "/fav-pin.png" : places.icon,
-        scaledSize: new google.maps.Size(
-          isFavorited ? 40 : 35,
-          isFavorited ? 40 : 35
-        ),
-      }}
-      onClick={() => {
-        setClickedPlace(places.place_id);
-        setSelectedPlace(places);
-        setShowSearchOptions(false);
-        setShowResults(true);
-        if (isFavorited)
-          handleClickOnMarker(places, flatResults, setFavoritesList);
-      }}
-      onMouseOver={() => setSelectedPlace(places)}
-      onMouseOut={() => setSelectedPlace(undefined)}
-    />
+    <div data-test-id={isFavorited ? "fav-marker" : "result-marker"}>
+      <MarkerF
+        position={{
+          lat: places.geometry.location.lat,
+          lng: places.geometry.location.lng,
+        }}
+        icon={{
+          url: isFavorited ? "/fav-pin.png" : places.icon,
+          scaledSize: new google.maps.Size(
+            isFavorited ? 40 : 35,
+            isFavorited ? 40 : 35
+          ),
+        }}
+        onClick={() => {
+          setClickedPlace(places.place_id);
+          setSelectedPlace(places);
+          setShowSearchOptions(false);
+          setShowResults(true);
+          if (isFavorited)
+            handleClickOnMarker(places, flatResults, setFavoritesList);
+        }}
+        onMouseOver={() => setSelectedPlace(places)}
+        onMouseOut={() => setSelectedPlace(undefined)}
+      />
+    </div>
   );
 }

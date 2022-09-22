@@ -42,7 +42,10 @@ export default function MapCanvas({}: Props) {
       setCurrentPosition={setCurrentPosition}
       timerRef={timerRef}
     >
-      <section className="relative h-full w-full bg-[#e5e3df]">
+      <section
+        className="relative h-full w-full bg-[#e5e3df]"
+        data-test-id="map-canvas"
+      >
         <GoogleMap
           zoom={queryLatLng ? 13 : 10}
           center={currentPosition ?? DEFAULT_CENTER}

@@ -11,7 +11,7 @@ export default function MapCanvasCenter({}: Props) {
 
   if (queryLatLng) {
     return (
-      <>
+      <div data-test-id="center-marker">
         <CircleF
           options={{
             center: queryLatLng,
@@ -23,7 +23,7 @@ export default function MapCanvasCenter({}: Props) {
           }}
         />
         <MarkerF position={queryLatLng} clickable={false} />
-      </>
+      </div>
     );
   }
   return null;
