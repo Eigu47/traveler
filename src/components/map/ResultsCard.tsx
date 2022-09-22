@@ -73,7 +73,6 @@ export default function ResultsCard({
             height={250}
             objectFit="cover"
           />
-
           <div className="absolute top-2 left-2 text-2xl">
             <button
               onClick={() => {
@@ -87,11 +86,10 @@ export default function ResultsCard({
               disabled={isLoading}
               className="outline-none"
             >
-              {isFavorited ? (
+              {isFavorited && (
                 <BsSuitHeartFill className="animate-favorited text-red-500" />
-              ) : (
-                <BsSuitHeart className="text-white" />
               )}
+              {!isFavorited && <BsSuitHeart className="text-white" />}
             </button>
             {showPopover && (
               <div className="absolute left-2 z-10 w-48 animate-popover rounded-md bg-black/80 p-2 text-sm text-white shadow-lg">
@@ -102,9 +100,9 @@ export default function ResultsCard({
         </div>
         <div className="flex w-full flex-col px-3 md:pt-2">
           <div className="w-full grow space-y-3">
-            <p className="">{place.vicinity}</p>
+            <p>{place.vicinity}</p>
             {queryLatLng && (
-              <p className="">{`${getDistance(
+              <p>{`${getDistance(
                 place.geometry.location,
                 queryLatLng
               )} km from the center`}</p>

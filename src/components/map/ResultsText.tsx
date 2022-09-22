@@ -43,7 +43,7 @@ export default function ResultsText({}: Props) {
     !isError
   ) {
     return (
-      <span
+      <div
         className={`my-auto w-full text-center text-2xl transition-none duration-300 md:translate-y-0 ${
           showResults ? "translate-y-0" : "translate-y-full"
         }`}
@@ -51,7 +51,7 @@ export default function ResultsText({}: Props) {
         <span className="md:hidden">Hold tap </span>
         <span className="hidden md:block">Right click </span>
         in the map to start searching
-      </span>
+      </div>
     );
   }
 

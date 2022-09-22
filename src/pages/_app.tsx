@@ -37,7 +37,7 @@ export default function MyApp({
           <Hydrate state={pageProps.dehydratedState}>
             <JotaiProvider>
               <Navbar />
-              <Component {...pageProps} isLoaded={isLoaded} />
+              <Component {...pageProps} googleMapScriptIsLoaded={isLoaded} />
             </JotaiProvider>
           </Hydrate>
         </QueryClientProvider>

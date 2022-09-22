@@ -60,11 +60,9 @@ export default function ResultsList({ sortBy }: Props) {
               }}
               disabled={isFetchingNextPage || !hasNextPage}
             >
-              {hasNextPage
-                ? !isFetchingNextPage
-                  ? "Load more"
-                  : "Searching..."
-                : "No more results"}
+              {hasNextPage && !isFetchingNextPage && "Load more"}
+              {hasNextPage && isFetchingNextPage && "Loading..."}
+              {!hasNextPage && "No more results"}
             </button>
           </div>
         )}

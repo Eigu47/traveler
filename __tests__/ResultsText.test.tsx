@@ -1,5 +1,5 @@
 import ResultsText from "@/components/map/ResultsText";
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 
 const mockRouter = jest.spyOn(require("next/router"), "useRouter");
 
@@ -22,9 +22,9 @@ describe("ResultsText", () => {
   });
 
   it("initial state renders idle text", () => {
-    const { getByText } = render(<ResultsText />);
+    render(<ResultsText />);
 
-    const idleText = getByText(/in the map to start searching/i);
+    const idleText = screen.getByText(/in the map to start searching/i);
 
     expect(idleText).toBeInTheDocument();
   });
@@ -34,9 +34,9 @@ describe("ResultsText", () => {
       isFetching: true,
     }));
 
-    const { getByRole } = render(<ResultsText />);
+    render(<ResultsText />);
 
-    const loadingState = getByRole("img", { name: /loading\.\.\./i });
+    const loadingState = screen.getByRole("img", { name: /loading\.\.\./i });
 
     expect(loadingState).toBeInTheDocument();
   });
@@ -49,9 +49,9 @@ describe("ResultsText", () => {
       },
     }));
 
-    const { getByText } = render(<ResultsText />);
+    render(<ResultsText />);
 
-    const noResultsText = getByText(/no results found/i);
+    const noResultsText = screen.getByText(/no results found/i);
 
     expect(noResultsText).toBeInTheDocument();
   });
@@ -61,9 +61,9 @@ describe("ResultsText", () => {
       query: { favs: true },
     }));
 
-    const { getByText } = render(<ResultsText />);
+    render(<ResultsText />);
 
-    const noFavoritesText = getByText(/no favorites yet/i);
+    const noFavoritesText = screen.getByText(/no favorites yet/i);
 
     expect(noFavoritesText).toBeInTheDocument();
   });
@@ -73,9 +73,9 @@ describe("ResultsText", () => {
       isError: true,
     }));
 
-    const { getByText } = render(<ResultsText />);
+    render(<ResultsText />);
 
-    const errorText = getByText(/something went wrong\.\.\./i);
+    const errorText = screen.getByText(/something went wrong\.\.\./i);
 
     expect(errorText).toBeInTheDocument();
   });

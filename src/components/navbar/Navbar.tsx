@@ -37,7 +37,7 @@ export default function Navbar() {
             />
           )}
           <NavbarLink name="About" href="/" />
-          {session ? (
+          {session && (
             <button
               className="hover:text-slate-300"
               onClick={() => {
@@ -47,7 +47,8 @@ export default function Navbar() {
             >
               Sign out
             </button>
-          ) : (
+          )}
+          {!session && (
             <button
               className="flex items-center space-x-1 hover:text-slate-300"
               onClick={() => signIn("google")}

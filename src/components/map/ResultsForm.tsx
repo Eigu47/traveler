@@ -52,7 +52,7 @@ export default function ResultsForm({ sortBy, setSortBy }: Props) {
         showSearchOptions ? "-translate-x-4" : "-translate-x-[calc(100%-8px)]"
       }`}
     >
-      <div className="flex w-full flex-col items-center justify-center space-x-3 space-y-3 overflow-hidden pt-6 pb-3 md:flex-row md:space-y-0 md:overflow-visible md:py-8">
+      <div className="flex w-full flex-col items-center justify-center space-x-3 space-y-3 overflow-hidden px-0.5 pt-6 pb-3 md:flex-row md:space-y-0 md:overflow-visible md:py-8">
         <div className="relative w-full">
           <label
             htmlFor="search-keyword"
@@ -82,7 +82,7 @@ export default function ResultsForm({ sortBy, setSortBy }: Props) {
         </button>
       </div>
       <div
-        className={`relative w-full overflow-hidden duration-300 ${
+        className={`relative w-full overflow-hidden px-0.5 duration-300 ${
           showSearchOptions ? "md:max-h-[170px]" : "md:max-h-0"
         }`}
       >
@@ -97,7 +97,7 @@ export default function ResultsForm({ sortBy, setSortBy }: Props) {
               </label>
               <select
                 id="search-type"
-                className="mb-3 w-full rounded text-lg outline-none focus:ring-1"
+                className="mb-3 w-full rounded text-lg outline-none ring-1 ring-black/20 focus:ring-2 focus:ring-blue-500/50"
                 defaultValue="tourist_attraction"
                 onChange={(e) => setSearchType(e.target.value as SearchTypes)}
               >
@@ -121,7 +121,7 @@ export default function ResultsForm({ sortBy, setSortBy }: Props) {
               <select
                 name="sort-by"
                 id="sort-by"
-                className="w-full rounded text-lg outline-none focus:ring-1"
+                className="w-full rounded text-lg outline-none ring-1 ring-black/20 focus:ring-2 focus:ring-blue-500/50"
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as SortOptions)}
               >
@@ -135,7 +135,7 @@ export default function ResultsForm({ sortBy, setSortBy }: Props) {
               </select>
             </div>
           </div>
-          <div className="">
+          <div>
             <label
               htmlFor="search-radius"
               className="block text-sm md:text-base"

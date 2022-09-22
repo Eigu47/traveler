@@ -3,16 +3,15 @@ import Results from "@/components/map/Results";
 import Image from "next/image";
 
 interface Props {
-  isLoaded: boolean;
+  googleMapScriptIsLoaded: boolean;
 }
 
-export default function Map({ isLoaded }: Props) {
+export default function Map({ googleMapScriptIsLoaded }: Props) {
   return (
     <main className="relative flex h-full max-w-full flex-row overflow-hidden sm:top-14 sm:h-[calc(100%-56px)] md:h-[calc(100%-56px)]">
       <Results />
-      {isLoaded ? (
-        <MapCanvas />
-      ) : (
+      {googleMapScriptIsLoaded && <MapCanvas />}
+      {!googleMapScriptIsLoaded && (
         <div className="flex h-full w-full items-center justify-center bg-[#e5e3df]">
           <Image src="/loading.svg" alt="Loading..." height={200} width={200} />
         </div>

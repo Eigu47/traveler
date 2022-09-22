@@ -3,7 +3,11 @@ import { FiMap, FiSearch } from "react-icons/fi";
 import Link from "next/link";
 import HeroSearchBar from "./HeroSearchBar";
 
-export default function Hero({ isLoaded }: { isLoaded: boolean }) {
+interface Props {
+  googleMapScriptIsLoaded: boolean;
+}
+
+export default function Hero({ googleMapScriptIsLoaded }: Props) {
   return (
     <section className="hero-clip h-full">
       <div className="fixed -z-10 h-full w-screen max-w-full">
@@ -18,9 +22,8 @@ export default function Hero({ isLoaded }: { isLoaded: boolean }) {
         <h1 className="text-center font-serif text-5xl font-semibold text-white">
           Discover new places
         </h1>
-        {isLoaded ? (
-          <HeroSearchBar />
-        ) : (
+        {googleMapScriptIsLoaded && <HeroSearchBar />}
+        {!googleMapScriptIsLoaded && (
           <div className="m-16 flex w-10/12 items-center overflow-hidden rounded-full bg-slate-200 p-2 pl-4 text-2xl shadow-lg ring-1 ring-black/30 md:w-6/12">
             <p className="w-full text-slate-500">Loading...</p>
             <button

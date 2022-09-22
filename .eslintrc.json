@@ -7,7 +7,14 @@
         "**/__tests__/**/*.[jt]s?(x)",
         "**/?(*.)+(spec|test).[jt]s?(x)"
       ],
-      "extends": ["plugin:testing-library/dom"]
+      "plugins": ["testing-library"],
+      "extends": ["plugin:testing-library/react"]
+    },
+    // Only uses Cypress lint rules in Cypress test files
+    {
+      "files": ["**/*.cy.ts"],
+      "plugins": ["cypress"],
+      "extends": ["plugin:cypress/recommended"]
     }
   ]
 }
