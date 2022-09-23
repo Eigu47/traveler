@@ -31,6 +31,7 @@ export interface Result {
   price_level?: number;
   distance?: number;
   favorited_at: Date;
+  latLng?: google.maps.LatLngLiteral;
 }
 
 export enum BusinessStatus {

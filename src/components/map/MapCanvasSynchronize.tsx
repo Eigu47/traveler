@@ -4,6 +4,7 @@ import {
   mapRefAtom,
   searchButtonAtom,
   selectedPlaceAtom,
+  showFavInMapAtom,
   showResultsAtom,
   showSearchOptionsAtom,
 } from "@/utils/store";
@@ -15,6 +16,7 @@ import {
   SetStateAction,
   useEffect,
   useState,
+  useRef,
 } from "react";
 import { useGetIsShowFavorites, useGetQueryLatLng } from "./MapCanvasUtil";
 
@@ -25,8 +27,6 @@ interface Props {
   >;
   timerRef: MutableRefObject<NodeJS.Timeout | undefined>;
 }
-
-let didMount = false;
 
 export default function MapCanvasSynchronize({
   children,
@@ -40,6 +40,8 @@ export default function MapCanvasSynchronize({
   const [, setClickedPlace] = useAtom(clickedPlaceAtom);
   const [, setShowResults] = useAtom(showResultsAtom);
   const [, setShowSearchOptions] = useAtom(showSearchOptionsAtom);
+  const [, setShowFavInMap] = useAtom(showFavInMapAtom);
+  const didMount = useRef(false);
   const queryLatLng = useGetQueryLatLng();
 
   useEffect(() => {
@@ -62,7 +64,7 @@ export default function MapCanvasSynchronize({
   }, [setSelectedPlace, setSearchButton, timerRef]);
   // Runs once when component mounts
   useEffect(() => {
-    if (!didMount) {
+    if (!didMount.current) {
       navigator?.geolocation?.getCurrentPosition((pos) => {
         setCurrentPosition({
           lat: pos.coords.latitude,
@@ -73,7 +75,7 @@ export default function MapCanvasSynchronize({
       setClickedPlace(undefined);
       if (window?.innerWidth < 768) setShowSearchOptions(false);
       if (window?.innerWidth > 768) setShowSearchOptions(true);
-      didMount = true;
+      didMount.current = true;
       setFavoritesList([]);
     }
   }, [
@@ -92,6 +94,7 @@ export default function MapCanvasSynchronize({
     // Reset results
     setFavoritesList([]);
     setShowResults(true);
+    setShowFavInMap(undefined);
     // Close search options in mobile
     if (window?.innerWidth < 768) setShowSearchOptions(false);
   }, [
@@ -100,6 +103,7 @@ export default function MapCanvasSynchronize({
     setShowSearchOptions,
     setClickedPlace,
     setFavoritesList,
+    setShowFavInMap,
     mapRef,
   ]);
 
@@ -115,6 +119,7 @@ export default function MapCanvasSynchronize({
 
     if (isShowFavorites && !favoritesList.length && favoritesData?.length) {
       setFavoritesList(favoritesData ?? []);
+      setShowFavInMap(undefined);
     }
   }, [
     favoritesData,
@@ -123,7 +128,8 @@ export default function MapCanvasSynchronize({
     isShowFavorites,
     wasPrevFavorite,
     setFavoritesList,
+    setShowFavInMap,
   ]);
 
-  return <>{children}</>;
+  return children;
 }

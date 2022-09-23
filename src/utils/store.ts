@@ -25,3 +25,5 @@ export const searchButtonAtom = atom<google.maps.LatLngLiteral | undefined>(
 );
 
 export const mapRefAtom = atom<google.maps.Map | null>(null);
+
+export const showFavInMapAtom = atom<Result | undefined>(undefined);

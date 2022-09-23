@@ -1,7 +1,5 @@
 import { useAtom } from "jotai";
-import { useSession } from "next-auth/react";
-import { clickedPlaceAtom, favoritesListAtom } from "@/utils/store";
-import { useGetFavoritesId } from "@/utils/useQueryFavorites";
+import { favoritesListAtom } from "@/utils/store";
 import ResultsCard from "./ResultsCard";
 import { SortOptions, sortResults } from "./ResultsUtil";
 import { useGetQueryLatLng } from "./MapCanvasUtil";
@@ -12,10 +10,7 @@ interface Props {
 }
 
 export default function ResultsList({ sortBy }: Props) {
-  const [clickedPlace] = useAtom(clickedPlaceAtom);
-  const favoritesId = useGetFavoritesId();
   const [favoritesList] = useAtom(favoritesListAtom);
-  const { data: session } = useSession();
 
   const queryLatLng = useGetQueryLatLng();
   const flatResults = useGetFlatResults();
@@ -30,10 +25,7 @@ export default function ResultsList({ sortBy }: Props) {
           <ResultsCard
             key={place.place_id}
             place={place}
-            isClicked={clickedPlace === place.place_id}
             queryLatLng={queryLatLng}
-            isFavorited={!!favoritesId?.includes(place.place_id)}
-            session={!!session}
           />
         ))}
         {(!isFetching || isFetchingNextPage) &&
@@ -41,10 +33,7 @@ export default function ResultsList({ sortBy }: Props) {
             <ResultsCard
               key={place.place_id}
               place={place}
-              isClicked={clickedPlace === place.place_id}
               queryLatLng={queryLatLng}
-              isFavorited={!!favoritesId?.includes(place.place_id)}
-              session={!!session}
             />
           ))}
         {!(isFetching && !isFetchingNextPage) && queryLatLng && (

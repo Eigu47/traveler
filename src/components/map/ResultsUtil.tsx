@@ -32,6 +32,15 @@ export function sortResults(results: Result[], sortBy: SortOptions) {
   return results;
 }
 
+export function handleClickOnCard(
+  mapRef: google.maps.Map | null,
+  place: Result
+) {
+  if (!mapRef?.getBounds()?.contains(place.geometry.location)) {
+    mapRef?.panTo(place.geometry.location);
+  }
+}
+
 export type SearchTypes = typeof SEARCH_TYPES[number];
 
 export type SortOptions = typeof SORT_OPTIONS[number];

@@ -4,12 +4,13 @@ import { UrlObject } from "url";
 import { showHamburgerAtom } from "@/utils/store";
 
 interface Props {
-  name: string;
+  children: JSX.Element | string;
   href: UrlObject | string;
   onClick?: () => void;
+  className?: string;
 }
 
-export function NavbarLink({ name, href, onClick }: Props) {
+export function NavbarLink({ children, href, onClick, className }: Props) {
   const [, setShowHamburger] = useAtom(showHamburgerAtom);
 
   return (
@@ -19,9 +20,9 @@ export function NavbarLink({ name, href, onClick }: Props) {
           setShowHamburger(false);
           if (onClick) onClick();
         }}
-        className="hover:text-slate-300"
+        className={`hover:text-slate-300 ${className}`}
       >
-        {name}
+        {children}
       </a>
     </Link>
   );

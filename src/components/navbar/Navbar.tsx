@@ -1,5 +1,4 @@
 import { useAtom } from "jotai";
-import Link from "next/link";
 import { showHamburgerAtom } from "@/utils/store";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
@@ -15,28 +14,29 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className={`fixed z-20 w-screen flex-row items-center justify-between border-b-2 border-black/10 bg-gradient-to-r from-indigo-800 via-blue-800 to-indigo-800 text-slate-100 shadow-md duration-200 sm:flex sm:h-14 sm:translate-y-0 sm:px-20 sm:transition-none ${
+        className={`fixed z-20 w-full flex-row items-center border-b-2 border-black/10 bg-gradient-to-r from-indigo-800 via-blue-800 to-indigo-800 text-slate-100 shadow-md duration-200 sm:flex sm:h-14 sm:translate-y-0 sm:transition-none ${
           showHamburger ? "" : "-translate-y-full"
         }`}
       >
-        <div className="hidden text-3xl sm:block">
-          <Link href="/">traveler</Link>
-        </div>
-        <div className="flex flex-col items-center justify-center space-y-4 py-4 pt-8 sm:flex sm:flex-row sm:space-y-0 sm:space-x-16 sm:py-0.5">
-          <NavbarLink name="Home" href="/" />
+        <div className="mx-auto flex flex-col items-center space-y-4 py-4 px-4 sm:container sm:flex-row sm:space-y-0 sm:space-x-16 2xl:min-w-full 2xl:p-16">
+          <NavbarLink href="/" className="hidden grow text-3xl sm:block">
+            traveler
+          </NavbarLink>
+          <NavbarLink href="/"> Home </NavbarLink>
           {router.pathname !== "/map" && (
-            <NavbarLink name="Search" href="/map" />
+            <NavbarLink href="/map"> Map </NavbarLink>
           )}
           {session && (
             <NavbarLink
-              name="Favorites"
               href={{
                 pathname: "/map",
                 query: { favs: true },
               }}
-            />
+            >
+              Favorites
+            </NavbarLink>
           )}
-          <NavbarLink name="About" href="/" />
+          {/* <NavbarLink href="/" > About </NavbarLink> */}
           {session && (
             <button
               className="hover:text-slate-300"

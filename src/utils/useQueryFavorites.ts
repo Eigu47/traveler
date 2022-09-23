@@ -90,6 +90,9 @@ export function useMutateFavorites() {
     ({ place, isFavorited }: Props) =>
       handleMutateFavorite(place, isFavorited, userId),
     {
+      onSuccess: () =>
+        // Invalidate most-favs query to trigger refetch if needed
+        queryClient.invalidateQueries(["most-favorites"]),
       // When mutate is called, props from mutate(props):
       onMutate: async ({ place, isFavorited }) => {
         // Cancel any outgoing refetches (so they don't overwrite our optimistic update)

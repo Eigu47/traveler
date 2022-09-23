@@ -1,6 +1,8 @@
 import { Result } from "@/types/NearbySearchResult";
 import { Dispatch, SetStateAction, useMemo } from "react";
 import { NextRouter, useRouter } from "next/router";
+import { useAtom } from "jotai";
+import { showFavInMapAtom } from "@/utils/store";
 
 export function handleMouseUp(
   timerRef: React.MutableRefObject<NodeJS.Timeout | undefined>
@@ -87,6 +89,21 @@ export function useGetQueryLatLng() {
       return { lat: +router.query.lat, lng: +router.query.lng };
     }
   }, [router.query.lat, router.query.lng]);
+}
+
+export function useGetShowFavoriteInMap() {
+  const router = useRouter();
+  const [showFavInMap] = useAtom(showFavInMapAtom);
+
+  if (showFavInMap && router.query.show === showFavInMap.name) {
+    return {
+      ...showFavInMap,
+      latLng: {
+        lat: showFavInMap.geometry.location.lat,
+        lng: showFavInMap.geometry.location.lng,
+      },
+    };
+  }
 }
 
 export function useGetIsShowFavorites() {

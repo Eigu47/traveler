@@ -1,37 +1,37 @@
 import { useAtom } from "jotai";
 import Image from "next/image";
 import { useRef, useEffect, useState } from "react";
-import { mapRefAtom, selectedPlaceAtom } from "@/utils/store";
+import { clickedPlaceAtom, mapRefAtom, selectedPlaceAtom } from "@/utils/store";
 import { Result } from "@/types/NearbySearchResult";
-import { getDistance } from "./ResultsUtil";
+import { getDistance, handleClickOnCard } from "./ResultsUtil";
 import { Rating } from "./ResultsCardRating";
 import { BsSuitHeart, BsSuitHeartFill } from "react-icons/bs";
-import { useMutateFavorites } from "@/utils/useQueryFavorites";
+import {
+  useGetFavoritesId,
+  useMutateFavorites,
+} from "@/utils/useQueryFavorites";
 import useTimeout from "@/utils/useTimeout";
+import { useSession } from "next-auth/react";
 
 interface Props {
   place: Result;
-  isClicked: boolean;
   queryLatLng: google.maps.LatLngLiteral | undefined;
-  isFavorited: boolean;
-  session: boolean;
 }
 
-export default function ResultsCard({
-  place,
-  isClicked,
-  queryLatLng,
-  isFavorited,
-  session,
-}: Props) {
+export default function ResultsCard({ place, queryLatLng }: Props) {
   const [selectedPlace, setSelectedPlace] = useAtom(selectedPlaceAtom);
   const resultRef = useRef<HTMLElement>(null);
   const { mutate, isLoading } = useMutateFavorites();
   const [mapRef] = useAtom(mapRefAtom);
   const [delay, setDelay] = useState<number | null>(null);
   const [showPopover, setShowPopover] = useState(false);
+  const [clickedPlace] = useAtom(clickedPlaceAtom);
+  const favoritesId = useGetFavoritesId();
+  const { data: session } = useSession();
 
   const isSelected = selectedPlace?.place_id === place.place_id;
+  const isClicked = clickedPlace === place.place_id;
+  const isFavorited = !!favoritesId?.includes(place.place_id);
 
   useEffect(() => {
     if (isClicked)
@@ -40,12 +40,6 @@ export default function ResultsCard({
         block: "start",
       });
   }, [isClicked]);
-
-  function handleClickOnCard() {
-    if (!mapRef?.getBounds()?.contains(place.geometry.location)) {
-      mapRef?.panTo(place.geometry.location);
-    }
-  }
 
   useTimeout(() => {
     setDelay(null);
@@ -59,15 +53,15 @@ export default function ResultsCard({
       }`}
       onMouseOver={() => setSelectedPlace(place)}
       onMouseOut={() => setSelectedPlace(undefined)}
-      onClick={handleClickOnCard}
+      onClick={() => handleClickOnCard(mapRef, place)}
       ref={resultRef}
       data-test-id="result-card"
     >
       <div className="flex h-36 rounded-xl border-b border-black/10 bg-slate-200 md:h-44">
         <div className="relative w-36 flex-none md:w-44">
           <Image
-            className="rounded-l-md bg-slate-300"
-            src={`https://maps.googleapis.com/maps/api/place/photo?photo_reference=${place.photos[0].photo_reference}&maxheight=200&maxwidth=200&key=${process.env.NEXT_PUBLIC_MAP_API_KEY}`}
+            className="rounded-l-xl bg-slate-300"
+            src={`https://maps.googleapis.com/maps/api/place/photo?photo_reference=${place.photos[0].photo_reference}&maxheight=300&maxwidth=300&key=${process.env.NEXT_PUBLIC_MAP_API_KEY}`}
             alt={place.name}
             width={250}
             height={250}
@@ -76,7 +70,7 @@ export default function ResultsCard({
           <div className="absolute top-2 left-2 text-2xl">
             <button
               onClick={() => {
-                if (session) {
+                if (!!session) {
                   mutate({ place, isFavorited });
                   return;
                 }
@@ -91,12 +85,12 @@ export default function ResultsCard({
               )}
               {!isFavorited && <BsSuitHeart className="text-white" />}
             </button>
-            {showPopover && (
-              <div className="absolute left-2 z-10 w-48 animate-popover rounded-md bg-black/80 p-2 text-sm text-white shadow-lg">
-                Sign in to add to favorites
-              </div>
-            )}
           </div>
+          {showPopover && (
+            <div className="absolute left-3 top-9 z-10 w-48 animate-popover rounded-md bg-black/80 p-2 text-sm text-white shadow-lg">
+              Sign in to add to favorites
+            </div>
+          )}
         </div>
         <div className="flex w-full flex-col px-3 md:pt-2">
           <div className="w-full grow space-y-3">

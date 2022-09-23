@@ -19,6 +19,9 @@ module.exports = {
         favorited: "_fav 0.25s ease-in-out 0s",
         popover: "1.5s ease-in-out 0s 1 normal forwards running _popover",
       },
+      fontFamily: {
+        roboto: ["Roboto", "sans-serif"],
+      },
     },
   },
   plugins: [],

@@ -9,6 +9,7 @@ import {
   handleRightClickOnMap,
   useGetIsShowFavorites,
   useGetQueryLatLng,
+  useGetShowFavoriteInMap,
 } from "./MapCanvasUtil";
 import MapCanvasCenter from "./MapCanvasCenter";
 import MapCanvasMarker from "./MapCanvasMarker";
@@ -37,6 +38,8 @@ export default function MapCanvas({}: Props) {
   const favoritesId = useGetFavoritesId();
   const flatResults = useGetFlatResults();
 
+  const showFavInMap = useGetShowFavoriteInMap();
+
   return (
     <MapCanvasSynchronize
       setCurrentPosition={setCurrentPosition}
@@ -47,8 +50,8 @@ export default function MapCanvas({}: Props) {
         data-test-id="map-canvas"
       >
         <GoogleMap
-          zoom={queryLatLng ? 13 : 10}
-          center={currentPosition ?? DEFAULT_CENTER}
+          zoom={queryLatLng || showFavInMap ? 13 : 10}
+          center={showFavInMap?.latLng ?? currentPosition ?? DEFAULT_CENTER}
           mapContainerClassName="h-full w-full"
           onLoad={(map) => setMapRef(map)}
           options={{
@@ -87,6 +90,9 @@ export default function MapCanvas({}: Props) {
                 isFavorited={true}
               />
             ))}
+          {showFavInMap && (
+            <MapCanvasMarker places={showFavInMap} isFavorited={false} />
+          )}
           <MapCanvasPlaceCard />
           <MapCanvasSearchMenu />
         </GoogleMap>
