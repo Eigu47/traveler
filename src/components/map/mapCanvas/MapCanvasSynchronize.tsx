@@ -87,7 +87,6 @@ export default function MapCanvasSynchronize({
   ]);
   // Runs every time url query changes
   useEffect(() => {
-    if (showFavInMapAtom) return setShowSearchOptions(false);
     if (!queryLatLng) return;
     mapRef?.panTo(queryLatLng);
     setClickedPlace(undefined);
@@ -110,24 +109,18 @@ export default function MapCanvasSynchronize({
 
   const isShowFavorites = useGetIsShowFavorites();
   const { data: favoritesData } = useGetFavorites();
-  const [wasPrevFavorite, setWasPrevFavorite] = useState(false);
 
   useEffect(() => {
-    if (isShowFavorites !== wasPrevFavorite) {
-      setWasPrevFavorite(isShowFavorites);
-      setShowResults(true);
-    }
-
-    if (isShowFavorites && !favoritesList.length && favoritesData?.length) {
+    if (isShowFavorites && !favoritesList.length && !!favoritesData?.length) {
       setFavoritesList(favoritesData ?? []);
       setShowFavInMap(undefined);
     }
   }, [
     favoritesData,
     setShowResults,
+    mapRef,
     favoritesList,
     isShowFavorites,
-    wasPrevFavorite,
     setFavoritesList,
     setShowFavInMap,
   ]);

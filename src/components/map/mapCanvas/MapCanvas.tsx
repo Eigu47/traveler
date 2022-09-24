@@ -30,6 +30,8 @@ export default function MapCanvas({}: Props) {
   const queryLatLng = useGetQueryLatLng();
   const showFavInMap = useGetShowFavoriteInMap();
 
+  const favInMapLatLng = showFavInMap && showFavInMap.latLng;
+
   return (
     <MapCanvasSynchronize
       setCurrentPosition={setCurrentPosition}
@@ -40,8 +42,8 @@ export default function MapCanvas({}: Props) {
         data-test-id="map-canvas"
       >
         <GoogleMap
-          zoom={queryLatLng || showFavInMap ? 13 : 10}
-          center={showFavInMap?.latLng ?? currentPosition ?? DEFAULT_CENTER}
+          zoom={queryLatLng || !!showFavInMap ? 13 : 10}
+          center={favInMapLatLng ?? currentPosition ?? DEFAULT_CENTER}
           mapContainerClassName="h-full w-full"
           onLoad={(map) => setMapRef(map)}
           options={{

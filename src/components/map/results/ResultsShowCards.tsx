@@ -2,6 +2,7 @@ import { favoritesListAtom, sortByAtom } from "@/utils/store";
 import { useGetFlatResults, useGetResults } from "@/utils/useQueryResults";
 import { useAtom } from "jotai";
 import {
+  useGetIsShowFavorites,
   useGetQueryLatLng,
   useGetShowFavoriteInMap,
 } from "../mapCanvas/MapCanvasUtil";
@@ -16,8 +17,8 @@ export default function ResultsListShowCard({}: Props) {
 
   const queryLatLng = useGetQueryLatLng();
   const flatResults = useGetFlatResults();
+  const isShowFavorites = useGetIsShowFavorites();
 
-  const { isFetching, isFetchingNextPage } = useGetResults();
   const showFavInMap = useGetShowFavoriteInMap();
 
   const isFav = favoritesList.some(
@@ -33,15 +34,18 @@ export default function ResultsListShowCard({}: Props) {
           queryLatLng={queryLatLng}
         />
       ))}
-      {(!isFetching || isFetchingNextPage) &&
-        sortResults(flatResults, sortBy).map((place) => (
-          <ResultsCard
-            key={place.place_id}
-            place={place}
-            queryLatLng={queryLatLng}
-          />
-        ))}
-      {showFavInMap && !isFav && <ResultsCard place={showFavInMap} />}
+
+      {sortResults(flatResults, sortBy).map((place) => (
+        <ResultsCard
+          key={place.place_id}
+          place={place}
+          queryLatLng={queryLatLng}
+        />
+      ))}
+
+      {showFavInMap && !queryLatLng && !isShowFavorites && !isFav && (
+        <ResultsCard place={showFavInMap} />
+      )}
     </>
   );
 }
