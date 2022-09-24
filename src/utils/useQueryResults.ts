@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { useAtom } from "jotai";
 import { NearbySearchResult } from "../types/NearbySearchResult";
 import { keywordAtom, radiusAtom, searchTypeAtom } from "./store";
-import { useGetQueryLatLng } from "@/components/map/MapCanvasUtil";
+import { useGetQueryLatLng } from "@/components/map/mapCanvas/MapCanvasUtil";
 
 async function fetchResults(
   queryLatLng?: google.maps.LatLngLiteral,

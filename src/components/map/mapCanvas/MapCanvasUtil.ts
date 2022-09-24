@@ -95,15 +95,17 @@ export function useGetShowFavoriteInMap() {
   const router = useRouter();
   const [showFavInMap] = useAtom(showFavInMapAtom);
 
-  if (showFavInMap && router.query.show === showFavInMap.name) {
-    return {
-      ...showFavInMap,
-      latLng: {
-        lat: showFavInMap.geometry.location.lat,
-        lng: showFavInMap.geometry.location.lng,
-      },
-    };
-  }
+  return useMemo(() => {
+    if (showFavInMap && router.query.show === showFavInMap.name) {
+      return {
+        ...showFavInMap,
+        latLng: {
+          lat: showFavInMap.geometry.location.lat,
+          lng: showFavInMap.geometry.location.lng,
+        },
+      };
+    }
+  }, [router.query.show, showFavInMap]);
 }
 
 export function useGetIsShowFavorites() {

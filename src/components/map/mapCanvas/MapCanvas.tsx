@@ -7,37 +7,27 @@ import {
   handleMouseDown,
   handleMouseUp,
   handleRightClickOnMap,
-  useGetIsShowFavorites,
   useGetQueryLatLng,
   useGetShowFavoriteInMap,
 } from "./MapCanvasUtil";
 import MapCanvasCenter from "./MapCanvasCenter";
-import MapCanvasMarker from "./MapCanvasMarker";
 import MapCanvasPlaceCard from "./MapCanvasPlaceCard";
-import MapCanvasSearchMenu from "./MapCanvasSearchButton";
-import { useGetFavorites, useGetFavoritesId } from "@/utils/useQueryFavorites";
-import { useGetFlatResults } from "@/utils/useQueryResults";
-import { favoritesListAtom, mapRefAtom, searchButtonAtom } from "@/utils/store";
+import MapCanvasSearchButton from "./MapCanvasSearchButton";
+import { mapRefAtom, searchButtonAtom } from "@/utils/store";
 import MapCanvasGpsButton from "./MapCanvasGpsButton";
 import MapCanvasSynchronize from "./MapCanvasSynchronize";
+import MapCanvasShowMarker from "./MapCanvasShowMarker";
 
 interface Props {}
 
 export default function MapCanvas({}: Props) {
   const [, setSearchButton] = useAtom(searchButtonAtom);
-  const [favoritesList] = useAtom(favoritesListAtom);
   const [, setMapRef] = useAtom(mapRefAtom);
   const timerRef = useRef<NodeJS.Timeout>();
   const [currentPosition, setCurrentPosition] =
     useState<google.maps.LatLngLiteral>();
 
   const queryLatLng = useGetQueryLatLng();
-  const isShowFavorites = useGetIsShowFavorites();
-  const { data: favoritesData, isSuccess: favoritesIsSuccess } =
-    useGetFavorites();
-  const favoritesId = useGetFavoritesId();
-  const flatResults = useGetFlatResults();
-
   const showFavInMap = useGetShowFavoriteInMap();
 
   return (
@@ -59,7 +49,9 @@ export default function MapCanvas({}: Props) {
             disableDefaultUI: true,
             clickableIcons: false,
           }}
-          onRightClick={(e) => handleRightClickOnMap(e, setSearchButton)}
+          onRightClick={(e) => {
+            handleRightClickOnMap(e, setSearchButton);
+          }}
           onMouseDown={(e) => handleMouseDown(e, timerRef, setSearchButton)}
           onMouseUp={() => handleMouseUp(timerRef)}
           onCenterChanged={() => {
@@ -72,29 +64,9 @@ export default function MapCanvas({}: Props) {
           }}
         >
           <MapCanvasCenter />
-          {flatResults
-            .concat(favoritesList)
-            .filter((result) => !favoritesId?.includes(result.place_id))
-            .map((place) => (
-              <MapCanvasMarker
-                key={place.place_id}
-                places={place}
-                isFavorited={false}
-              />
-            ))}
-          {(isShowFavorites || favoritesIsSuccess) &&
-            favoritesData?.map((place) => (
-              <MapCanvasMarker
-                key={place.place_id}
-                places={place}
-                isFavorited={true}
-              />
-            ))}
-          {showFavInMap && (
-            <MapCanvasMarker places={showFavInMap} isFavorited={false} />
-          )}
+          <MapCanvasShowMarker />
           <MapCanvasPlaceCard />
-          <MapCanvasSearchMenu />
+          <MapCanvasSearchButton />
         </GoogleMap>
         <SearchBar />
         <MapCanvasGpsButton />

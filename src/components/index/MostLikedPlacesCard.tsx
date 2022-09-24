@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { MostFavoritesData } from "@/types/NearbySearchResult";
 import Image from "next/image";
-import { Rating } from "@/components/map/ResultsCardRating";
+import { Rating } from "@/components/map/results/ResultsCardRating";
 import { BsSuitHeart, BsSuitHeartFill } from "react-icons/bs";
 import { useSession } from "next-auth/react";
 import {
@@ -35,14 +35,14 @@ export default function MostLikedPlacesCard({ staticFav, favTimes }: Props) {
   }, delay);
 
   return (
-    <article className="flex rounded-xl bg-slate-200 text-center shadow-xl ring-1 ring-black/20">
+    <article className="flex flex-col rounded-xl bg-slate-200 text-center shadow-xl ring-1 ring-black/20 md:flex-row lg:flex-col 2xl:flex-row">
       <div className="relative flex">
         <Image
           className="rounded-l-xl bg-slate-300"
           src={`https://maps.googleapis.com/maps/api/place/photo?photo_reference=${place.photos[0].photo_reference}&maxheight=400&maxwidth=400&key=${process.env.NEXT_PUBLIC_MAP_API_KEY}`}
           alt={place.name}
-          width={300}
-          height={300}
+          width={320}
+          height={288}
           objectFit="cover"
         />
         <div className="absolute top-3 left-3 text-3xl">
@@ -70,8 +70,8 @@ export default function MostLikedPlacesCard({ staticFav, favTimes }: Props) {
           </div>
         )}
       </div>
-      <div className="flex h-full w-96 flex-col space-y-3 p-4 pt-6">
-        <div className="grow">
+      <div className="flex h-full w-80 flex-col space-y-3 p-4 pt-6">
+        <div className="flex grow items-center justify-center">
           <Link
             href={{
               pathname: "/map",
@@ -96,10 +96,10 @@ export default function MostLikedPlacesCard({ staticFav, favTimes }: Props) {
           </p>
         )}
         {place.rating && (
-          <div className="flex items-center justify-center space-x-1.5 md:py-1.5">
+          <div className="flex items-center justify-center space-x-1.5">
             <span>{place.rating}</span>
             <Rating rating={place.rating} />
-            <span className="whitespace-nowrap md:whitespace-normal">{`${place.user_ratings_total} reviews`}</span>
+            <span className="whitespace-nowrap">{`${place.user_ratings_total} reviews`}</span>
           </div>
         )}
         <p>{favTimes ?? 0} likes</p>
@@ -110,7 +110,7 @@ export default function MostLikedPlacesCard({ staticFav, favTimes }: Props) {
             )
             .map((type) => (
               <li
-                className="whitespace-nowrap rounded-lg bg-gray-300/30 px-1 py-0.5 shadow ring-1 ring-black/10 md:px-2"
+                className="whitespace-nowrap rounded-lg bg-gray-300/30 py-0.5 px-2 text-sm shadow ring-1 ring-black/10"
                 key={type}
               >
                 {type.charAt(0).toUpperCase() +

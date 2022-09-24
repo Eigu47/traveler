@@ -87,6 +87,7 @@ export default function MapCanvasSynchronize({
   ]);
   // Runs every time url query changes
   useEffect(() => {
+    if (showFavInMapAtom) return setShowSearchOptions(false);
     if (!queryLatLng) return;
     mapRef?.panTo(queryLatLng);
     setClickedPlace(undefined);

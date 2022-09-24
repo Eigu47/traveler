@@ -1,5 +1,5 @@
-import MapCanvas from "@/components/map/MapCanvas";
-import Results from "@/components/map/Results";
+import MapCanvas from "@/components/map/mapCanvas/MapCanvas";
+import Results from "@/components/map/results/Results";
 import Image from "next/image";
 
 interface Props {

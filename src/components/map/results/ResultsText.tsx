@@ -1,8 +1,11 @@
 import Image from "next/image";
-import { useGetIsShowFavorites, useGetQueryLatLng } from "./MapCanvasUtil";
-import { useGetFlatResults, useGetResults } from "@/utils/useQueryResults";
-import { favoritesListAtom, showResultsAtom } from "@/utils/store";
+import { useGetResults } from "@/utils/useQueryResults";
+import { showResultsAtom } from "@/utils/store";
 import { useAtom } from "jotai";
+import {
+  useGetIsShowFavorites,
+  useGetQueryLatLng,
+} from "../mapCanvas/MapCanvasUtil";
 
 interface Props {}
 
@@ -10,8 +13,6 @@ export default function ResultsText({}: Props) {
   const [showResults] = useAtom(showResultsAtom);
   const isShowFavorites = useGetIsShowFavorites();
   const queryLatLng = useGetQueryLatLng();
-  const flatResults = useGetFlatResults();
-  const [favoritesList] = useAtom(favoritesListAtom);
 
   const { isFetching, isFetchingNextPage, isError } = useGetResults();
 
@@ -23,10 +24,10 @@ export default function ResultsText({}: Props) {
     );
   }
 
-  if (!isFetching && !flatResults.length && queryLatLng) {
+  if (!isFetching && queryLatLng) {
     return (
       <span
-        className={`my-auto w-full text-center text-2xl transition-none duration-300 md:translate-y-0 ${
+        className={`my-auto w-full text-center text-2xl transition-none duration-300 lg:translate-y-0 ${
           showResults ? "translate-y-0" : "translate-y-full"
         }`}
       >
@@ -35,30 +36,24 @@ export default function ResultsText({}: Props) {
     );
   }
 
-  if (
-    !flatResults.length &&
-    !favoritesList.length &&
-    !isFetching &&
-    !isShowFavorites &&
-    !isError
-  ) {
+  if (!isFetching && !isShowFavorites && !isError) {
     return (
       <div
-        className={`my-auto w-full text-center text-2xl transition-none duration-300 md:translate-y-0 ${
+        className={`my-auto w-full text-center text-2xl transition-none duration-300 lg:translate-y-0 ${
           showResults ? "translate-y-0" : "translate-y-full"
         }`}
       >
-        <span className="md:hidden">Hold tap </span>
-        <span className="hidden md:block">Right click </span>
+        <span className="sm:hidden">Hold tap </span>
+        <span className="hidden sm:block">Right click </span>
         in the map to start searching
       </div>
     );
   }
 
-  if (isShowFavorites && !favoritesList.length) {
+  if (isShowFavorites) {
     return (
       <span
-        className={`my-auto w-full text-center text-2xl transition-none duration-300 md:translate-y-0 ${
+        className={`my-auto w-full text-center text-2xl transition-none duration-300 lg:translate-y-0 ${
           showResults ? "translate-y-0" : "translate-y-full"
         }`}
       >
@@ -70,7 +65,7 @@ export default function ResultsText({}: Props) {
   if (isError) {
     return (
       <span
-        className={`my-auto w-full text-center text-2xl transition-none duration-300 md:translate-y-0 ${
+        className={`my-auto w-full text-center text-2xl transition-none duration-300 lg:translate-y-0 ${
           showResults ? "translate-y-0" : "translate-y-full"
         }`}
       >
