@@ -1,8 +1,10 @@
 /// <reference types="cypress" />
 import { NearbySearchResult } from "@/types/NearbySearchResult";
 
-describe("map page with mocked results", () => {
+describe.only("map page with mocked results", () => {
   beforeEach(() => {
+    cy.viewport("macbook-16");
+
     cy.visit("/map");
 
     cy.intercept(
@@ -11,7 +13,7 @@ describe("map page with mocked results", () => {
       { fixture: "nearby.json" } // Comment this line for real API call
     ).as("nearby");
 
-    cy.findByPlaceholderText(/search city/i).type("Tokyo");
+    cy.findByPlaceholderText(/search city/i).type("Tokyo", { force: true });
 
     cy.findAllByRole("option", { name: /tokyo, japan/i })
       .first()
@@ -70,16 +72,17 @@ describe("map page with mocked results", () => {
   });
 
   it("should render map markers", () => {
-    cy.findByTestId("center-marker").should("exist");
-
     cy.wait("@nearby").then((interception) => {
       const { results } = interception.response?.body as NearbySearchResult;
+      cy.findByTestId("center-marker").should("exist");
 
       cy.findAllByTestId("result-marker").should("have.length", results.length);
     });
   });
 
   it("search options should work", () => {
+    cy.wait("@nearby");
+
     cy.findByRole("textbox").type("open now");
 
     cy.findByRole("combobox", { name: /filter by/i }).select("restaurant");
@@ -105,6 +108,8 @@ describe("map page with mocked results", () => {
 
 describe("map page with real results", () => {
   beforeEach(() => {
+    cy.viewport("macbook-16");
+
     cy.visit("/map");
 
     cy.intercept("GET", "**/api/nearby?*").as("nearby");
@@ -123,9 +128,7 @@ describe("map page with real results", () => {
 
       function loadNextPageLoop(next_page_token) {
         if (next_page_token) {
-          cy.findByRole("button", { name: /load more/i })
-            .should("exist")
-            .click();
+          cy.findByRole("button", { name: /load more/i }).click();
 
           cy.wait("@nearby").then((interception) => {
             const { next_page_token } = interception.response

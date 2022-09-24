@@ -14,6 +14,7 @@ export default function ResultsChevronButton({}: Props) {
     >
       <button
         type="button"
+        data-test-id="results-button"
         className="mx-auto block w-2/6 rounded-md bg-gray-300 text-slate-700 shadow ring-1 ring-black/20"
       >
         <FiChevronDown

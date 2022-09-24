@@ -155,6 +155,7 @@ export default function ResultsForm({}: Props) {
       </div>
       <button
         type="button"
+        data-test-id="search-options-button"
         className="absolute -right-8 block h-12 w-12 translate-y-[108px] -rotate-90 rounded-full border border-black/30 bg-slate-200 text-slate-700 shadow lg:left-6 lg:h-6 lg:-translate-y-3 lg:rotate-0 lg:rounded"
         onClick={() => setShowSearchOptions((prev) => !prev)}
       >
