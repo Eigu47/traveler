@@ -15,7 +15,7 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className={`fixed w-full flex-row items-center border-b-2 border-black/10 bg-gradient-to-r from-indigo-800 via-blue-800 to-indigo-800 text-slate-100 shadow-md duration-200 sm:flex sm:h-14 sm:translate-y-0 sm:transition-none ${
+        className={`fixed z-10 w-full flex-row items-center border-b-2 border-black/10 bg-gradient-to-r from-indigo-800 via-blue-800 to-indigo-800 text-slate-100 shadow-md duration-200 sm:flex sm:h-14 sm:translate-y-0 sm:transition-none ${
           showHamburger ? "" : "-translate-y-full"
         }`}
       >
