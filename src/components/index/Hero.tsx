@@ -17,6 +17,7 @@ export default function Hero({ googleMapScriptIsLoaded }: Props) {
           alt="Ocean background"
           objectFit="cover"
           layout="fill"
+          priority
         />
       </div>
       <div className="absolute top-[20vh] flex w-screen max-w-full flex-col items-center md:top-[35vh]">
