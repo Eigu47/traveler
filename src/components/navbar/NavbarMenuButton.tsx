@@ -11,7 +11,7 @@ export default function NavbarMenuButton({}: Props) {
 
   return (
     <button
-      className={`fixed right-2 top-2 rounded-full p-3 text-slate-100 shadow-inner duration-100 sm:hidden ${
+      className={`fixed right-2 top-2 z-10 rounded-full p-3 text-slate-100 shadow-inner duration-100 sm:hidden ${
         showHamburger ? "bg-transparent" : "bg-blue-700"
       }`}
       onClick={() => {
