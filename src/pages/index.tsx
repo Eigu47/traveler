@@ -1,3 +1,4 @@
+import AboutFooter from "@/components/index/AboutFooter";
 import Hero from "@/components/index/Hero";
 import MostLikedPlaces from "@/components/index/MostLikedPlaces";
 
@@ -10,6 +11,7 @@ const Home = ({ googleMapScriptIsLoaded }: Props) => {
     <>
       <Hero googleMapScriptIsLoaded={googleMapScriptIsLoaded} />
       <MostLikedPlaces />
+      <AboutFooter />
     </>
   );
 };
