@@ -1,10 +1,11 @@
 import { useAtom } from "jotai";
-import { showHamburgerAtom } from "@/utils/store";
-import { useSession, signIn, signOut } from "next-auth/react";
-import { FcGoogle } from "react-icons/fc";
-import { NavbarLink } from "./NavbarLink";
-import NavbarMenuButton from "./NavbarMenuButton";
+import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { FcGoogle } from "react-icons/fc";
+
+import { NavbarLink } from "@/components/navbar/NavbarLink";
+import NavbarMenuButton from "@/components/navbar/NavbarMenuButton";
+import { showHamburgerAtom } from "@/utils/store";
 
 export default function Navbar() {
   const [showHamburger, setShowHamburger] = useAtom(showHamburgerAtom);

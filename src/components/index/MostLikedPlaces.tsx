@@ -1,7 +1,8 @@
-import { useState, useEffect, useRef } from "react";
-import { useGetMostFavorites } from "@/utils/useQueryMostFavorites";
-import MostLikedPlacesCard from "./MostLikedPlacesCard";
+import { useEffect, useRef, useState } from "react";
+
+import MostLikedPlacesCard from "@/components/index/MostLikedPlacesCard";
 import { MostFavoritesData } from "@/types/NearbySearchResult";
+import { useGetMostFavorites } from "@/utils/useQueryMostFavorites";
 
 interface Props {}
 

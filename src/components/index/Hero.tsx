@@ -1,7 +1,8 @@
 import Image from "next/image";
-import { FiMap, FiSearch } from "react-icons/fi";
 import Link from "next/link";
-import HeroSearchBar from "./HeroSearchBar";
+import { FiMap, FiSearch } from "react-icons/fi";
+
+import HeroSearchBar from "@/components/index/HeroSearchBar";
 
 interface Props {
   googleMapScriptIsLoaded: boolean;

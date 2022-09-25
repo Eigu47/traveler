@@ -1,16 +1,18 @@
-import "../styles/globals.css";
-import type { AppProps } from "next/app";
 import { useRef } from "react";
-import Navbar from "@/components/navbar/Navbar";
-import Head from "next/head";
+import "../styles/globals.css";
+
+import { useLoadScript } from "@react-google-maps/api";
 import {
   Hydrate,
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
-import { useLoadScript } from "@react-google-maps/api";
 import { Provider as JotaiProvider } from "jotai";
 import { SessionProvider } from "next-auth/react";
+import type { AppProps } from "next/app";
+import Head from "next/head";
+
+import Navbar from "@/components/navbar/Navbar";
 
 export default function MyApp({
   Component,

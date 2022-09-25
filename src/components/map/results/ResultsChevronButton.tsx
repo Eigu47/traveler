@@ -1,5 +1,6 @@
 import { useAtom } from "jotai";
 import { FiChevronDown } from "react-icons/fi";
+
 import { showResultsAtom } from "@/utils/store";
 
 interface Props {}

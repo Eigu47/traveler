@@ -1,23 +1,24 @@
+import { useAtom } from "jotai";
 import { FiChevronsDown } from "react-icons/fi";
+
+import { useGetQueryLatLng } from "@/components/map/mapCanvas/MapCanvasUtil";
 import {
   SearchTypes,
   SEARCH_TYPES,
   SortOptions,
   SORT_OPTIONS,
-} from "./ResultsUtil";
-import { useAtom } from "jotai";
+} from "@/components/map/results/ResultsUtil";
 import {
-  radiusAtom,
   clickedPlaceAtom,
+  favoritesListAtom,
   keywordAtom,
+  radiusAtom,
   searchTypeAtom,
   showResultsAtom,
   showSearchOptionsAtom,
-  favoritesListAtom,
   sortByAtom,
 } from "@/utils/store";
 import { useGetResults } from "@/utils/useQueryResults";
-import { useGetQueryLatLng } from "../mapCanvas/MapCanvasUtil";
 
 interface Props {}
 

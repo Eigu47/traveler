@@ -1,5 +1,6 @@
-import ResultsText from "@/components/map/ResultsText";
 import { render, screen } from "@testing-library/react";
+
+import ResultsText from "@/components/map/results/ResultsText";
 
 const mockRouter = jest.spyOn(require("next/router"), "useRouter");
 

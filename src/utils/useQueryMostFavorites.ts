@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+
 import { MostFavoritesData } from "@/types/NearbySearchResult";
 
 export function useGetMostFavorites() {

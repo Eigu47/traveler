@@ -1,4 +1,18 @@
 import {
+  Dispatch,
+  MutableRefObject,
+  SetStateAction,
+  useEffect,
+  useRef,
+} from "react";
+
+import { useAtom } from "jotai";
+
+import {
+  useGetIsShowFavorites,
+  useGetQueryLatLng,
+} from "@/components/map/mapCanvas/MapCanvasUtil";
+import {
   clickedPlaceAtom,
   favoritesListAtom,
   mapRefAtom,
@@ -9,16 +23,6 @@ import {
   showSearchOptionsAtom,
 } from "@/utils/store";
 import { useGetFavorites } from "@/utils/useQueryFavorites";
-import { useAtom } from "jotai";
-import {
-  Dispatch,
-  MutableRefObject,
-  SetStateAction,
-  useEffect,
-  useState,
-  useRef,
-} from "react";
-import { useGetIsShowFavorites, useGetQueryLatLng } from "./MapCanvasUtil";
 
 interface Props {
   children: JSX.Element;

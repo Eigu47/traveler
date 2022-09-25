@@ -1,6 +1,7 @@
+import { ChangeEvent } from "react";
+
 import { Combobox, Transition } from "@headlessui/react";
 import { useRouter } from "next/router";
-import { ChangeEvent } from "react";
 import { FiSearch } from "react-icons/fi";
 import usePlacesAutocomplete, {
   getGeocode,

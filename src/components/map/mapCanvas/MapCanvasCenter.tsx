@@ -1,7 +1,8 @@
 import { CircleF, MarkerF } from "@react-google-maps/api";
 import { useAtom } from "jotai";
+
+import { useGetQueryLatLng } from "@/components/map/mapCanvas/MapCanvasUtil";
 import { radiusAtom } from "@/utils/store";
-import { useGetQueryLatLng } from "./MapCanvasUtil";
 
 interface Props {}
 

@@ -1,6 +1,7 @@
 import { useAtom } from "jotai";
 import Link from "next/link";
 import { UrlObject } from "url";
+
 import { showHamburgerAtom } from "@/utils/store";
 
 interface Props {

@@ -1,7 +1,15 @@
-import { GoogleMap } from "@react-google-maps/api/";
 import { useRef, useState } from "react";
+
+import { GoogleMap } from "@react-google-maps/api/";
 import { useAtom } from "jotai";
-import SearchBar from "./MapCanvasSearchBar";
+
+import MapCanvasCenter from "@/components/map/mapCanvas/MapCanvasCenter";
+import MapCanvasGpsButton from "@/components/map/mapCanvas/MapCanvasGpsButton";
+import MapCanvasPlaceCard from "@/components/map/mapCanvas/MapCanvasPlaceCard";
+import SearchBar from "@/components/map/mapCanvas/MapCanvasSearchBar";
+import MapCanvasSearchButton from "@/components/map/mapCanvas/MapCanvasSearchButton";
+import MapCanvasShowMarker from "@/components/map/mapCanvas/MapCanvasShowMarker";
+import MapCanvasSynchronize from "@/components/map/mapCanvas/MapCanvasSynchronize";
 import {
   DEFAULT_CENTER,
   handleMouseDown,
@@ -9,14 +17,8 @@ import {
   handleRightClickOnMap,
   useGetQueryLatLng,
   useGetShowFavoriteInMap,
-} from "./MapCanvasUtil";
-import MapCanvasCenter from "./MapCanvasCenter";
-import MapCanvasPlaceCard from "./MapCanvasPlaceCard";
-import MapCanvasSearchButton from "./MapCanvasSearchButton";
+} from "@/components/map/mapCanvas/MapCanvasUtil";
 import { mapRefAtom, searchButtonAtom } from "@/utils/store";
-import MapCanvasGpsButton from "./MapCanvasGpsButton";
-import MapCanvasSynchronize from "./MapCanvasSynchronize";
-import MapCanvasShowMarker from "./MapCanvasShowMarker";
 
 interface Props {}
 

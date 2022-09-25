@@ -1,17 +1,19 @@
 import { useState } from "react";
-import { MostFavoritesData } from "@/types/NearbySearchResult";
-import Image from "next/image";
-import { Rating } from "@/components/map/results/ResultsCardRating";
-import { BsSuitHeart, BsSuitHeartFill } from "react-icons/bs";
+
+import { useAtom } from "jotai";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
+import Link from "next/link";
+import { BsSuitHeart, BsSuitHeartFill } from "react-icons/bs";
+
+import { Rating } from "@/components/map/results/ResultsCardRating";
+import { MostFavoritesData } from "@/types/NearbySearchResult";
+import { showFavInMapAtom } from "@/utils/store";
 import {
   useGetFavoritesId,
   useMutateFavorites,
 } from "@/utils/useQueryFavorites";
 import useTimeout from "@/utils/useTimeout";
-import { useAtom } from "jotai";
-import { showFavInMapAtom } from "@/utils/store";
-import Link from "next/link";
 
 interface Props {
   staticFav: MostFavoritesData;

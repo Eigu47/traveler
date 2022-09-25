@@ -1,11 +1,12 @@
-import Image from "next/image";
-import { useGetResults } from "@/utils/useQueryResults";
-import { showResultsAtom } from "@/utils/store";
 import { useAtom } from "jotai";
+import Image from "next/image";
+
 import {
   useGetIsShowFavorites,
   useGetQueryLatLng,
-} from "../mapCanvas/MapCanvasUtil";
+} from "@/components/map/mapCanvas/MapCanvasUtil";
+import { showResultsAtom } from "@/utils/store";
+import { useGetResults } from "@/utils/useQueryResults";
 
 interface Props {}
 

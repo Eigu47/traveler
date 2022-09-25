@@ -1,5 +1,6 @@
 import { useAtom } from "jotai";
 import { HiMenu, HiX } from "react-icons/hi";
+
 import { showHamburgerAtom, showSearchOptionsAtom } from "@/utils/store";
 
 interface Props {}

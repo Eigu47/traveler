@@ -1,5 +1,6 @@
 import axios from "axios";
 import type { NextApiRequest, NextApiResponse } from "next";
+
 import { NearbySearchResult } from "@/types/NearbySearchResult";
 
 export default async function handler(

@@ -1,12 +1,13 @@
-import ResultsForm from "./ResultsForm";
 import { useAtom } from "jotai";
+
+import { useGetShowFavoriteInMap } from "@/components/map/mapCanvas/MapCanvasUtil";
+import ResultsChevronButton from "@/components/map/results/ResultsChevronButton";
+import ResultsForm from "@/components/map/results/ResultsForm";
+import ResultsShowCards from "@/components/map/results/ResultsShowCards";
+import ResultsShowState from "@/components/map/results/ResultsShowState";
+import ResultsText from "@/components/map/results/ResultsText";
 import { favoritesListAtom, showResultsAtom } from "@/utils/store";
-import ResultsChevronButton from "./ResultsChevronButton";
-import ResultsText from "./ResultsText";
 import { useGetFlatResults } from "@/utils/useQueryResults";
-import ResultsShowCards from "./ResultsShowCards";
-import ResultsShowState from "./ResultsShowState";
-import { useGetShowFavoriteInMap } from "../mapCanvas/MapCanvasUtil";
 
 interface Props {}
 

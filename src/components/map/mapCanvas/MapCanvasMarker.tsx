@@ -1,5 +1,7 @@
 import { MarkerF } from "@react-google-maps/api";
 import { useAtom } from "jotai";
+
+import { handleClickOnMarker } from "@/components/map/mapCanvas/MapCanvasUtil";
 import { Result } from "@/types/NearbySearchResult";
 import {
   clickedPlaceAtom,
@@ -9,7 +11,6 @@ import {
   showSearchOptionsAtom,
 } from "@/utils/store";
 import { useGetFlatResults } from "@/utils/useQueryResults";
-import { handleClickOnMarker } from "./MapCanvasUtil";
 
 interface Props {
   places: Result;

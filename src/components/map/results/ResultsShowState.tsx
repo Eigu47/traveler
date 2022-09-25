@@ -1,5 +1,5 @@
+import { useGetQueryLatLng } from "@/components/map/mapCanvas/MapCanvasUtil";
 import { useGetResults } from "@/utils/useQueryResults";
-import { useGetQueryLatLng } from "../mapCanvas/MapCanvasUtil";
 
 interface Props {}
 

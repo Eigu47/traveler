@@ -1,4 +1,5 @@
 import { atom } from "jotai";
+
 import { SearchTypes, SortOptions } from "@/components/map/results/ResultsUtil";
 import { Result } from "@/types/NearbySearchResult";
 

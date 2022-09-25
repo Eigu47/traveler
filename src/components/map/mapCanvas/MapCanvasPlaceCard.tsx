@@ -1,8 +1,9 @@
 import { OverlayView } from "@react-google-maps/api";
+import { useAtom } from "jotai";
 import Image from "next/image";
 import { BsSuitHeartFill } from "react-icons/bs";
+
 import { selectedPlaceAtom } from "@/utils/store";
-import { useAtom } from "jotai";
 import { useGetFavoritesId } from "@/utils/useQueryFavorites";
 
 interface Props {}

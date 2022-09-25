@@ -1,12 +1,14 @@
+import { useRef } from "react";
+
+import { Combobox, Transition } from "@headlessui/react";
+import { useAtom } from "jotai";
+import { useRouter } from "next/router";
+import { FiSearch } from "react-icons/fi";
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
 } from "use-places-autocomplete";
-import { useRef } from "react";
-import { Combobox, Transition } from "@headlessui/react";
-import { FiSearch } from "react-icons/fi";
-import { useRouter } from "next/router";
-import { useAtom } from "jotai";
+
 import { showResultsAtom, showSearchOptionsAtom } from "@/utils/store";
 
 interface Props {}

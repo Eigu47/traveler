@@ -1,10 +1,12 @@
+import { useMemo } from "react";
+
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useMemo } from "react";
 import { useAtom } from "jotai";
-import { NearbySearchResult } from "../types/NearbySearchResult";
-import { keywordAtom, radiusAtom, searchTypeAtom } from "./store";
+
 import { useGetQueryLatLng } from "@/components/map/mapCanvas/MapCanvasUtil";
+import { NearbySearchResult } from "@/types/NearbySearchResult";
+import { keywordAtom, radiusAtom, searchTypeAtom } from "@/utils/store";
 
 async function fetchResults(
   queryLatLng?: google.maps.LatLngLiteral,

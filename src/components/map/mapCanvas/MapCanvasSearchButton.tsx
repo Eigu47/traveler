@@ -1,9 +1,10 @@
-import { searchButtonAtom } from "@/utils/store";
 import { OverlayView } from "@react-google-maps/api";
 import { useAtom } from "jotai";
 import { useRouter } from "next/router";
 import { MdLocationPin } from "react-icons/md";
-import { handleSearchButton } from "./MapCanvasUtil";
+
+import { handleSearchButton } from "@/components/map/mapCanvas/MapCanvasUtil";
+import { searchButtonAtom } from "@/utils/store";
 
 interface Props {}
 

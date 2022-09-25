@@ -1,8 +1,10 @@
+import { useMemo } from "react";
+
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+
 import { FavoritesData, Result } from "@/types/NearbySearchResult";
-import { useMemo } from "react";
 
 async function fetchFavorites(userId: string | null) {
   if (!userId) throw new Error("Not logged");

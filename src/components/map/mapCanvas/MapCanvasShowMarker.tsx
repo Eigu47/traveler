@@ -1,12 +1,13 @@
-import { favoritesListAtom } from "@/utils/store";
-import { useGetFavorites, useGetFavoritesId } from "@/utils/useQueryFavorites";
-import { useGetFlatResults } from "@/utils/useQueryResults";
 import { useAtom } from "jotai";
-import MapCanvasMarker from "./MapCanvasMarker";
+
+import MapCanvasMarker from "@/components/map/mapCanvas/MapCanvasMarker";
 import {
   useGetIsShowFavorites,
   useGetShowFavoriteInMap,
-} from "./MapCanvasUtil";
+} from "@/components/map/mapCanvas/MapCanvasUtil";
+import { favoritesListAtom } from "@/utils/store";
+import { useGetFavorites, useGetFavoritesId } from "@/utils/useQueryFavorites";
+import { useGetFlatResults } from "@/utils/useQueryResults";
 
 interface Props {}
 

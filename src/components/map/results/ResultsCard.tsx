@@ -1,17 +1,22 @@
+import { useEffect, useRef, useState } from "react";
+
 import { useAtom } from "jotai";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useRef, useEffect, useState } from "react";
-import { clickedPlaceAtom, mapRefAtom, selectedPlaceAtom } from "@/utils/store";
-import { Result } from "@/types/NearbySearchResult";
-import { getDistance, handleClickOnCard } from "./ResultsUtil";
-import { Rating } from "./ResultsCardRating";
 import { BsSuitHeart, BsSuitHeartFill } from "react-icons/bs";
+
+import { Rating } from "@/components/map/results/ResultsCardRating";
+import {
+  getDistance,
+  handleClickOnCard,
+} from "@/components/map/results/ResultsUtil";
+import { Result } from "@/types/NearbySearchResult";
+import { clickedPlaceAtom, mapRefAtom, selectedPlaceAtom } from "@/utils/store";
 import {
   useGetFavoritesId,
   useMutateFavorites,
 } from "@/utils/useQueryFavorites";
 import useTimeout from "@/utils/useTimeout";
-import { useSession } from "next-auth/react";
 
 interface Props {
   place: Result;

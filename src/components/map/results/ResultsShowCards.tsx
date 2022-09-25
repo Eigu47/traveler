@@ -1,13 +1,14 @@
-import { favoritesListAtom, sortByAtom } from "@/utils/store";
-import { useGetFlatResults, useGetResults } from "@/utils/useQueryResults";
 import { useAtom } from "jotai";
+
 import {
   useGetIsShowFavorites,
   useGetQueryLatLng,
   useGetShowFavoriteInMap,
-} from "../mapCanvas/MapCanvasUtil";
-import ResultsCard from "./ResultsCard";
-import { sortResults } from "./ResultsUtil";
+} from "@/components/map/mapCanvas/MapCanvasUtil";
+import ResultsCard from "@/components/map/results/ResultsCard";
+import { sortResults } from "@/components/map/results/ResultsUtil";
+import { favoritesListAtom, sortByAtom } from "@/utils/store";
+import { useGetFlatResults } from "@/utils/useQueryResults";
 
 interface Props {}
 

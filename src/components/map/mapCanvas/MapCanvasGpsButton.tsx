@@ -1,8 +1,9 @@
-import { showResultsAtom } from "@/utils/store";
 import { useAtom } from "jotai";
 import { useRouter } from "next/router";
 import { MdGpsFixed } from "react-icons/md";
-import { getCurrentPosition } from "./MapCanvasUtil";
+
+import { getCurrentPosition } from "@/components/map/mapCanvas/MapCanvasUtil";
+import { showResultsAtom } from "@/utils/store";
 
 interface Props {}
 

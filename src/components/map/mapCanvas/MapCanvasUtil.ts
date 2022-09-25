@@ -1,7 +1,9 @@
-import { Result } from "@/types/NearbySearchResult";
 import { Dispatch, SetStateAction, useMemo } from "react";
-import { NextRouter, useRouter } from "next/router";
+
 import { useAtom } from "jotai";
+import { NextRouter, useRouter } from "next/router";
+
+import { Result } from "@/types/NearbySearchResult";
 import { showFavInMapAtom } from "@/utils/store";
 
 export function handleMouseUp(
