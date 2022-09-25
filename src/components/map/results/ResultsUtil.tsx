@@ -1,3 +1,5 @@
+import { SetStateAction } from "jotai";
+
 import { Result } from "@/types/NearbySearchResult";
 
 export function getDistance(
@@ -34,11 +36,14 @@ export function sortResults(results: Result[], sortBy: SortOptions) {
 
 export function handleClickOnCard(
   mapRef: google.maps.Map | null,
-  place: Result
+  place: Result,
+  setShowSearchOptions: (update: SetStateAction<boolean>) => void
 ) {
   if (!mapRef?.getBounds()?.contains(place.geometry.location)) {
     mapRef?.panTo(place.geometry.location);
   }
+
+  setShowSearchOptions(false);
 }
 
 export type SearchTypes = typeof SEARCH_TYPES[number];

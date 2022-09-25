@@ -11,7 +11,12 @@ import {
   handleClickOnCard,
 } from "@/components/map/results/ResultsUtil";
 import { Result } from "@/types/NearbySearchResult";
-import { clickedPlaceAtom, mapRefAtom, selectedPlaceAtom } from "@/utils/store";
+import {
+  clickedPlaceAtom,
+  mapRefAtom,
+  selectedPlaceAtom,
+  showSearchOptionsAtom,
+} from "@/utils/store";
 import {
   useGetFavoritesId,
   useMutateFavorites,
@@ -33,6 +38,7 @@ export default function ResultsCard({ place, queryLatLng }: Props) {
   const [clickedPlace] = useAtom(clickedPlaceAtom);
   const favoritesId = useGetFavoritesId();
   const { data: session } = useSession();
+  const [, setShowSearchOptions] = useAtom(showSearchOptionsAtom);
 
   const isSelected = selectedPlace?.place_id === place.place_id;
   const isClicked = clickedPlace === place.place_id;
@@ -58,7 +64,7 @@ export default function ResultsCard({ place, queryLatLng }: Props) {
       }`}
       onMouseOver={() => setSelectedPlace(place)}
       onMouseOut={() => setSelectedPlace(undefined)}
-      onClick={() => handleClickOnCard(mapRef, place)}
+      onClick={() => handleClickOnCard(mapRef, place, setShowSearchOptions)}
       ref={resultRef}
       data-test-id="result-card"
     >
@@ -97,7 +103,7 @@ export default function ResultsCard({ place, queryLatLng }: Props) {
             </div>
           )}
         </div>
-        <div className="flex w-full flex-col px-3 py-2">
+        <div className="flex w-full min-w-[200px] flex-col px-3 py-2">
           <div className="w-full grow space-y-3">
             <p>{place.vicinity}</p>
             {queryLatLng && (

@@ -10,7 +10,9 @@ export default function ResultsChevronButton({}: Props) {
 
   return (
     <div
-      className="absolute -top-2 w-screen duration-200 lg:hidden"
+      className={`fixed bottom-[250px] w-screen duration-300 lg:hidden lg:animate-none ${
+        showResults ? "translate-y-0" : "translate-y-60"
+      }`}
       onClick={() => setShowResults((prev) => !prev)}
     >
       <button

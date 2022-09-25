@@ -9,7 +9,7 @@ interface Props {
 
 export default function Map({ googleMapScriptIsLoaded }: Props) {
   return (
-    <main className="relative flex h-full max-w-full flex-row overflow-hidden sm:top-14 sm:h-[calc(100%-56px)] md:h-[calc(100%-56px)]">
+    <main className="relative flex h-full max-w-full flex-row sm:top-14 sm:h-[calc(100%-56px)] md:h-[calc(100%-56px)]">
       <Results />
       {googleMapScriptIsLoaded && <MapCanvas />}
       {!googleMapScriptIsLoaded && (

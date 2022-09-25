@@ -44,7 +44,7 @@ export default function SearchBar({}: Props) {
   }
 
   return (
-    <div className="absolute top-4 z-10 w-full px-4 text-xl sm:top-6 sm:right-6 sm:w-96 sm:px-0">
+    <div className="absolute top-4 w-full px-4 text-xl sm:top-6 sm:right-6 sm:w-96 sm:px-0">
       <Combobox
         value={value}
         onChange={(val) => handleChange(val)}
